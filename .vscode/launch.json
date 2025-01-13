@@ -1,0 +1,12 @@
+{
+  "configurations": [
+    {
+      "name": "Cadenza CLI",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "src/cadenza/cli.py",
+      "console": "integratedTerminal",
+      "args": "run"
+    }
+  ]
+}
