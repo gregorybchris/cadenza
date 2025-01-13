@@ -95,6 +95,54 @@ class Interval(StrEnum):
             case Interval.Octave:
                 return "P8"
 
+    def to_int(self) -> int:  # noqa: PLR0911
+        match self:
+            case Interval.MinorSecond:
+                return 1
+            case Interval.MajorSecond:
+                return 2
+            case Interval.MinorThird:
+                return 3
+            case Interval.MajorThird:
+                return 4
+            case Interval.PerfectFourth:
+                return 5
+            case Interval.Tritone:
+                return 6
+            case Interval.PerfectFifth:
+                return 7
+            case Interval.MinorSixth:
+                return 8
+            case Interval.MajorSixth:
+                return 9
+            case Interval.MinorSeventh:
+                return 10
+            case Interval.MajorSeventh:
+                return 11
+            case Interval.Octave:
+                return 12
+
+    @classmethod
+    def from_int(cls, interval_int: int) -> "Interval":
+        mapping = {
+            1: cls.MinorSecond,
+            2: cls.MajorSecond,
+            3: cls.MinorThird,
+            4: cls.MajorThird,
+            5: cls.PerfectFourth,
+            6: cls.Tritone,
+            7: cls.PerfectFifth,
+            8: cls.MinorSixth,
+            9: cls.MajorSixth,
+            10: cls.MinorSeventh,
+            11: cls.MajorSeventh,
+            12: cls.Octave,
+        }
+        if interval_int not in mapping:
+            msg = f"Invalid interval: {interval_int}"
+            raise ParseError(msg)
+        return mapping[interval_int]
+
     def __str__(self) -> str:
         return self.to_str()
 
