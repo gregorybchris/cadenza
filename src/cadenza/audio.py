@@ -6,6 +6,9 @@ import torch
 import torchaudio
 from torch import Tensor
 
+from cadenza.chord import Chord
+from cadenza.note import Note
+
 
 @dataclass(kw_only=True)
 class Saver:
@@ -34,13 +37,16 @@ class SynthArgs:
 class Synth:
     args: SynthArgs
 
-    def generate(self, frequencies: list[float], duration: float) -> Tensor:
+    def generate_silence(self, duration: float) -> Tensor:
+        return torch.zeros(int(self.args.sample_rate * duration), dtype=torch.float32)
+
+    def generate(self, frequencies: Tensor, duration: float) -> Tensor:
         # Time vector
         t = torch.linspace(0, duration, int(self.args.sample_rate * duration), dtype=torch.float32)
 
         # Generate sine waves
         amplitude = 0.5
-        tones = torch.stack([amplitude * torch.sin(2 * torch.pi * freq * t) for freq in frequencies])
+        tones = torch.stack([amplitude * torch.sin(2 * torch.pi * f * t) for f in frequencies])
 
         # Merge tones by summing them
         audio = tones.sum(dim=0)
@@ -58,9 +64,20 @@ class Synth:
         audio /= len(frequencies)
         return audio
 
+    def concat(self, segments: list[Tensor]) -> Tensor:
+        return torch.cat(segments)
 
-def get_frequency(reference_frequency: float, distance: int) -> float:
-    return reference_frequency * 2 ** (distance / 12)
+
+def get_frequency(reference_frequency: float, intervals: Tensor) -> Tensor:
+    return reference_frequency * 2 ** (intervals / 12)
+
+
+def generate_chord_audio(chord: Chord, reference_note: Note, reference_frequency: float, synth: Synth) -> Tensor:
+    intervals = torch.tensor([interval.to_int() for interval in chord.to_intervals()])
+    scale_degree = chord.root.to_index() - reference_note.to_index()
+    intervals += scale_degree  # Transpose
+    frequencies = get_frequency(reference_frequency, intervals)
+    return synth.generate(frequencies, 0.8)
 
 
 if __name__ == "__main__":
@@ -69,17 +86,21 @@ if __name__ == "__main__":
     synth_args = SynthArgs(sample_rate=sample_rate)
     synth = Synth(args=synth_args)
 
-    # Am chord
+    reference_note = Note.from_str("A")
     reference_frequency = 440.0  # A4
-    frequencies = [
-        reference_frequency,  # A4
-        get_frequency(reference_frequency, 3),  # C4
-        get_frequency(reference_frequency, 7),  # E4
-        get_frequency(reference_frequency, 12),  # A5
-    ]
 
-    duration = 2.0
-    audio = synth.generate(frequencies, duration)
+    chord_strs = ["A", "E", "F#m", "D", "A"]
+    segments: list[Tensor] = []
+    for chord_str in chord_strs:
+        chord = Chord.from_str(chord_str)
+        segment = generate_chord_audio(chord, reference_note, reference_frequency, synth)
+        segments.append(segment)
+
+        audio_silence = synth.generate_silence(0.1)
+        segments.append(audio_silence)
+
+    audio = synth.concat(segments)
+
     player = Player(sample_rate=sample_rate)
     player.play(audio)
 

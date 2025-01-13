@@ -7,6 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 class Interval(StrEnum):
+    Unison = auto()
     MinorSecond = auto()
     MajorSecond = auto()
     MinorThird = auto()
@@ -20,8 +21,10 @@ class Interval(StrEnum):
     MajorSeventh = auto()
     Octave = auto()
 
-    def to_written(self) -> str:  # noqa: PLR0911
+    def to_written(self) -> str:  # noqa: PLR0911, PLR0912
         match self:
+            case Interval.Unison:
+                return "unison"
             case Interval.MinorSecond:
                 return "minor second"
             case Interval.MajorSecond:
@@ -50,6 +53,7 @@ class Interval(StrEnum):
     @classmethod
     def from_str(cls, interval_str: str) -> "Interval":
         mapping = {
+            "P1": cls.Unison,
             "m2": cls.MinorSecond,
             "M2": cls.MajorSecond,
             "m3": cls.MinorThird,
@@ -68,8 +72,10 @@ class Interval(StrEnum):
             raise ParseError(msg)
         return mapping[interval_str]
 
-    def to_str(self) -> str:  # noqa: PLR0911
+    def to_str(self) -> str:  # noqa: PLR0911, PLR0912
         match self:
+            case Interval.Unison:
+                return "P1"
             case Interval.MinorSecond:
                 return "m2"
             case Interval.MajorSecond:
@@ -95,8 +101,10 @@ class Interval(StrEnum):
             case Interval.Octave:
                 return "P8"
 
-    def to_int(self) -> int:  # noqa: PLR0911
+    def to_int(self) -> int:  # noqa: PLR0911, PLR0912
         match self:
+            case Interval.Unison:
+                return 0
             case Interval.MinorSecond:
                 return 1
             case Interval.MajorSecond:
@@ -125,6 +133,7 @@ class Interval(StrEnum):
     @classmethod
     def from_int(cls, interval_int: int) -> "Interval":
         mapping = {
+            0: cls.Unison,
             1: cls.MinorSecond,
             2: cls.MajorSecond,
             3: cls.MinorThird,
