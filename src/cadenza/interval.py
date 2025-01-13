@@ -48,35 +48,25 @@ class Interval(StrEnum):
                 return "octave"
 
     @classmethod
-    def from_str(cls, interval_str: str) -> "Interval":  # noqa: PLR0911
-        match interval_str:
-            case "m2":
-                return cls.MinorSecond
-            case "M2":
-                return cls.MajorSecond
-            case "m3":
-                return cls.MinorThird
-            case "M3":
-                return cls.MajorThird
-            case "P4":
-                return cls.PerfectFourth
-            case "TT":
-                return cls.Tritone
-            case "P5":
-                return cls.PerfectFifth
-            case "m6":
-                return cls.MinorSixth
-            case "M6":
-                return cls.MajorSixth
-            case "m7":
-                return cls.MinorSeventh
-            case "M7":
-                return cls.MajorSeventh
-            case "P8":
-                return cls.Octave
-
-        msg = f"Invalid interval: {interval_str}"
-        raise ParseError(msg)
+    def from_str(cls, interval_str: str) -> "Interval":
+        mapping = {
+            "m2": cls.MinorSecond,
+            "M2": cls.MajorSecond,
+            "m3": cls.MinorThird,
+            "M3": cls.MajorThird,
+            "P4": cls.PerfectFourth,
+            "TT": cls.Tritone,
+            "P5": cls.PerfectFifth,
+            "m6": cls.MinorSixth,
+            "M6": cls.MajorSixth,
+            "m7": cls.MinorSeventh,
+            "M7": cls.MajorSeventh,
+            "P8": cls.Octave,
+        }
+        if interval_str not in mapping:
+            msg = f"Invalid interval: {interval_str}"
+            raise ParseError(msg)
+        return mapping[interval_str]
 
     def to_str(self) -> str:  # noqa: PLR0911
         match self:

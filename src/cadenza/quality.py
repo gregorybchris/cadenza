@@ -34,26 +34,21 @@ class Quality(StrEnum):
                 return "suspended fourth"
 
     @classmethod
-    def from_str(cls, quality_str: str) -> "Quality":  # noqa: PLR0911
+    def from_str(cls, quality_str: str) -> "Quality":
         quality_str = remove_symbols(quality_str)
-        match quality_str:
-            case "":
-                return cls.Major
-            case "m":
-                return cls.Minor
-            case "dim":
-                return cls.Diminished
-            case "aug":
-                return cls.Augmented
-            case "halfdim":
-                return cls.HalfDiminished
-            case "sus2":
-                return cls.SusTwo
-            case "sus4":
-                return cls.SusFour
-
-        msg = f"Invalid quality: {quality_str}"
-        raise ParseError(msg)
+        mapping = {
+            "": cls.Major,
+            "m": cls.Minor,
+            "dim": cls.Diminished,
+            "aug": cls.Augmented,
+            "halfdim": cls.HalfDiminished,
+            "sus2": cls.SusTwo,
+            "sus4": cls.SusFour,
+        }
+        if quality_str not in mapping:
+            msg = f"Invalid quality: {quality_str}"
+            raise ParseError(msg)
+        return mapping[quality_str]
 
     def to_str(self, symbols: bool = True) -> str:  # noqa: PLR0911
         match self:

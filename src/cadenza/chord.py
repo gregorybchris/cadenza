@@ -9,6 +9,7 @@ from cadenza.errors import ParseError
 from cadenza.extension import Extension
 from cadenza.note import Note
 from cadenza.quality import Quality
+from cadenza.scale_degree import ScaleDegree
 
 logger = logging.getLogger(__name__)
 
@@ -48,29 +49,29 @@ class Chord(BaseModel):
         raise NotImplementedError
 
     @classmethod
-    def from_degree(cls, tonic: "Chord", degree: int) -> Self:
+    def from_scale_degree(cls, tonic: "Chord", scale_degree: ScaleDegree) -> Self:
         root = tonic.root
         match tonic.quality:
             case Quality.Major:
                 return {
-                    1: cls(root=root, quality=Quality.Major),
-                    2: cls(root=root + 2, quality=Quality.Minor),
-                    3: cls(root=root + 3, quality=Quality.Minor),
-                    4: cls(root=root + 5, quality=Quality.Major),
-                    5: cls(root=root + 7, quality=Quality.Major),
-                    6: cls(root=root + 9, quality=Quality.Minor),
-                    7: cls(root=root + 10, quality=Quality.Diminished),
-                }[degree % 8]
+                    ScaleDegree.Tonic: cls(root=root, quality=Quality.Major),
+                    ScaleDegree.Supertonic: cls(root=root + 2, quality=Quality.Minor),
+                    ScaleDegree.Mediant: cls(root=root + 4, quality=Quality.Minor),
+                    ScaleDegree.Subdominant: cls(root=root + 5, quality=Quality.Major),
+                    ScaleDegree.Dominant: cls(root=root + 7, quality=Quality.Major),
+                    ScaleDegree.Submediant: cls(root=root + 9, quality=Quality.Minor),
+                    ScaleDegree.LeadingTone: cls(root=root + 10, quality=Quality.Diminished),
+                }[scale_degree]
             case Quality.Minor:
                 return {
-                    1: cls(root=root, quality=Quality.Minor),
-                    2: cls(root=root + 2, quality=Quality.Diminished),
-                    3: cls(root=root + 3, quality=Quality.Major),
-                    4: cls(root=root + 5, quality=Quality.Minor),
-                    5: cls(root=root + 7, quality=Quality.Minor),
-                    6: cls(root=root + 8, quality=Quality.Major),
-                    7: cls(root=root + 10, quality=Quality.Minor),
-                }[degree % 8]
+                    ScaleDegree.Tonic: cls(root=root, quality=Quality.Minor),
+                    ScaleDegree.Supertonic: cls(root=root + 2, quality=Quality.Diminished),
+                    ScaleDegree.Mediant: cls(root=root + 3, quality=Quality.Major),
+                    ScaleDegree.Subdominant: cls(root=root + 5, quality=Quality.Minor),
+                    ScaleDegree.Dominant: cls(root=root + 6, quality=Quality.Minor),
+                    ScaleDegree.Submediant: cls(root=root + 8, quality=Quality.Major),
+                    ScaleDegree.LeadingTone: cls(root=root + 10, quality=Quality.Minor),
+                }[scale_degree]
             case _:
                 msg = f"Getting chords by degree for quality {tonic.quality.to_written()} is not supported"
                 raise ValueError(msg)
