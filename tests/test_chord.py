@@ -6,7 +6,7 @@ from cadenza import Alteration, Chord, Extension, Note, Quality
 from cadenza.utils.symbol_utils import add_symbols, remove_symbols
 
 
-class TestModels:
+class TestChord:
     @pytest.mark.parametrize(
         ("chord_str", "root", "quality", "extension", "alteration"),
         [
