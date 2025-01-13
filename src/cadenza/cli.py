@@ -7,11 +7,12 @@ from typer import Typer
 
 from cadenza import Chord
 from cadenza.duration import Duration
-from cadenza.note import Note
+from cadenza.inversion import Inversion
 from cadenza.player import Player
 from cadenza.saver import Saver
 from cadenza.song_library import SongLibrary
 from cadenza.synth import Synth, SynthArgs
+from cadenza.voicing import Voicing
 
 if TYPE_CHECKING:
     from torch import Tensor
@@ -44,9 +45,6 @@ def go(
     synth_args = SynthArgs(sample_rate=sample_rate)
     synth = Synth(args=synth_args)
 
-    reference_note = Note.from_str("A")
-    reference_frequency = 440.0  # A4
-
     tempo = 120
     beat_value = Duration.Quarter
     chord_duration = Duration.Quarter
@@ -57,12 +55,8 @@ def go(
     song = SongLibrary.DANCING_THROUGH_LIFE
     segments: list[Tensor] = []
     for chord in song.iter_chords():
-        segment = synth.generate_chord_audio(
-            chord,
-            reference_note,
-            reference_frequency,
-            seconds_per_chord,
-        )
+        voicing = Voicing(chord=chord, inversion=Inversion.First, octave=4)
+        segment = synth.generate_voicing_audio(voicing, seconds_per_chord, overtones=True)
         segments.append(segment)
 
         audio_silence = synth.generate_silence(0.05)
@@ -74,7 +68,7 @@ def go(
     player.play(audio)
 
     saver = Saver(sample_rate=sample_rate)
-    audio_filepath = Path("data/output.wav")
+    audio_filepath = Path("data/cadenza.wav")
     saver.save(audio, audio_filepath)
 
 

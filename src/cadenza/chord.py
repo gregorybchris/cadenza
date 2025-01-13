@@ -1,6 +1,6 @@
 import logging
 import re
-from typing import Iterator, Optional, Self
+from typing import Optional, Self
 
 from pydantic import BaseModel
 
@@ -46,9 +46,6 @@ class Chord(BaseModel):
         alterations_str = "" if self.alteration is None else self.alteration.to_str()
         return f"{self.root}{self.quality}{extension_str}{alterations_str}"
 
-    def iter_notes(self) -> Iterator[Note]:
-        raise NotImplementedError
-
     def _get_intervals_from_quality(self) -> list[Interval]:  # noqa: PLR0911
         match self.quality:
             case Quality.Major:
@@ -88,12 +85,16 @@ class Chord(BaseModel):
             case Alteration.FlatFive:
                 return [Interval.Tritone]
 
-    def to_intervals(self) -> list[Interval]:
+    def get_intervals(self) -> list[Interval]:
         intervals = [Interval.Unison]
         intervals += self._get_intervals_from_quality()
         intervals += self._get_intervals_from_extension()
         intervals += self._get_intervals_from_alteration()
         return intervals
+
+    def get_notes(self) -> list[Note]:
+        intervals = self.get_intervals()
+        return [self.root + interval.to_int() for interval in intervals]
 
     @classmethod
     def from_scale_degree(cls, tonic: "Chord", scale_degree: ScaleDegree) -> Self:

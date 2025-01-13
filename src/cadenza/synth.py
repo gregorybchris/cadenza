@@ -3,8 +3,7 @@ from dataclasses import dataclass
 import torch
 from torch import Tensor
 
-from cadenza.chord import Chord
-from cadenza.note import Note
+from cadenza.voicing import Voicing
 
 
 @dataclass(kw_only=True)
@@ -47,19 +46,12 @@ class Synth:
     def concat(self, segments: list[Tensor]) -> Tensor:
         return torch.cat(segments)
 
-    @staticmethod
-    def _get_frequency(reference_frequency: float, intervals: Tensor) -> Tensor:
-        return reference_frequency * 2 ** (intervals / 12)
-
-    def generate_chord_audio(
+    def generate_voicing_audio(
         self,
-        chord: Chord,
-        reference_note: Note,
-        reference_frequency: float,
+        voicing: Voicing,
         duration_s: float,
+        overtones: bool = False,
     ) -> Tensor:
-        intervals = torch.tensor([interval.to_int() for interval in chord.to_intervals()])
-        scale_degree = chord.root.to_index() - reference_note.to_index()
-        intervals += scale_degree  # Transpose
-        frequencies = self._get_frequency(reference_frequency, intervals)
-        return self.generate(frequencies, duration_s)
+        pitches = voicing.get_pitches()
+        frequencies = torch.tensor([pitch.get_frequency() for pitch in pitches])
+        return self.generate(frequencies, duration_s, overtones=overtones)
