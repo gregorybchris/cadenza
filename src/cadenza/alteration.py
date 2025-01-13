@@ -1,6 +1,7 @@
 import logging
 from enum import StrEnum, auto
 
+from cadenza.errors import ParseError
 from cadenza.utils.symbol_utils import remove_symbols
 
 logger = logging.getLogger(__name__)
@@ -12,12 +13,13 @@ class Alteration(StrEnum):
     @classmethod
     def from_str(cls, alteration_str: str) -> "Alteration":
         alteration_str = remove_symbols(alteration_str)
-        match alteration_str:
-            case "b5":
-                return cls.FlatFive
-
-        msg = f"Invalid alteration: {alteration_str}"
-        raise ValueError(msg)
+        mapping = {
+            "b5": cls.FlatFive,
+        }
+        if alteration_str not in mapping:
+            msg = f"Invalid extension: {alteration_str}"
+            raise ParseError(msg)
+        return mapping[alteration_str]
 
     def to_str(self, symbols: bool = True) -> str:
         match self:

@@ -5,6 +5,7 @@ from typing import Iterator, Optional, Self
 from pydantic import BaseModel
 
 from cadenza.alteration import Alteration
+from cadenza.errors import ParseError
 from cadenza.extension import Extension
 from cadenza.note import Note
 from cadenza.quality import Quality
@@ -28,8 +29,8 @@ class Chord(BaseModel):
         )
         match = re.match(regex, chord_str)
         if not match:
-            msg = f"Invalid chord string: {chord_str}"
-            raise ValueError(msg)
+            msg = f"Failed to parse chord string: {chord_str}"
+            raise ParseError(msg)
         root_str, _, quality_str, extension_str, alteration_str = match.groups()
 
         root = Note.from_str(root_str)
@@ -47,41 +48,29 @@ class Chord(BaseModel):
         raise NotImplementedError
 
     @classmethod
-    def get_chord(cls, root: "Chord", degree: int) -> Self:  # noqa: PLR0911, PLR0912
-        mod = degree % 8
-        match root.quality:
+    def from_degree(cls, tonic: "Chord", degree: int) -> Self:
+        root = tonic.root
+        match tonic.quality:
             case Quality.Major:
-                if mod == 1:
-                    return cls(root=root.root, quality=Quality.Major)
-                if mod == 2:  # noqa: PLR2004
-                    return cls(root=root.root + 2, quality=Quality.Minor)
-                if mod == 3:  # noqa: PLR2004
-                    return cls(root=root.root + 3, quality=Quality.Minor)
-                if mod == 4:  # noqa: PLR2004
-                    return cls(root=root.root + 5, quality=Quality.Major)
-                if mod == 5:  # noqa: PLR2004
-                    return cls(root=root.root + 7, quality=Quality.Major)
-                if mod == 6:  # noqa: PLR2004
-                    return cls(root=root.root + 9, quality=Quality.Minor)
-                if mod == 7:  # noqa: PLR2004
-                    return cls(root=root.root + 10, quality=Quality.Diminished)
+                return {
+                    1: cls(root=root, quality=Quality.Major),
+                    2: cls(root=root + 2, quality=Quality.Minor),
+                    3: cls(root=root + 3, quality=Quality.Minor),
+                    4: cls(root=root + 5, quality=Quality.Major),
+                    5: cls(root=root + 7, quality=Quality.Major),
+                    6: cls(root=root + 9, quality=Quality.Minor),
+                    7: cls(root=root + 10, quality=Quality.Diminished),
+                }[degree % 8]
             case Quality.Minor:
-                if mod == 1:
-                    return cls(root=root.root, quality=Quality.Minor)
-                if mod == 2:  # noqa: PLR2004
-                    return cls(root=root.root + 2, quality=Quality.Diminished)
-                if mod == 3:  # noqa: PLR2004
-                    return cls(root=root.root + 3, quality=Quality.Major)
-                if mod == 4:  # noqa: PLR2004
-                    return cls(root=root.root + 5, quality=Quality.Minor)
-                if mod == 5:  # noqa: PLR2004
-                    return cls(root=root.root + 7, quality=Quality.Minor)
-                if mod == 6:  # noqa: PLR2004
-                    return cls(root=root.root + 8, quality=Quality.Major)
-                if mod == 7:  # noqa: PLR2004
-                    return cls(root=root.root + 10, quality=Quality.Minor)
+                return {
+                    1: cls(root=root, quality=Quality.Minor),
+                    2: cls(root=root + 2, quality=Quality.Diminished),
+                    3: cls(root=root + 3, quality=Quality.Major),
+                    4: cls(root=root + 5, quality=Quality.Minor),
+                    5: cls(root=root + 7, quality=Quality.Minor),
+                    6: cls(root=root + 8, quality=Quality.Major),
+                    7: cls(root=root + 10, quality=Quality.Minor),
+                }[degree % 8]
             case _:
-                msg = f"Cannot get chord for quality: {root.quality.to_written()}"
+                msg = f"Getting chords by degree for quality {tonic.quality.to_written()} is not supported"
                 raise ValueError(msg)
-        msg = f"Invalid degree: {degree}"
-        raise ValueError(msg)

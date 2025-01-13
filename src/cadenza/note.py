@@ -1,6 +1,6 @@
 import logging
 from enum import StrEnum
-from typing import Any
+from typing import Any, Self
 
 from cadenza.utils.symbol_utils import add_symbols, remove_symbols
 
@@ -27,7 +27,7 @@ class Note(StrEnum):
     A_FLAT = "Ab"
 
     @classmethod
-    def from_str(cls, note_str: str) -> "Note":
+    def from_str(cls, note_str: str) -> Self:
         return cls(remove_symbols(note_str))
 
     def to_str(self, symbols: bool = True) -> str:
@@ -37,14 +37,14 @@ class Note(StrEnum):
 
     def __add__(self, other: Any) -> "Note":
         if not isinstance(other, int):
-            msg = f"Invalid type for addition: {type(other)}"
+            msg = f"Cannot add type with Note: {type(other)}"
             raise ValueError(msg)
         notes = list(Note)
         return Note(notes[(notes.index(self) + other) % len(notes)])
 
     def __sub__(self, other: Any) -> "Note":
         if not isinstance(other, int):
-            msg = f"Invalid type for subtraction: {type(other)}"
+            msg = f"Cannot subtract type with Note: {type(other)}"
             raise ValueError(msg)
         notes = list(Note)
         return Note(notes[(notes.index(self) - other) % len(notes)])

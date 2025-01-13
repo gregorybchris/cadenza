@@ -1,6 +1,7 @@
 import logging
 from enum import StrEnum, auto
 
+from cadenza.errors import ParseError
 from cadenza.utils.symbol_utils import remove_symbols
 
 logger = logging.getLogger(__name__)
@@ -52,7 +53,7 @@ class Quality(StrEnum):
                 return cls.SusFour
 
         msg = f"Invalid quality: {quality_str}"
-        raise ValueError(msg)
+        raise ParseError(msg)
 
     def to_str(self, symbols: bool = True) -> str:  # noqa: PLR0911
         match self:

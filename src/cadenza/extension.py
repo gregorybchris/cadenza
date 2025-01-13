@@ -1,6 +1,8 @@
 import logging
 from enum import StrEnum, auto
 
+from cadenza.errors import ParseError
+
 logger = logging.getLogger(__name__)
 
 
@@ -13,22 +15,22 @@ class Extension(StrEnum):
 
     @classmethod
     def from_str(cls, extension_str: str) -> "Extension":
-        match extension_str:
-            case "7":
-                return cls.Seven
-            case "maj7":
-                return cls.MajorSeven
-            case "add9":
-                return cls.AddNine
-            case "add11":
-                return cls.AddEleven
-            case "add13":
-                return cls.AddThirteen
+        mapping = {
+            "7": cls.Seven,
+            "maj7": cls.MajorSeven,
+            "add9": cls.AddNine,
+            "9": cls.AddNine,
+            "add11": cls.AddEleven,
+            "11": cls.AddEleven,
+            "add13": cls.AddThirteen,
+            "13": cls.AddThirteen,
+        }
+        if extension_str not in mapping:
+            msg = f"Invalid extension: {extension_str}"
+            raise ParseError(msg)
+        return mapping[extension_str]
 
-        msg = f"Invalid extension: {extension_str}"
-        raise ValueError(msg)
-
-    def to_str(self, symbols: bool = True) -> str:  # noqa: ARG002
+    def to_str(self) -> str:
         match self:
             case Extension.Seven:
                 return "7"

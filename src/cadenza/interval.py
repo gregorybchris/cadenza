@@ -1,6 +1,8 @@
 import logging
 from enum import StrEnum, auto
 
+from cadenza.errors import ParseError
+
 logger = logging.getLogger(__name__)
 
 
@@ -74,7 +76,7 @@ class Interval(StrEnum):
                 return cls.Octave
 
         msg = f"Invalid interval: {interval_str}"
-        raise ValueError(msg)
+        raise ParseError(msg)
 
     def to_str(self) -> str:  # noqa: PLR0911
         match self:

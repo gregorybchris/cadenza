@@ -1,5 +1,6 @@
 import logging
 from enum import StrEnum, auto
+from typing import Self
 
 logger = logging.getLogger(__name__)
 
@@ -13,43 +14,12 @@ class DiatonicMode(StrEnum):
     Aeolian = auto()  # Natural Minor
     Locrian = auto()
 
-    def to_written(self) -> str:  # noqa: PLR0911
-        match self:
-            case DiatonicMode.Ionian:
-                return "ionian"
-            case DiatonicMode.Dorian:
-                return "dorian"
-            case DiatonicMode.Phrygian:
-                return "phrygian"
-            case DiatonicMode.Lydian:
-                return "lydian"
-            case DiatonicMode.Mixolydian:
-                return "mixolydian"
-            case DiatonicMode.Aeolian:
-                return "aeolian"
-            case DiatonicMode.Locrian:
-                return "locrian"
+    def to_written(self) -> str:
+        return self.value
 
     @classmethod
-    def from_str(cls, mode_str: str) -> "DiatonicMode":  # noqa: PLR0911
-        match mode_str:
-            case "ionian":
-                return cls.Ionian
-            case "dorian":
-                return cls.Dorian
-            case "phrygian":
-                return cls.Phrygian
-            case "lydian":
-                return cls.Lydian
-            case "mixolydian":
-                return cls.Mixolydian
-            case "aeolian":
-                return cls.Aeolian
-            case "locrian":
-                return cls.Locrian
-
-        msg = f"Invalid mode: {mode_str}"
-        raise ValueError(msg)
+    def from_str(cls, mode_str: str) -> Self:
+        return cls[mode_str]
 
     def __str__(self) -> str:
         return self.to_written()
