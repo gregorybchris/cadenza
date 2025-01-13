@@ -16,12 +16,12 @@ class SynthArgs:
 class Synth:
     args: SynthArgs
 
-    def generate_silence(self, duration: float) -> Tensor:
-        return torch.zeros(int(self.args.sample_rate * duration), dtype=torch.float32)
+    def generate_silence(self, duration_s: float) -> Tensor:
+        return torch.zeros(int(self.args.sample_rate * duration_s), dtype=torch.float32)
 
-    def generate(self, frequencies: Tensor, duration: float, overtones: bool = False) -> Tensor:
+    def generate(self, frequencies: Tensor, duration_s: float, overtones: bool = False) -> Tensor:
         # Time vector
-        t = torch.linspace(0, duration, int(self.args.sample_rate * duration), dtype=torch.float32)
+        t = torch.linspace(0, duration_s, int(self.args.sample_rate * duration_s), dtype=torch.float32)
 
         # Generate sine waves
         amplitude = 0.5
@@ -56,10 +56,10 @@ class Synth:
         chord: Chord,
         reference_note: Note,
         reference_frequency: float,
-        duration: float,
+        duration_s: float,
     ) -> Tensor:
         intervals = torch.tensor([interval.to_int() for interval in chord.to_intervals()])
         scale_degree = chord.root.to_index() - reference_note.to_index()
         intervals += scale_degree  # Transpose
         frequencies = self._get_frequency(reference_frequency, intervals)
-        return self.generate(frequencies, duration)
+        return self.generate(frequencies, duration_s)

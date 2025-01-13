@@ -6,6 +6,7 @@ from rich.logging import RichHandler
 from typer import Typer
 
 from cadenza import Chord
+from cadenza.duration import Duration
 from cadenza.note import Note
 from cadenza.player import Player
 from cadenza.saver import Saver
@@ -46,11 +47,22 @@ def go(
     reference_note = Note.from_str("A")
     reference_frequency = 440.0  # A4
 
-    song = SongLibrary.DONT_STOP_BELIEVIN
+    tempo = 120
+    beat_value = Duration.Quarter
+    chord_duration = Duration.Quarter
+    beats_per_chord = chord_duration.get_n_quarter_notes() / beat_value.get_n_quarter_notes()
+    beats_per_second = tempo / 60
+    seconds_per_chord = beats_per_chord / beats_per_second
+
+    song = SongLibrary.DANCING_THROUGH_LIFE
     segments: list[Tensor] = []
     for chord in song.iter_chords():
-        duration = 1.0
-        segment = synth.generate_chord_audio(chord, reference_note, reference_frequency, duration)
+        segment = synth.generate_chord_audio(
+            chord,
+            reference_note,
+            reference_frequency,
+            seconds_per_chord,
+        )
         segments.append(segment)
 
         audio_silence = synth.generate_silence(0.05)
