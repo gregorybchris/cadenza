@@ -105,21 +105,21 @@ class Chord(BaseModel):
         match tonic.quality:
             case Quality.Major:
                 return {
-                    ScaleDegree.Tonic: cls(root=root, quality=major),
+                    ScaleDegree.Tonic: cls(root=root + 0, quality=major),
                     ScaleDegree.Supertonic: cls(root=root + 2, quality=minor),
                     ScaleDegree.Mediant: cls(root=root + 4, quality=minor),
                     ScaleDegree.Subdominant: cls(root=root + 5, quality=major),
                     ScaleDegree.Dominant: cls(root=root + 7, quality=major),
                     ScaleDegree.Submediant: cls(root=root + 9, quality=minor),
-                    ScaleDegree.LeadingTone: cls(root=root + 10, quality=diminished),
+                    ScaleDegree.LeadingTone: cls(root=root + 11, quality=diminished),
                 }[scale_degree]
             case Quality.Minor:
                 return {
-                    ScaleDegree.Tonic: cls(root=root, quality=minor),
+                    ScaleDegree.Tonic: cls(root=root + 0, quality=minor),
                     ScaleDegree.Supertonic: cls(root=root + 2, quality=diminished),
                     ScaleDegree.Mediant: cls(root=root + 3, quality=major),
                     ScaleDegree.Subdominant: cls(root=root + 5, quality=minor),
-                    ScaleDegree.Dominant: cls(root=root + 6, quality=minor),
+                    ScaleDegree.Dominant: cls(root=root + 7, quality=minor),
                     ScaleDegree.Submediant: cls(root=root + 8, quality=major),
                     ScaleDegree.LeadingTone: cls(root=root + 10, quality=minor),
                 }[scale_degree]
