@@ -132,6 +132,7 @@ class Interval(StrEnum):
 
     @classmethod
     def from_int(cls, interval_int: int) -> "Interval":
+        interval_int %= 12
         mapping = {
             0: cls.Unison,
             1: cls.MinorSecond,
