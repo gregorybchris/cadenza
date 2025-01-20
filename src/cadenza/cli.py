@@ -10,6 +10,8 @@ from cadenza import Chord
 from cadenza.duration import Duration
 from cadenza.inversion import Inversion
 from cadenza.library import Library
+from cadenza.note import Note
+from cadenza.pitch import Pitch
 from cadenza.player import Player
 from cadenza.saver import Saver
 from cadenza.synth import Synth, SynthArgs
@@ -36,6 +38,45 @@ def set_logger_config(info: bool, debug: bool) -> None:
 
 
 @app.command()
+def note(  # noqa: PLR0913
+    note_str: Annotated[str, Argument(...)],
+    octave: Annotated[int, Option("--octave")] = 4,
+    transpose: Annotated[int, Option("--transpose")] = 0,
+    duration_s: Annotated[float, Option("--duration", "-d")] = 3.0,
+    overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
+    sample_rate: int = 44_100,
+    play: Annotated[bool, Option("--play/--no-play")] = True,
+    show_pitch: Annotated[bool, Option("--pitch/--no-pitch")] = True,
+    filepath: Optional[Path] = None,
+    info: bool = False,
+    debug: bool = False,
+) -> None:
+    set_logger_config(info, debug)
+
+    note = Note.from_str(note_str)
+    note = note + transpose
+    pitch = Pitch(note=note, octave=octave)
+
+    synth_args = SynthArgs(sample_rate=sample_rate)
+    synth = Synth(args=synth_args)
+
+    audio = synth.generate_pitch_audio(pitch, duration_s, overtones=overtones)
+
+    if show_pitch:
+        console.print(
+            f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{pitch.get_frequency():.1f} Hz"
+        )
+
+    if play:
+        player = Player(sample_rate=sample_rate)
+        player.play(audio)
+
+    if filepath:
+        saver = Saver(sample_rate=sample_rate)
+        saver.save(audio, filepath)
+
+
+@app.command()
 def chord(  # noqa: PLR0913
     chord_str: Annotated[str, Argument(...)],
     octave: Annotated[int, Option("--octave")] = 4,
@@ -51,6 +92,7 @@ def chord(  # noqa: PLR0913
     debug: bool = False,
 ) -> None:
     set_logger_config(info, debug)
+
     inversion = Inversion.from_number(inversion_num)
     chord = Chord.from_str(chord_str)
     chord = chord.transpose(transpose)
@@ -66,7 +108,9 @@ def chord(  # noqa: PLR0913
     if show_pitches:
         pitches = voicing.get_pitches()
         for pitch in pitches:
-            console.print(f"[bold][white]{pitch.note}{pitch.octave}[bright_black]: [red]{pitch.get_frequency():.1f} Hz")
+            console.print(
+                f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{pitch.get_frequency():.1f} Hz"
+            )
 
     if play:
         player = Player(sample_rate=sample_rate)

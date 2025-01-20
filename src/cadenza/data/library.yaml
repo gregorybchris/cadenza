@@ -127,3 +127,21 @@ songs:
     beat_duration: quarter
     chord_duration: whole
     tonic: A
+
+  - id: ead79bd9-6463-475f-a55c-edb15329cab6
+    title: Happy Ending
+    artist: MIKA
+    chords: |
+      Db Ab Bbm Gb
+      Db Ab Bbm Gb
+      Bbm Ab Gb Db
+      Bbm Ab Gb Db
+      Bbm Ab Gb Db
+      Bbm Ab Gb Db
+      Bbm Ab Gb Ab Db
+      Ab Bbm Gb
+      Db Ab Bbm Gb
+    tempo: 100
+    beat_duration: quarter
+    chord_duration: half
+    tonic: Db

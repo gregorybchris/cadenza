@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import torch
 from torch import Tensor
 
+from cadenza.pitch import Pitch
 from cadenza.voicing import Voicing
 
 
@@ -45,6 +46,16 @@ class Synth:
 
     def concat(self, segments: list[Tensor]) -> Tensor:
         return torch.cat(segments)
+
+    def generate_pitch_audio(
+        self,
+        pitch: Pitch,
+        duration_s: float,
+        overtones: bool = False,
+    ) -> Tensor:
+        frequency = pitch.get_frequency()
+        frequencies = torch.tensor([frequency])
+        return self.generate(frequencies, duration_s, overtones=overtones)
 
     def generate_voicing_audio(
         self,
