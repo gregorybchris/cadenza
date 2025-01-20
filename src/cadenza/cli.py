@@ -76,6 +76,54 @@ def chord(  # noqa: PLR0913
 
 
 @app.command()
+def chords(  # noqa: PLR0913
+    chords_str: str,
+    octave: Annotated[int, Option("--octave")] = 4,
+    tempo: Annotated[float, Option("--tempo")] = 80.0,
+    chord_duration: Duration = Duration.Quarter,
+    beat_duration: Duration = Duration.Quarter,
+    repeat: Annotated[int, Option("--repeat")] = 1,
+    overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
+    sample_rate: int = 44_100,
+    play: Annotated[bool, Option("--play/--no-play")] = True,
+    filepath: Optional[Path] = None,
+    info: bool = False,
+    debug: bool = False,
+) -> None:
+    set_logger_config(info, debug)
+
+    synth_args = SynthArgs(sample_rate=sample_rate)
+    synth = Synth(args=synth_args)
+
+    beats_per_chord = chord_duration.get_n_quarter_notes() / beat_duration.get_n_quarter_notes()
+    beats_per_second = tempo / 60
+    seconds_per_chord = beats_per_chord / beats_per_second
+    silence_duration = seconds_per_chord / 20
+    audio_duration = seconds_per_chord - silence_duration
+
+    segments: list[Tensor] = []
+    chords = [Chord.from_str(chord_str) for chord_str in chords_str.split()]
+    for _ in range(repeat):
+        for chord in chords:
+            voicing = Voicing(chord=chord, inversion=Inversion.Root, octave=octave)
+            segment = synth.generate_voicing_audio(voicing, audio_duration, overtones=overtones)
+            segments.append(segment)
+
+            audio_silence = synth.generate_silence(silence_duration)
+            segments.append(audio_silence)
+
+    audio = synth.concat(segments)
+
+    if play:
+        player = Player(sample_rate=sample_rate)
+        player.play(audio)
+
+    if filepath:
+        saver = Saver(sample_rate=sample_rate)
+        saver.save(audio, filepath)
+
+
+@app.command()
 def song(  # noqa: PLR0913
     query: str,
     octave: Annotated[int, Option("--octave")] = 4,

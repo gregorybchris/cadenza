@@ -14,7 +14,9 @@ uv sync
 
 ## Usage examples
 
-### Chords
+### Chord command
+
+Play a single chord
 
 ```bash
 # Play a chord
@@ -42,7 +44,18 @@ cz chord F/G --filepath audio.wav
 cz chord Cmaj7/A --filepath audio.wav --sample-rate 48000
 ```
 
-### Songs
+### Chords command
+
+Play a series of chords
+
+```bash
+# Play several chords in a loop
+cz chords --tempo 60 --repeat 3 "E C#madd9 Amaj7"
+```
+
+### Song command
+
+Play a full song
 
 ```bash
 # Play a song by title
