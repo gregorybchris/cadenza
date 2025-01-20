@@ -108,7 +108,8 @@ def chords(  # noqa: PLR0913
     chords = [Chord.from_str(chord_str) for chord_str in chords_str.split()]
     for _ in range(repeat):
         for chord in chords:
-            voicing = Voicing(chord=chord.transpose(transpose), inversion=Inversion.Root, octave=octave)
+            transposed_chord = chord.transpose(transpose)
+            voicing = Voicing(chord=transposed_chord, inversion=Inversion.Root, octave=octave)
             segment = synth.generate_voicing_audio(voicing, audio_duration, overtones=overtones)
             segments.append(segment)
 
@@ -184,7 +185,8 @@ def song(  # noqa: PLR0913
             if chord_line_num < start_line:
                 continue
             for chord in chord_line:
-                voicing = Voicing(chord=chord.transpose(transpose), inversion=Inversion.Root, octave=octave)
+                transposed_chord = chord.transpose(transpose)
+                voicing = Voicing(chord=transposed_chord, inversion=Inversion.Root, octave=octave)
                 segment = synth.generate_voicing_audio(voicing, audio_duration, overtones=overtones)
                 segments.append(segment)
 
