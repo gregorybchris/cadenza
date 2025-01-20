@@ -107,6 +107,18 @@ songs:
       Bbm7 Ab Bbm7 Ab
       Bbm7 Ab Bbm7 Ab
       Ab F7 F7/A Bbm7
-    tempo: 90
+    tempo: 105
+    beat_duration: quarter
+    chord_duration: whole
+
+  - id: e66378ba-045c-4f6f-929f-1b3a204b15a7
+    title: Get Lucky
+    artist: Daft Punk (feat. Pharrell Williams and Nile Rodgers)
+    chords: |
+      Bm7 D F#m7 E
+      Bm7 D F#m7 E
+      Bm7 D F#m7 E
+      Bm7 D F#m7 E
+    tempo: 130
     beat_duration: quarter
     chord_duration: whole
