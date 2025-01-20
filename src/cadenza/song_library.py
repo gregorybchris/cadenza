@@ -11,8 +11,8 @@ class SongLibrary:
             return cls.DANCING_THROUGH_LIFE
         if slug == "dancing-my-way":
             return cls.DANCING_MY_WAY
-        if slug == "home-sick":
-            return cls.HOME_SICK
+        if slug == "homesick":
+            return cls.HOMESICK
         if slug == "put-your-records-on":
             return cls.PUT_YOUR_RECORDS_ON
         if slug == "only-home-ive-ever-known":
@@ -34,7 +34,7 @@ D F#m Bm D7 G D E7 G
 D F# Bm D7 G D E7 G/A
 D D D""",
         tempo=35,
-        beat_value=Duration.Whole,
+        beat_duration=Duration.Whole,
         chord_duration=Duration.Whole,
     )
 
@@ -54,7 +54,7 @@ C D
 E Emaj7 A
 """,
         tempo=80,
-        beat_value=Duration.Eighth,
+        beat_duration=Duration.Eighth,
         chord_duration=Duration.Quarter,
     )
 
@@ -72,11 +72,11 @@ Fm C Bb F Fm C Bb F Fm C Bb F
 F Am F Am F Am F Am F Am F Am F Am F Am
 """,
         tempo=80,
-        beat_value=Duration.Eighth,
+        beat_duration=Duration.Eighth,
         chord_duration=Duration.Half,
     )
 
-    HOME_SICK = Song.from_str(
+    HOMESICK = Song.from_str(
         "Homesick",
         "Noah Kahan",
         """

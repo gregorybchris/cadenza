@@ -18,6 +18,15 @@ class Inversion(StrEnum):
             Inversion.Third: 3,
         }[self]
 
+    @classmethod
+    def from_number(cls, number: int) -> "Inversion":
+        return {
+            0: Inversion.Root,
+            1: Inversion.First,
+            2: Inversion.Second,
+            3: Inversion.Third,
+        }[number]
+
     def to_written(self) -> str:
         return {
             Inversion.Root: "root position",

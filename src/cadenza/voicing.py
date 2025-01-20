@@ -68,6 +68,15 @@ class Voicing(BaseModel):
         return [Interval.from_int(self.chord.bass.to_index() - self.chord.root.to_index())]
 
     def get_pitches(self) -> list[Pitch]:
+        # Get pitches for left hand
+        lh_intervals: list[Interval] = []
+        lh_intervals += self._get_intervals_from_bass()
+        if len(lh_intervals) == 0:
+            lh_intervals += [Interval.Unison]
+        lh_notes = [self.chord.root + interval.to_int() for interval in lh_intervals]
+        lh_pitches = [Pitch(note=note, octave=self.octave - 2) for note in lh_notes]
+
+        # Get pitches for right hand
         rh_intervals: list[Interval] = []
         rh_intervals += [Interval.Unison]
         rh_intervals += self._get_intervals_from_quality()
@@ -76,11 +85,11 @@ class Voicing(BaseModel):
 
         rh_notes = [self.chord.root + interval.to_int() for interval in rh_intervals]
 
+        # Apply inversions
         inversion_number = self.inversion.get_number()
         n_rh_notes = len(rh_notes)
         if inversion_number >= n_rh_notes:
             msg = f"The {self.inversion.to_written()} does not exist for a voicing with {n_rh_notes} right hand notes."
-            logger.error(msg)
             raise ValueError(msg)
 
         rh_pitches = [Pitch(note=note, octave=self.octave) for note in rh_notes]
@@ -89,12 +98,5 @@ class Voicing(BaseModel):
             transposed_pitch = rh_pitches[0]
             transposed_pitch.octave += 1
             rh_pitches = rh_pitches[1:] + [transposed_pitch]
-
-        lh_intervals: list[Interval] = []
-        lh_intervals += self._get_intervals_from_bass()
-        if len(lh_intervals) == 0:
-            lh_intervals += [Interval.Unison]
-        lh_notes = [self.chord.root + interval.to_int() for interval in lh_intervals]
-        lh_pitches = [Pitch(note=note, octave=self.octave - 2) for note in lh_notes]
 
         return lh_pitches + rh_pitches

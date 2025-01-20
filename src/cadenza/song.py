@@ -7,15 +7,15 @@ from cadenza.duration import Duration
 
 
 class Song(BaseModel):
-    DEFAULT_TEMPO: ClassVar[int] = 80
-    DEFAULT_BEAT_VALUE: ClassVar[Duration] = Duration.Quarter
+    DEFAULT_TEMPO: ClassVar[float] = 80.0
+    DEFAULT_BEAT_DURATION: ClassVar[Duration] = Duration.Quarter
     DEFAULT_CHORD_DURATION: ClassVar[Duration] = Duration.Quarter
 
     name: str
     artist: str
     chords: list[Chord]
-    tempo: int = DEFAULT_TEMPO
-    beat_value: Duration = DEFAULT_BEAT_VALUE
+    tempo: float = DEFAULT_TEMPO
+    beat_duration: Duration = DEFAULT_BEAT_DURATION
     chord_duration: Duration = DEFAULT_CHORD_DURATION
 
     @classmethod
@@ -25,8 +25,8 @@ class Song(BaseModel):
         artist: str,
         song_str: str,
         *,
-        tempo: int = DEFAULT_TEMPO,
-        beat_value: Duration = DEFAULT_BEAT_VALUE,
+        tempo: float = DEFAULT_TEMPO,
+        beat_duration: Duration = DEFAULT_BEAT_DURATION,
         chord_duration: Duration = DEFAULT_CHORD_DURATION,
     ) -> "Song":
         chord_strs = song_str.replace("\n", " ").strip().split(" ")
@@ -36,7 +36,7 @@ class Song(BaseModel):
             artist=artist,
             chords=chords,
             tempo=tempo,
-            beat_value=beat_value,
+            beat_duration=beat_duration,
             chord_duration=chord_duration,
         )
 
