@@ -139,7 +139,7 @@ def song(  # noqa: PLR0913
     overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     sample_rate: int = 44_100,
     play: Annotated[bool, Option("--play/--no-play")] = True,
-    start_line: Annotated[int, Option("--start-line")] = 0,
+    start_line: Annotated[int, Option("--line")] = 0,
     filepath: Optional[Path] = None,
     info: bool = False,
     debug: bool = False,
