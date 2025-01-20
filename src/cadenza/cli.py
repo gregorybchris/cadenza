@@ -45,7 +45,7 @@ def chord(  # noqa: PLR0913
     overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     sample_rate: Annotated[int, Option("--sample-rate", "-sr")] = 44_100,
     play: Annotated[bool, Option("--play/--no-play")] = True,
-    show_pitches: Annotated[bool, Option("--show-pitches/--no-show-pitches")] = True,
+    show_pitches: Annotated[bool, Option("--pitches/--no-pitches")] = True,
     filepath: Optional[Path] = None,
     info: bool = False,
     debug: bool = False,
@@ -138,6 +138,7 @@ def song(  # noqa: PLR0913
     repeat: Annotated[int, Option("--repeat")] = 1,
     overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     sample_rate: int = 44_100,
+    show_functions: Annotated[bool, Option("--functions/--no-functions")] = False,
     play: Annotated[bool, Option("--play/--no-play")] = True,
     start_line: Annotated[int, Option("--line")] = 0,
     filepath: Optional[Path] = None,
@@ -159,13 +160,30 @@ def song(  # noqa: PLR0913
         console.print(f"Tempo: [bold][white]{song.tempo:.0f}bpm")
         console.print(f"Beat duration: [bold][white]{song.beat_duration}")
         console.print(f"Chord duration: [bold][white]{song.chord_duration}")
+        if song.tonic is not None:
+            console.print(f"Tonic: [bold][white]{song.tonic.to_key()}")
         if transpose != 0:
             console.print(f"Transpose: [bold][white]{transpose}")
         console.print("Chords:")
         for chord_line in song.chords:
             chords = [chord.transpose(transpose) for chord in chord_line]
+
+            if show_functions:
+                if song.tonic is None:
+                    msg = "Cannot display functional analysis with an unknown tonic"
+                    console.print(f"[bold][red]{msg}")
+                    return
+
+                functions = [chord.to_function(song.tonic) for chord in chords]
+                function_line_str = "[white]   [bold][green]".join(str(function) for function in functions)
+                console.print(f"[bold][green]{function_line_str}")
+
             chord_line_str = "[white] | [bold][blue]".join(str(chord) for chord in chords)
             console.print(f"[bold][blue]{chord_line_str}")
+
+            if show_functions:
+                console.print()
+
     except StopIteration:
         msg = f"No song found for query: {query}"
         console.print(f"[bold][red]{msg}")

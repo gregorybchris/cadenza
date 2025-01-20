@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from cadenza.alteration import Alteration
 from cadenza.errors import ParseError
 from cadenza.extension import Extension
+from cadenza.interval import Interval
 from cadenza.note import Note
 from cadenza.quality import Quality
 from cadenza.scale_degree import ScaleDegree
@@ -52,30 +53,26 @@ class Chord(BaseModel):
 
     @classmethod
     def from_scale_degree(cls, tonic: "Chord", scale_degree: ScaleDegree) -> Self:
-        root = tonic.root
-        minor = Quality.Minor
-        major = Quality.Major
-        diminished = Quality.Diminished
         match tonic.quality:
             case Quality.Major:
                 return {
-                    ScaleDegree.Tonic: cls(root=root + 0, quality=major),
-                    ScaleDegree.Supertonic: cls(root=root + 2, quality=minor),
-                    ScaleDegree.Mediant: cls(root=root + 4, quality=minor),
-                    ScaleDegree.Subdominant: cls(root=root + 5, quality=major),
-                    ScaleDegree.Dominant: cls(root=root + 7, quality=major),
-                    ScaleDegree.Submediant: cls(root=root + 9, quality=minor),
-                    ScaleDegree.LeadingTone: cls(root=root + 11, quality=diminished),
+                    ScaleDegree.Tonic: cls(root=tonic.root + 0, quality=Quality.Major),
+                    ScaleDegree.Supertonic: cls(root=tonic.root + 2, quality=Quality.Minor),
+                    ScaleDegree.Mediant: cls(root=tonic.root + 4, quality=Quality.Minor),
+                    ScaleDegree.Subdominant: cls(root=tonic.root + 5, quality=Quality.Major),
+                    ScaleDegree.Dominant: cls(root=tonic.root + 7, quality=Quality.Major),
+                    ScaleDegree.Submediant: cls(root=tonic.root + 9, quality=Quality.Minor),
+                    ScaleDegree.LeadingTone: cls(root=tonic.root + 11, quality=Quality.Diminished),
                 }[scale_degree]
             case Quality.Minor:
                 return {
-                    ScaleDegree.Tonic: cls(root=root + 0, quality=minor),
-                    ScaleDegree.Supertonic: cls(root=root + 2, quality=diminished),
-                    ScaleDegree.Mediant: cls(root=root + 3, quality=major),
-                    ScaleDegree.Subdominant: cls(root=root + 5, quality=minor),
-                    ScaleDegree.Dominant: cls(root=root + 7, quality=minor),
-                    ScaleDegree.Submediant: cls(root=root + 8, quality=major),
-                    ScaleDegree.LeadingTone: cls(root=root + 10, quality=minor),
+                    ScaleDegree.Tonic: cls(root=tonic.root + 0, quality=Quality.Minor),
+                    ScaleDegree.Supertonic: cls(root=tonic.root + 2, quality=Quality.Diminished),
+                    ScaleDegree.Mediant: cls(root=tonic.root + 3, quality=Quality.Major),
+                    ScaleDegree.Subdominant: cls(root=tonic.root + 5, quality=Quality.Minor),
+                    ScaleDegree.Dominant: cls(root=tonic.root + 7, quality=Quality.Minor),
+                    ScaleDegree.Submediant: cls(root=tonic.root + 8, quality=Quality.Major),
+                    ScaleDegree.LeadingTone: cls(root=tonic.root + 10, quality=Quality.Minor),
                 }[scale_degree]
             case _:
                 msg = f"Getting chords by degree for quality {tonic.quality.to_written()} is not supported"
@@ -91,3 +88,45 @@ class Chord(BaseModel):
             alteration=self.alteration,
             bass=new_bass,
         )
+
+    def to_function(self, tonic: "Chord") -> str:
+        tonic_root = tonic.root
+        interval_num = (self.root.to_index() - tonic_root.to_index()) % 12
+        interval = Interval.from_int(interval_num)
+        scale_degree = ScaleDegree.from_interval(interval)
+        function_map = {
+            ScaleDegree.Tonic: "I",
+            ScaleDegree.Supertonic: "II",
+            ScaleDegree.Mediant: "III",
+            ScaleDegree.Subdominant: "IV",
+            ScaleDegree.Dominant: "V",
+            ScaleDegree.Submediant: "VI",
+            ScaleDegree.LeadingTone: "VII",
+        }
+        ret = function_map[scale_degree]
+        if self.quality in [Quality.Minor, Quality.Diminished]:
+            ret = ret.lower()
+        if self.quality == Quality.Diminished:
+            ret += "°"
+        if self.quality == Quality.Augmented:
+            ret += "+"
+        if self.quality == Quality.SusTwo:
+            ret += "sus2"
+        if self.quality == Quality.SusFour:
+            ret += "sus4"
+        if self.extension == Extension.Seven:
+            ret += "7"
+        if self.extension == Extension.MajorSeven:
+            ret += "maj7"
+
+        return ret
+
+    def to_key(self) -> str:
+        match self.quality:
+            case Quality.Major:
+                return self.root.to_str() + " major"
+            case Quality.Minor:
+                return self.root.to_str() + " minor"
+            case _:
+                msg = f"The chord {self} could not be converted to a key"
+                raise ValueError(msg)

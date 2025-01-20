@@ -2,6 +2,8 @@ import logging
 from enum import StrEnum, auto
 from typing import Self
 
+from cadenza.interval import Interval
+
 logger = logging.getLogger(__name__)
 
 
@@ -60,6 +62,38 @@ class ScaleDegree(StrEnum):
                 return 6
             case ScaleDegree.LeadingTone:
                 return 7
+
+    @classmethod
+    def from_interval(cls, interval: Interval) -> "ScaleDegree":  # noqa: PLR0911, PLR0912
+        match interval:
+            case Interval.Unison:
+                return cls.Tonic
+            case Interval.MinorSecond:
+                msg = "Minor second is not a valid interval for scale degrees"
+                raise ValueError(msg)
+            case Interval.MajorSecond:
+                return cls.Supertonic
+            case Interval.MinorThird:
+                return cls.Mediant
+            case Interval.MajorThird:
+                return cls.Mediant
+            case Interval.PerfectFourth:
+                return cls.Subdominant
+            case Interval.Tritone:
+                msg = "Tritone is not a valid interval for scale degrees"
+                raise ValueError(msg)
+            case Interval.PerfectFifth:
+                return cls.Dominant
+            case Interval.MinorSixth:
+                return cls.Submediant
+            case Interval.MajorSixth:
+                return cls.Submediant
+            case Interval.MinorSeventh:
+                return cls.LeadingTone
+            case Interval.MajorSeventh:
+                return cls.LeadingTone
+            case Interval.Octave:
+                return cls.Tonic
 
     @classmethod
     def from_str(cls, mode_str: str) -> Self:

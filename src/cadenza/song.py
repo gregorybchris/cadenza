@@ -1,4 +1,4 @@
-from typing import Any, ClassVar, Iterator
+from typing import Any, ClassVar, Iterator, Optional
 
 from pydantic import BaseModel, model_validator
 
@@ -12,6 +12,7 @@ class Song(BaseModel):
     DEFAULT_TEMPO: ClassVar[float] = 80.0
     DEFAULT_BEAT_DURATION: ClassVar[Duration] = Duration.Quarter
     DEFAULT_CHORD_DURATION: ClassVar[Duration] = Duration.Quarter
+    DEFAULT_TONIC: ClassVar[Optional[Chord]] = None
 
     id: str
     title: str
@@ -20,6 +21,7 @@ class Song(BaseModel):
     tempo: float = DEFAULT_TEMPO
     beat_duration: Duration = DEFAULT_BEAT_DURATION
     chord_duration: Duration = DEFAULT_CHORD_DURATION
+    tonic: Optional[Chord] = DEFAULT_TONIC
 
     @staticmethod
     def _parse_chords_str(chords_str: str) -> list[list[Chord]]:
@@ -30,6 +32,7 @@ class Song(BaseModel):
     @model_validator(mode="before")
     def transform_fields(cls, values: JsonDict) -> JsonDict:  # noqa: N805
         values["chords"] = cls._parse_chords_str(values["chords"])
+        values["tonic"] = Chord.from_str(values["tonic"]) if values.get("tonic") else None
         return values
 
     def iter_chords(self) -> Iterator[Chord]:

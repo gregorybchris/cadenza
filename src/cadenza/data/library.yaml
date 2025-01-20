@@ -95,6 +95,7 @@ songs:
     tempo: 130
     beat_duration: quarter
     chord_duration: whole
+    tonic: E
 
   - id: 322899b2-908f-4025-ae3c-eadd76ed6b02
     title: Talk is Cheap
@@ -122,3 +123,4 @@ songs:
     tempo: 130
     beat_duration: quarter
     chord_duration: whole
+    tonic: A
