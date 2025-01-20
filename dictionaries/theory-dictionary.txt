@@ -1,0 +1,9 @@
+Aeolian
+Dorian
+halfdim
+Ionian
+Locrian
+Lydian
+microtones
+Mixolydian
+Phrygian

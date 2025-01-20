@@ -15,15 +15,5 @@
   "prettier.printWidth": 120,
   "ruff.configuration": "pyproject.toml",
   "ruff.nativeServer": true,
-  "cSpell.words": [
-    "halfdim",
-    "Locrian",
-    "microtones",
-    "Mixolydian",
-    "numpy",
-    "samplerate",
-    "soundfile",
-    "torchaudio",
-    "typer"
-  ]
+  "cSpell.words": ["numpy", "samplerate", "soundfile", "torchaudio", "typer"]
 }
