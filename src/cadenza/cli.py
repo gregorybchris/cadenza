@@ -193,7 +193,7 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     sample_rate: int = 44_100,
     show_functions: Annotated[bool, Option("--functions/--no-functions")] = False,
     play: Annotated[bool, Option("--play/--no-play")] = True,
-    start_line: Annotated[int, Option("--line")] = 0,
+    start_line: Annotated[int, Option("--line")] = 1,
     spacious: Annotated[bool, Option("--spacious/--no-spacious")] = False,
     filepath: Optional[Path] = None,
     info: bool = False,
@@ -256,7 +256,7 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     silence_duration = 0  # Can be seconds_per_chord / 20 for some space
     audio_duration = seconds_per_chord - silence_duration
 
-    if start_line >= len(song.chords):
+    if start_line - 1 >= len(song.chords):
         msg = f"Start line is greater than the number of lines in the song: {len(song.chords)}"
         console.print(f"[bold][red]{msg}")
         return
@@ -264,7 +264,7 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     segments: list[Tensor] = []
     for _ in range(repeat):
         for chord_line_num, chord_line in enumerate(song.chords):
-            if chord_line_num < start_line:
+            if chord_line_num < start_line - 1:
                 continue
             for chord in chord_line:
                 transposed_chord = chord.transpose(transpose)
