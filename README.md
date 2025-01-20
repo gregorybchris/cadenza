@@ -45,7 +45,7 @@ cz chord Cmaj7/A --filepath audio.wav --sample-rate 48000
 ### Songs
 
 ```bash
-# Play a song by name
+# Play a song by title
 cz song homesick
 
 # Change the octave (default is 4)

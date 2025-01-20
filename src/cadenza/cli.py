@@ -9,9 +9,9 @@ from typer import Argument, Option, Typer
 from cadenza import Chord
 from cadenza.duration import Duration
 from cadenza.inversion import Inversion
+from cadenza.library import Library
 from cadenza.player import Player
 from cadenza.saver import Saver
-from cadenza.song_library import SongLibrary
 from cadenza.synth import Synth, SynthArgs
 from cadenza.voicing import Voicing
 
@@ -77,7 +77,7 @@ def chord(  # noqa: PLR0913
 
 @app.command()
 def song(  # noqa: PLR0913
-    slug: str,
+    query: str,
     octave: Annotated[int, Option("--octave")] = 4,
     tempo: Annotated[Optional[float], Option("--tempo")] = None,
     chord_duration: Optional[Duration] = None,
@@ -94,8 +94,24 @@ def song(  # noqa: PLR0913
     synth_args = SynthArgs(sample_rate=sample_rate)
     synth = Synth(args=synth_args)
 
-    # Select a song from the library to generate
-    song = SongLibrary.get(slug)
+    library_filepath = Path(__file__).parent / "data" / "songs.yaml"
+    library = Library.from_file(library_filepath)
+    results_iter = library.search(query)
+    try:
+        song = next(results_iter)
+        console.print(f"Title: [bold][white]{song.title}")
+        console.print(f"Artist: [bold][white]{song.artist}")
+        console.print(f"Tempo: [bold][white]{song.tempo}")
+        console.print(f"Beat Duration: [bold][white]{song.beat_duration}")
+        console.print(f"Chord Duration: [bold][white]{song.chord_duration}")
+        console.print("Chords:")
+        for chord_line in song.chords:
+            chord_line_str = "[white] | [bold][blue]".join(str(chord) for chord in chord_line)
+            console.print(f"[bold][blue]{chord_line_str}")
+    except StopIteration:
+        msg = f"No song found for query: {query}"
+        console.print(f"[bold][red]{msg}")
+        return
 
     tempo = tempo or song.tempo
     beat_duration = beat_duration or song.beat_duration

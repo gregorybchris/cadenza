@@ -5,12 +5,14 @@ authors = [
 dependencies = [
     "numpy>=2.2.2",
     "pydantic>=2.10.5",
+    "pyyaml>=6.0.2",
     "rich>=13.9.4",
     "sounddevice>=0.5.1",
     "soundfile>=0.13.0",
     "torch>=2.5.1",
     "torchaudio>=2.5.1",
     "typer>=0.15.1",
+    "types-pyyaml>=6.0.12.20241230",
 ]
 description = "Exploration of music theory."
 keywords = ["chord", "progression", "modulator", "music", "theory", "song"]

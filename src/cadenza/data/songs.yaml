@@ -1,0 +1,87 @@
+songs:
+  - id: 3e268135-bd7f-4a15-a08e-95001f6346fa
+    title: Range Rover
+    artist: Ben Rector
+    chords: |
+      D F#m Bm G
+      D F#m Bm D7 G D E7 G
+      D F# Bm D7 G D E7 G/A
+      D D D
+    tempo: 35
+    beat_duration: whole
+    chord_duration: whole
+
+  - id: 9e7f9d1c-7f96-4f17-b7c0-b49e01eba51f
+    title: Dancing Through Life
+    artist: Wicked
+    chords: |
+      G Cm/G G Adim G
+      D Em C Am D
+      G D#aug
+      Em G C9 C Ahalfdim D#
+      G G#dim7 Am7
+      E Emaj7 E Emaj7
+      E Emaj7 A B B C#m7
+      Am
+      C D
+      E Emaj7 A
+    tempo: 80
+    beat_duration: eighth
+    chord_duration: quarter
+
+  - id: 0ef25518-355a-42f3-bed1-9e589ba63ea3
+    title: Dancing My Way
+    artist: Wyn Starks
+    chords: |
+      C G Am F C G Am F
+      Dm Am G Dm Am G
+      F Am F Am F Am F Am
+      C Dm Am F C Dm Am F
+      Dm Am G Dm Am G
+      F Am F Am F Am F Am
+      Fm C Bb F Fm C Bb F Fm C Bb F
+      F Am F Am F Am F Am F Am F Am F Am F Am
+    tempo: 80
+    beat_duration: eighth
+    chord_duration: half
+
+  - id: 48315e4c-0a1b-478a-95fe-f233e842fd47
+    title: Homesick
+    artist: Noah Kahan
+    chords: |
+      F# D#m C# B
+      F# D#m C# B
+
+  - id: 16020461-d7d2-43cd-a804-eb246f62af67
+    title: Put Your Records On
+    artist: Corinne Bailey Rae
+    chords: |
+      Bb C7 Eb/F Bb
+      Gm7 D7/F# Gm7 C
+
+  - id: 604da82b-1577-4ee0-86c8-43447895edf2
+    title: Only Home I've Ever Known
+    artist: The California Honeydrops
+    chords: |
+      Eb Ab Eb G Cm Faug Bb7 Eb
+      Eb Ab Ab Ab Eb
+      Bb G7/B Cm F7 Bb7
+      Bb G7 Cm Ab G7
+      Ab F7/A Eb/Bb G7/B Cm
+      F7 Bb7 Eb
+      Bb Eb Bb Eb G7 Cm
+      F7 Bb7
+      Bb Ab Eb
+
+  - id: 2320e8bd-93f5-445b-a3d0-9476d1cbf1f9
+    title: Don't Stop Believin'
+    artist: Journey
+    chords: |
+      E B C#m A
+
+  - id: 322899b2-908f-4025-ae3c-eadd76ed6b02
+    title: Talk is Cheap
+    artist: Kyle Thornton
+    chords: |
+      Bbm7 Bbm7/Eb Abmaj7 F7/A
+      Ab F7 F7/A Bbm7
