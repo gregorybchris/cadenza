@@ -245,6 +245,11 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     silence_duration = 0  # Can be seconds_per_chord / 20 for some space
     audio_duration = seconds_per_chord - silence_duration
 
+    if start_line >= len(song.chords):
+        msg = f"Start line is greater than the number of lines in the song: {len(song.chords)}"
+        console.print(f"[bold][red]{msg}")
+        return
+
     segments: list[Tensor] = []
     for _ in range(repeat):
         for chord_line_num, chord_line in enumerate(song.chords):

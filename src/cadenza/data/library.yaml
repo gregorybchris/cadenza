@@ -194,6 +194,7 @@ songs:
       C C/Bb F/A E7b9/G# C/G F#m7b5 Dm/F Fmaj7/G
       C E7/B Am7 C7/G F F/G C F/G
       C E7/B Am7 C7/Bb F F/G C F/G
+      C
     tempo: 110
     beat_duration: quarter
     chord_duration: half

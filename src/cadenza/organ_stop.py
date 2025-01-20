@@ -11,9 +11,8 @@ class OrganStop(StrEnum):
     EightFoot = auto()
     SixteenFoot = auto()
     ThirtyTwoFoot = auto()
-    SixtyFourFoot = auto()
 
-    def get_multiplier(self) -> float:  # noqa: PLR0911
+    def get_multiplier(self) -> float:
         match self:
             case OrganStop.OneFoot:
                 return 1 / 8
@@ -27,10 +26,8 @@ class OrganStop(StrEnum):
                 return 2
             case OrganStop.ThirtyTwoFoot:
                 return 4
-            case OrganStop.SixtyFourFoot:
-                return 8
 
-    def get_decay(self) -> float:  # noqa: PLR0911
+    def get_decay(self) -> float:
         match self:
             case OrganStop.OneFoot:
                 return 1 / 16
@@ -44,5 +41,3 @@ class OrganStop(StrEnum):
                 return 1 / 4
             case OrganStop.ThirtyTwoFoot:
                 return 1 / 9
-            case OrganStop.SixtyFourFoot:
-                return 1 / 16
