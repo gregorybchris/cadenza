@@ -77,3 +77,12 @@ class Synth:
         height = 1.0 - dip
         amplitude = dip + height * torch.sin(2 * torch.pi * frequency * t)
         return audio * amplitude
+
+    def apply_hammond_tremolo(self, audio: Tensor) -> Tensor:
+        # Apply high frequency tremolo
+        audio = self.apply_tremolo(audio, frequency=5.2, dip=0.92)
+
+        # Apply low frequency tremolo, like the Leslie effect on a Hammond organ
+        audio = self.apply_tremolo(audio, frequency=1.7, dip=0.92)
+
+        return audio  # noqa: RET504

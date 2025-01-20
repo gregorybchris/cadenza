@@ -34,8 +34,11 @@ cz chord G#m7 --transpose 2
 # Change the duration of the notes (default is 3 seconds)
 cz chord Em --duration 1
 
-# Add overtones
+# Add pipe organ overtones
 cz chord F#dim --overtones
+
+# Add tremolo
+cz chord E7b9/G# --tremolo
 
 # Analyze a chord without playing it
 cz chord Dmaj7 --no-play
@@ -79,8 +82,11 @@ cz song homesick --chord-duration eighth
 # Change the note associated with one beat
 cz song homesick --beat-duration half
 
-# Add overtones
+# Add pipe organ overtones
 cz song homesick --overtones
+
+# Add tremolo
+cz song homesick --tremolo
 
 # Save song audio to a file
 cz song homesick --filepath audio.wav

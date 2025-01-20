@@ -84,6 +84,7 @@ def chord(  # noqa: PLR0913
     transpose: Annotated[int, Option("--transpose")] = 0,
     duration_s: Annotated[float, Option("--duration", "-d")] = 3.0,
     overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
+    tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
     sample_rate: Annotated[int, Option("--sample-rate", "-sr")] = 44_100,
     play: Annotated[bool, Option("--play/--no-play")] = True,
     show_pitches: Annotated[bool, Option("--pitches/--no-pitches")] = True,
@@ -104,6 +105,9 @@ def chord(  # noqa: PLR0913
 
     voicing = Voicing(chord=chord, inversion=inversion, octave=octave)
     audio = synth.generate_voicing_audio(voicing, duration_s, overtones=overtones)
+
+    if tremolo:
+        audio = synth.apply_hammond_tremolo(audio)
 
     if show_pitches:
         pitches = voicing.get_pitches()
@@ -131,6 +135,7 @@ def chords(  # noqa: PLR0913
     beat_duration: Duration = Duration.Quarter,
     repeat: Annotated[int, Option("--repeat")] = 1,
     overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
+    tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
     sample_rate: int = 44_100,
     play: Annotated[bool, Option("--play/--no-play")] = True,
     filepath: Optional[Path] = None,
@@ -161,6 +166,9 @@ def chords(  # noqa: PLR0913
             segments.append(audio_silence)
 
     audio = synth.concat(segments)
+
+    if tremolo:
+        audio = synth.apply_hammond_tremolo(audio)
 
     if filepath:
         saver = Saver(sample_rate=sample_rate)
@@ -267,11 +275,7 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     audio = synth.concat(segments)
 
     if tremolo:
-        # Apply high frequency tremolo
-        audio = synth.apply_tremolo(audio, frequency=5.2, dip=0.92)
-
-        # Apply low frequency tremolo, like the Leslie effect on a Hammond organ
-        audio = synth.apply_tremolo(audio, frequency=1.7, dip=0.92)
+        audio = synth.apply_hammond_tremolo(audio)
 
     if filepath:
         saver = Saver(sample_rate=sample_rate)
