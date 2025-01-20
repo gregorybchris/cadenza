@@ -172,7 +172,7 @@ def chords(  # noqa: PLR0913
 
 
 @app.command()
-def song(  # noqa: PLR0913
+def song(  # noqa: PLR0912, PLR0913
     query: str,
     octave: Annotated[int, Option("--octave")] = 4,
     transpose: Annotated[int, Option("--transpose")] = 0,
@@ -185,6 +185,7 @@ def song(  # noqa: PLR0913
     show_functions: Annotated[bool, Option("--functions/--no-functions")] = False,
     play: Annotated[bool, Option("--play/--no-play")] = True,
     start_line: Annotated[int, Option("--line")] = 0,
+    spacious: Annotated[bool, Option("--spacious/--no-spacious")] = False,
     filepath: Optional[Path] = None,
     info: bool = False,
     debug: bool = False,
@@ -225,7 +226,7 @@ def song(  # noqa: PLR0913
             chord_line_str = "[white] | [bold][blue]".join(str(chord) for chord in chords)
             console.print(f"[bold][blue]{chord_line_str}")
 
-            if show_functions:
+            if spacious:
                 console.print()
 
     except StopIteration:

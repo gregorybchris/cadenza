@@ -145,3 +145,29 @@ songs:
     beat_duration: quarter
     chord_duration: half
     tonic: Db
+
+  - id: bda1ab2f-6d97-4459-aa11-65509fc419f1
+    title: Don't Know Why
+    artist: Norah Jones
+    chords: |
+      A A7 D Dm
+      A/F# B D/E A
+      A A7 D C#7
+      A/F# B D A
+      F#m7 B D/E A
+      A A7 D Dm
+      A/F# B D A
+      A A7 D C#7
+      F#m7 B D/E A
+      F#m7 B E E7
+      F#m7 B E
+      D C#m E7/B
+      A A7 D Dm
+      A/F# B D/E A
+      A A7 D C#7
+      A/F# B D A
+      A/F# B D A
+    tempo: 50
+    beat_duration: quarter
+    chord_duration: quarter
+    tonic: A
