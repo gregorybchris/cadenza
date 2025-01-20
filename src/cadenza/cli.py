@@ -85,6 +85,7 @@ def song(  # noqa: PLR0913
     overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     sample_rate: int = 44_100,
     play: Annotated[bool, Option("--play/--no-play")] = True,
+    start_line: Annotated[int, Option("--start-line")] = 0,
     filepath: Optional[Path] = None,
     info: bool = False,
     debug: bool = False,
@@ -124,13 +125,16 @@ def song(  # noqa: PLR0913
     audio_duration = seconds_per_chord - silence_duration
 
     segments: list[Tensor] = []
-    for chord in song.iter_chords():
-        voicing = Voicing(chord=chord, inversion=Inversion.Root, octave=octave)
-        segment = synth.generate_voicing_audio(voicing, audio_duration, overtones=overtones)
-        segments.append(segment)
+    for chord_line_num, chord_line in enumerate(song.chords):
+        if chord_line_num < start_line:
+            continue
+        for chord in chord_line:
+            voicing = Voicing(chord=chord, inversion=Inversion.Root, octave=octave)
+            segment = synth.generate_voicing_audio(voicing, audio_duration, overtones=overtones)
+            segments.append(segment)
 
-        audio_silence = synth.generate_silence(silence_duration)
-        segments.append(audio_silence)
+            audio_silence = synth.generate_silence(silence_duration)
+            segments.append(audio_silence)
 
     audio = synth.concat(segments)
 
