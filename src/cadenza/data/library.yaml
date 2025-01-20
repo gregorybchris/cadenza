@@ -77,7 +77,7 @@ songs:
     artist: The California Honeydrops
     chords: |
       Eb Ab Eb G Cm Faug Bb7 Eb
-      Eb Ab Ab Ab Eb
+      Eb Ab Eb Ab Eb
       Bb G7/B Cm F7 Bb7
       Bb G7 Cm Ab G7
       Ab F7/A Eb/Bb G7/B Cm
@@ -88,6 +88,7 @@ songs:
     tempo: 40
     beat_duration: quarter
     chord_duration: quarter
+    tonic: Eb
 
   - id: 2320e8bd-93f5-445b-a3d0-9476d1cbf1f9
     title: Don't Stop Believin'
@@ -114,6 +115,7 @@ songs:
     tempo: 105
     beat_duration: quarter
     chord_duration: whole
+    tonic: Ab
 
   - id: e66378ba-045c-4f6f-929f-1b3a204b15a7
     title: Get Lucky

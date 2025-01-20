@@ -228,7 +228,8 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
                     console.print(f"[bold][red]{msg}")
                     return
 
-                functions = [chord.to_function(song.tonic) for chord in chords]
+                transposed_tonic = song.tonic.transpose(transpose)
+                functions = [chord.to_function(transposed_tonic) for chord in chords]
                 function_line_str = "[white]   [bold][green]".join(str(function) for function in functions)
                 console.print(f"[bold][green]{function_line_str}")
 

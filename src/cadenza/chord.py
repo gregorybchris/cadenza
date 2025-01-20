@@ -98,7 +98,7 @@ class Chord(BaseModel):
             scale_degree = ScaleDegree.from_interval(interval)
         except ValueError as exc:
             msg = f"Failed to convert chord {self} to a scale degree: {exc}"
-            logger.warning(msg)
+            logger.debug(msg)
             return str(self)
         function_map = {
             ScaleDegree.Tonic: "I",
@@ -129,7 +129,12 @@ class Chord(BaseModel):
         if self.bass is not None:
             base_interval_num = (self.bass.to_index() - tonic_root.to_index()) % 12
             base_interval = Interval.from_int(base_interval_num)
-            base_scale_degree = ScaleDegree.from_interval(base_interval)
+            try:
+                base_scale_degree = ScaleDegree.from_interval(base_interval)
+            except ValueError as exc:
+                msg = f"Failed to convert chord {self} bass to a scale degree: {exc}"
+                logger.debug(msg)
+                return str(self)
             base_func = function_map[base_scale_degree]
             ret += f"/{base_func}"
 
