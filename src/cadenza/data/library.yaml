@@ -68,6 +68,7 @@ songs:
     tempo: 90
     beat_duration: quarter
     chord_duration: whole
+    tonic: Bb
 
   - id: 604da82b-1577-4ee0-86c8-43447895edf2
     title: Only Home I've Ever Known

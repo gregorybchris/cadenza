@@ -91,6 +91,7 @@ class Chord(BaseModel):
 
     def to_function(self, tonic: "Chord") -> str:
         tonic_root = tonic.root
+
         interval_num = (self.root.to_index() - tonic_root.to_index()) % 12
         interval = Interval.from_int(interval_num)
         scale_degree = ScaleDegree.from_interval(interval)
@@ -103,7 +104,8 @@ class Chord(BaseModel):
             ScaleDegree.Submediant: "VI",
             ScaleDegree.LeadingTone: "VII",
         }
-        ret = function_map[scale_degree]
+        func = function_map[scale_degree]
+        ret = func
         if self.quality in [Quality.Minor, Quality.Diminished]:
             ret = ret.lower()
         if self.quality == Quality.Diminished:
@@ -118,6 +120,13 @@ class Chord(BaseModel):
             ret += "7"
         if self.extension == Extension.MajorSeven:
             ret += "maj7"
+
+        if self.bass is not None:
+            base_interval_num = (self.bass.to_index() - tonic_root.to_index()) % 12
+            base_interval = Interval.from_int(base_interval_num)
+            base_scale_degree = ScaleDegree.from_interval(base_interval)
+            base_func = function_map[base_scale_degree]
+            ret += f"/{base_func}"
 
         return ret
 
