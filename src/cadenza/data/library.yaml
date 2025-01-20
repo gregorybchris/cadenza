@@ -43,7 +43,7 @@ songs:
       F Am F Am F Am F Am F Am F Am F Am F Am
     tempo: 80
     beat_duration: eighth
-    chord_duration: half
+    chord_duration: quarter
 
   - id: 48315e4c-0a1b-478a-95fe-f233e842fd47
     title: Homesick
@@ -51,6 +51,11 @@ songs:
     chords: |
       F# D#m C# B
       F# D#m C# B
+      F# G#m D#m B
+      F# G#m D#m B
+    tempo: 150
+    beat_duration: quarter
+    chord_duration: whole
 
   - id: 16020461-d7d2-43cd-a804-eb246f62af67
     title: Put Your Records On
