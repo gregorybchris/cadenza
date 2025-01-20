@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import torch
 from torch import Tensor
 
+from cadenza.organ_stop import OrganStop
 from cadenza.pitch import Pitch
 from cadenza.voicing import Voicing
 
@@ -25,17 +26,18 @@ class Synth:
 
         # Generate sine waves
         amplitude = 0.5
-        tones = torch.stack([amplitude * torch.sin(2 * torch.pi * f * t) for f in frequencies])
+        tones = torch.stack([amplitude * torch.sin(2 * torch.pi * freq * t) for freq in frequencies])
 
         # Merge tones by summing them
         audio = tones.sum(dim=0)
 
         if overtones:
-            # Add overtones with exponential decay
+            # Add overtones using organ stops
             for freq in frequencies:
-                for i in [2, 3, 4, 5]:
-                    overtone = freq * i
-                    decay = 1 / i**2
+                for stop in OrganStop:
+                    multiplier = stop.get_multiplier()
+                    decay = stop.get_decay()
+                    overtone = freq * multiplier
                     overtone_amplitude = decay * amplitude
                     overtone_waveform = overtone_amplitude * torch.sin(2 * torch.pi * overtone * t)
                     audio += overtone_waveform
