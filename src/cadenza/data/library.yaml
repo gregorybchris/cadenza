@@ -62,7 +62,12 @@ songs:
     artist: Corinne Bailey Rae
     chords: |
       Bb C7 Eb/F Bb
+      Bb C7 Eb/F Bb
       Gm7 D7/F# Gm7 C
+      Cm F7 Bb
+    tempo: 90
+    beat_duration: quarter
+    chord_duration: whole
 
   - id: 604da82b-1577-4ee0-86c8-43447895edf2
     title: Only Home I've Ever Known
@@ -77,16 +82,31 @@ songs:
       Bb Eb Bb Eb G7 Cm
       F7 Bb7
       Bb Ab Eb
+    tempo: 40
+    beat_duration: quarter
+    chord_duration: quarter
 
   - id: 2320e8bd-93f5-445b-a3d0-9476d1cbf1f9
     title: Don't Stop Believin'
     artist: Journey
     chords: |
       E B C#m A
+      E B C#m A
+    tempo: 130
+    beat_duration: quarter
+    chord_duration: whole
 
   - id: 322899b2-908f-4025-ae3c-eadd76ed6b02
     title: Talk is Cheap
     artist: Kyle Thornton
     chords: |
       Bbm7 Bbm7/Eb Abmaj7 F7/A
+      Bbm7 Bbm7/Eb Abmaj7 F7/A
+      Bbm7 Bbm7/Eb Abmaj7 F7/A
+      Bbm7 Bbm7/Eb Ab
+      Bbm7 Ab Bbm7 Ab
+      Bbm7 Ab Bbm7 Ab
       Ab F7 F7/A Bbm7
+    tempo: 90
+    beat_duration: quarter
+    chord_duration: whole
