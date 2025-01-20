@@ -156,9 +156,11 @@ def song(  # noqa: PLR0913
         song = next(results_iter)
         console.print(f"Title: [bold][white]{song.title}")
         console.print(f"Artist: [bold][white]{song.artist}")
-        console.print(f"Tempo: [bold][white]{song.tempo}")
-        console.print(f"Beat Duration: [bold][white]{song.beat_duration}")
-        console.print(f"Chord Duration: [bold][white]{song.chord_duration}")
+        console.print(f"Tempo: [bold][white]{song.tempo:.0f}bpm")
+        console.print(f"Beat duration: [bold][white]{song.beat_duration}")
+        console.print(f"Chord duration: [bold][white]{song.chord_duration}")
+        if transpose != 0:
+            console.print(f"Transpose: [bold][white]{transpose}")
         console.print("Chords:")
         for chord_line in song.chords:
             chords = [chord.transpose(transpose) for chord in chord_line]
