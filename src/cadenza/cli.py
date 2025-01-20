@@ -207,46 +207,48 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     library_filepath = Path(__file__).parent / "data" / "library.yaml"
     library = Library.from_file(library_filepath)
     results_iter = library.search(query)
+
     try:
         song = next(results_iter)
-        console.print(f"Title: [bold][white]{song.title}")
-        console.print(f"Artist: [bold][white]{song.artist}")
-        console.print(f"Tempo: [bold][white]{song.tempo:.0f}bpm")
-        console.print(f"Beat duration: [bold][white]{song.beat_duration}")
-        console.print(f"Chord duration: [bold][white]{song.chord_duration}")
-        if song.tonic is not None:
-            console.print(f"Tonic: [bold][white]{song.tonic.to_key()}")
-        if transpose != 0:
-            console.print(f"Transpose: [bold][white]{transpose}")
-        console.print("Chords:")
-        for chord_line in song.chords:
-            chords = [chord.transpose(transpose) for chord in chord_line]
-
-            if show_functions:
-                if song.tonic is None:
-                    msg = "Cannot display functional analysis with an unknown tonic"
-                    console.print(f"[bold][red]{msg}")
-                    return
-
-                transposed_tonic = song.tonic.transpose(transpose)
-                functions = [chord.to_function(transposed_tonic) for chord in chords]
-                function_line_str = "[white]   [bold][green]".join(str(function) for function in functions)
-                console.print(f"[bold][green]{function_line_str}")
-
-            chord_line_str = "[white] | [bold][blue]".join(str(chord) for chord in chords)
-            console.print(f"[bold][blue]{chord_line_str}")
-
-            if spacious:
-                console.print()
-
     except StopIteration:
         msg = f"No song found for query: {query}"
         console.print(f"[bold][red]{msg}")
         return
 
+    # Apply overrides
     tempo = tempo or song.tempo
     beat_duration = beat_duration or song.beat_duration
     chord_duration = chord_duration or song.chord_duration
+    transposed_tonic = None if song.tonic is None else song.tonic.transpose(transpose)
+
+    console.print(f"Title: [bold][white]{song.title}")
+    console.print(f"Artist: [bold][white]{song.artist}")
+    console.print(f"Tempo: [bold][white]{tempo:.0f}bpm")
+    console.print(f"Beat duration: [bold][white]{beat_duration}")
+    console.print(f"Chord duration: [bold][white]{chord_duration}")
+    if transposed_tonic is not None:
+        console.print(f"Tonic: [bold][white]{transposed_tonic.to_key()}")
+    if transpose != 0:
+        console.print(f"Transpose: [bold][white]{transpose}")
+    console.print("Chords:")
+    for chord_line in song.chords:
+        chords = [chord.transpose(transpose) for chord in chord_line]
+
+        if show_functions:
+            if transposed_tonic is None:
+                msg = "Cannot display functional analysis with an unknown tonic"
+                console.print(f"[bold][red]{msg}")
+                return
+
+            functions = [chord.to_function(transposed_tonic) for chord in chords]
+            function_line_str = "[white]   [bold][green]".join(str(function) for function in functions)
+            console.print(f"[bold][green]{function_line_str}")
+
+        chord_line_str = "[white] | [bold][blue]".join(str(chord) for chord in chords)
+        console.print(f"[bold][blue]{chord_line_str}")
+
+        if spacious:
+            console.print()
 
     beats_per_chord = chord_duration.get_n_quarter_notes() / beat_duration.get_n_quarter_notes()
     beats_per_second = tempo / 60
@@ -267,6 +269,17 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
             for chord in chord_line:
                 transposed_chord = chord.transpose(transpose)
                 voicing = Voicing(chord=transposed_chord, inversion=Inversion.Root, octave=octave)
+                if song.voicings is not None:
+                    for voicing_override in song.voicings:
+                        if voicing_override.chord == chord:
+                            transposed_override_chord = voicing_override.chord.transpose(transpose)
+                            voicing = Voicing(
+                                chord=transposed_override_chord,
+                                inversion=voicing_override.inversion,
+                                octave=voicing_override.octave,
+                            )
+                            break
+
                 segment = synth.generate_voicing_audio(voicing, audio_duration, overtones=overtones)
                 segments.append(segment)
 

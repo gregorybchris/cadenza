@@ -89,6 +89,11 @@ songs:
     beat_duration: quarter
     chord_duration: quarter
     tonic: Eb
+    voicings:
+      - { chord: Eb, inversion: second, octave: 3 }
+      - { chord: G, inversion: first, octave: 3 }
+      - { chord: Cm, inversion: second, octave: 3 }
+      - { chord: Am, inversion: second, octave: 4 }
 
   - id: 2320e8bd-93f5-445b-a3d0-9476d1cbf1f9
     title: Don't Stop Believin'

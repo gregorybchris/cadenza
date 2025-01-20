@@ -4,6 +4,7 @@ from pydantic import BaseModel, model_validator
 
 from cadenza.chord import Chord
 from cadenza.duration import Duration
+from cadenza.voicing import Voicing
 
 JsonDict = dict[str, Any]
 
@@ -22,6 +23,7 @@ class Song(BaseModel):
     beat_duration: Duration = DEFAULT_BEAT_DURATION
     chord_duration: Duration = DEFAULT_CHORD_DURATION
     tonic: Optional[Chord] = DEFAULT_TONIC
+    voicings: Optional[list[Voicing]] = None
 
     @staticmethod
     def _parse_chords_str(chords_str: str) -> list[list[Chord]]:
@@ -33,6 +35,9 @@ class Song(BaseModel):
     def transform_fields(cls, values: JsonDict) -> JsonDict:  # noqa: N805
         values["chords"] = cls._parse_chords_str(values["chords"])
         values["tonic"] = Chord.from_str(values["tonic"]) if values.get("tonic") else None
+        if values.get("voicings"):
+            for voicing_dict in values["voicings"]:
+                voicing_dict["chord"] = Chord.from_str(voicing_dict["chord"])
         return values
 
     def iter_chords(self) -> Iterator[Chord]:

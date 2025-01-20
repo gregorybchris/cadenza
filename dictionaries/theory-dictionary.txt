@@ -7,3 +7,4 @@ Lydian
 microtones
 Mixolydian
 Phrygian
+voicings
