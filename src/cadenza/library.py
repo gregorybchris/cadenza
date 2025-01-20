@@ -19,5 +19,9 @@ class Library(BaseModel):
 
     def search(self, query: str) -> Iterator[Song]:
         for song in self.songs:
-            if re.search(query, song.title, re.IGNORECASE) or re.search(query, song.artist, re.IGNORECASE):
+            if (
+                re.search(query, song.title, re.IGNORECASE)
+                or re.search(query, song.artist, re.IGNORECASE)
+                or query == song.id
+            ):
                 yield song
