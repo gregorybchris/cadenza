@@ -61,6 +61,8 @@ class Voicing(BaseModel):
         match self.chord.alteration:
             case Alteration.FlatFive:
                 return [Interval.Tritone]
+            case Alteration.FlatNine:
+                return [Interval.MinorSecond]
 
     def _get_intervals_from_bass(self) -> list[Interval]:
         if not self.chord.bass:

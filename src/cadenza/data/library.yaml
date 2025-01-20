@@ -185,3 +185,16 @@ songs:
     beat_duration: quarter
     chord_duration: half
     tonic: Bb
+
+  - id: 0972c1c1-ef69-4de7-be15-c3263e9c1c60
+    title: Letting Things Go
+    artist: Vulfmon, Evangeline
+    chords: |
+      C C/Bb F/A E7b9/G# C/G F#m7b5 Dm/F Fmaj7/G
+      C C/Bb F/A E7b9/G# C/G F#m7b5 Dm/F Fmaj7/G
+      C E7/B Am7 C7/G F F/G C F/G
+      C E7/B Am7 C7/Bb F F/G C F/G
+    tempo: 110
+    beat_duration: quarter
+    chord_duration: half
+    tonic: C

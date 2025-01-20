@@ -9,12 +9,14 @@ logger = logging.getLogger(__name__)
 
 class Alteration(StrEnum):
     FlatFive = auto()
+    FlatNine = auto()
 
     @classmethod
     def from_str(cls, alteration_str: str) -> "Alteration":
         alteration_str = remove_symbols(alteration_str)
         mapping = {
             "b5": cls.FlatFive,
+            "b9": cls.FlatNine,
         }
         if alteration_str not in mapping:
             msg = f"Invalid extension: {alteration_str}"
@@ -25,6 +27,8 @@ class Alteration(StrEnum):
         match self:
             case Alteration.FlatFive:
                 return "♭5" if symbols else "b5"
+            case Alteration.FlatNine:
+                return "♭9" if symbols else "b9"
 
     def __str__(self) -> str:
         return self.to_str()

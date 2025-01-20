@@ -67,13 +67,13 @@ def note(  # noqa: PLR0913
             f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{pitch.get_frequency():.1f} Hz"
         )
 
-    if play:
-        player = Player(sample_rate=sample_rate)
-        player.play(audio)
-
     if filepath:
         saver = Saver(sample_rate=sample_rate)
         saver.save(audio, filepath)
+
+    if play:
+        player = Player(sample_rate=sample_rate)
+        player.play(audio)
 
 
 @app.command()
@@ -112,13 +112,13 @@ def chord(  # noqa: PLR0913
                 f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{pitch.get_frequency():.1f} Hz"
             )
 
-    if play:
-        player = Player(sample_rate=sample_rate)
-        player.play(audio)
-
     if filepath:
         saver = Saver(sample_rate=sample_rate)
         saver.save(audio, filepath)
+
+    if play:
+        player = Player(sample_rate=sample_rate)
+        player.play(audio)
 
 
 @app.command()
@@ -162,13 +162,13 @@ def chords(  # noqa: PLR0913
 
     audio = synth.concat(segments)
 
-    if play:
-        player = Player(sample_rate=sample_rate)
-        player.play(audio)
-
     if filepath:
         saver = Saver(sample_rate=sample_rate)
         saver.save(audio, filepath)
+
+    if play:
+        player = Player(sample_rate=sample_rate)
+        player.play(audio)
 
 
 @app.command()
@@ -260,10 +260,10 @@ def song(  # noqa: PLR0912, PLR0913
 
     audio = synth.concat(segments)
 
-    if play:
-        player = Player(sample_rate=sample_rate)
-        player.play(audio)
-
     if filepath:
         saver = Saver(sample_rate=sample_rate)
         saver.save(audio, filepath)
+
+    if play:
+        player = Player(sample_rate=sample_rate)
+        player.play(audio)

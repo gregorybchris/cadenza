@@ -94,7 +94,12 @@ class Chord(BaseModel):
 
         interval_num = (self.root.to_index() - tonic_root.to_index()) % 12
         interval = Interval.from_int(interval_num)
-        scale_degree = ScaleDegree.from_interval(interval)
+        try:
+            scale_degree = ScaleDegree.from_interval(interval)
+        except ValueError as exc:
+            msg = f"Failed to convert chord {self} to a scale degree: {exc}"
+            logger.warning(msg)
+            return str(self)
         function_map = {
             ScaleDegree.Tonic: "I",
             ScaleDegree.Supertonic: "II",
