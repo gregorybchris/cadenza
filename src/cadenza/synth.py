@@ -33,7 +33,7 @@ class Synth:
         if overtones:
             # Add overtones with exponential decay
             for freq in frequencies:
-                for i in range(2, 10):
+                for i in [2, 3, 4, 5]:
                     overtone = freq * i
                     decay = 1 / i**2
                     overtone_amplitude = decay * amplitude
@@ -66,3 +66,12 @@ class Synth:
         pitches = voicing.get_pitches()
         frequencies = torch.tensor([pitch.get_frequency() for pitch in pitches])
         return self.generate(frequencies, duration_s, overtones=overtones)
+
+    def apply_tremolo(self, audio: Tensor, *, frequency: float, dip: float) -> Tensor:
+        sample_rate = self.args.sample_rate
+        audio_duration = len(audio) / sample_rate
+
+        t = torch.linspace(0, audio_duration, len(audio), dtype=torch.float32)
+        height = 1.0 - dip
+        amplitude = dip + height * torch.sin(2 * torch.pi * frequency * t)
+        return audio * amplitude

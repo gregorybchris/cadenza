@@ -172,7 +172,7 @@ def chords(  # noqa: PLR0913
 
 
 @app.command()
-def song(  # noqa: PLR0912, PLR0913
+def song(  # noqa: PLR0912, PLR0913, PLR0915
     query: str,
     octave: Annotated[int, Option("--octave")] = 4,
     transpose: Annotated[int, Option("--transpose")] = 0,
@@ -181,6 +181,7 @@ def song(  # noqa: PLR0912, PLR0913
     beat_duration: Optional[Duration] = None,
     repeat: Annotated[int, Option("--repeat")] = 1,
     overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
+    tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
     sample_rate: int = 44_100,
     show_functions: Annotated[bool, Option("--functions/--no-functions")] = False,
     play: Annotated[bool, Option("--play/--no-play")] = True,
@@ -241,7 +242,7 @@ def song(  # noqa: PLR0912, PLR0913
     beats_per_chord = chord_duration.get_n_quarter_notes() / beat_duration.get_n_quarter_notes()
     beats_per_second = tempo / 60
     seconds_per_chord = beats_per_chord / beats_per_second
-    silence_duration = seconds_per_chord / 20
+    silence_duration = 0  # Can be seconds_per_chord / 20 for some space
     audio_duration = seconds_per_chord - silence_duration
 
     segments: list[Tensor] = []
@@ -259,6 +260,13 @@ def song(  # noqa: PLR0912, PLR0913
                 segments.append(audio_silence)
 
     audio = synth.concat(segments)
+
+    if tremolo:
+        # Apply high frequency tremolo
+        audio = synth.apply_tremolo(audio, frequency=5.2, dip=0.92)
+
+        # Apply low frequency tremolo, like the Leslie effect on a Hammond organ
+        audio = synth.apply_tremolo(audio, frequency=1.7, dip=0.92)
 
     if filepath:
         saver = Saver(sample_rate=sample_rate)
