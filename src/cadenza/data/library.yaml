@@ -171,3 +171,17 @@ songs:
     beat_duration: quarter
     chord_duration: quarter
     tonic: A
+
+  - id: 7d039f86-3353-4b72-9b6e-83ddf36d2c25
+    title: It Might Have To Be You
+    artist: Vulfmon, Evangeline
+    chords: |
+      Gm7 Gm7 Ebmaj7 Ebmaj7 Cm7 Cm7 Eb/F F#dim7
+      Gm7 Gm7 Ebmaj7 Ebmaj7 Cm7 Cm7 F#dim7 F#dim7
+      Bb Bb Ebmaj7 Ebmaj7 Cm7 Cm7 Eb/F F#dim7
+      Bb Bb Ebmaj7 Ebmaj7 Cm7 Cm7 Eb/F F#dim7
+      Bb
+    tempo: 110
+    beat_duration: quarter
+    chord_duration: half
+    tonic: Bb
