@@ -10,6 +10,7 @@ songs:
     tempo: 35
     beat_duration: whole
     chord_duration: whole
+    tonic: D
 
   - id: 9e7f9d1c-7f96-4f17-b7c0-b49e01eba51f
     title: Dancing Through Life
@@ -56,6 +57,7 @@ songs:
     tempo: 150
     beat_duration: quarter
     chord_duration: whole
+    tonic: F#
 
   - id: 16020461-d7d2-43cd-a804-eb246f62af67
     title: Put Your Records On
