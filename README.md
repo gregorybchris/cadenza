@@ -28,6 +28,9 @@ cz chord Bbm7 --inversion 2
 # Change the octave (default is 4)
 cz chord G#m7 --octave 3
 
+# Transpose a chord up or down by a number of semitones
+cz chord G#m7 --transpose 2
+
 # Change the duration of the notes (default is 3 seconds)
 cz chord Em --duration 1
 
@@ -63,6 +66,9 @@ cz song homesick
 
 # Change the octave (default is 4)
 cz song homesick --octave 5
+
+# Transpose a song into a different key by a number of semitones
+cz song homesick --transpose -2
 
 # Change the tempo (in beats per minute)
 cz song homesick --tempo 120

@@ -40,6 +40,7 @@ def chord(  # noqa: PLR0913
     chord_str: Annotated[str, Argument(...)],
     octave: Annotated[int, Option("--octave")] = 4,
     inversion_num: Annotated[int, Option("--inversion")] = 0,
+    transpose: Annotated[int, Option("--transpose")] = 0,
     duration_s: Annotated[float, Option("--duration", "-d")] = 3.0,
     overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     sample_rate: Annotated[int, Option("--sample-rate", "-sr")] = 44_100,
@@ -52,6 +53,7 @@ def chord(  # noqa: PLR0913
     set_logger_config(info, debug)
     inversion = Inversion.from_number(inversion_num)
     chord = Chord.from_str(chord_str)
+    chord = chord.transpose(transpose)
     console.print(chord)
     console.print(f"[red]{chord}")
 
@@ -79,6 +81,7 @@ def chord(  # noqa: PLR0913
 def chords(  # noqa: PLR0913
     chords_str: str,
     octave: Annotated[int, Option("--octave")] = 4,
+    transpose: Annotated[int, Option("--transpose")] = 0,
     tempo: Annotated[float, Option("--tempo")] = 80.0,
     chord_duration: Duration = Duration.Quarter,
     beat_duration: Duration = Duration.Quarter,
@@ -105,7 +108,7 @@ def chords(  # noqa: PLR0913
     chords = [Chord.from_str(chord_str) for chord_str in chords_str.split()]
     for _ in range(repeat):
         for chord in chords:
-            voicing = Voicing(chord=chord, inversion=Inversion.Root, octave=octave)
+            voicing = Voicing(chord=chord.transpose(transpose), inversion=Inversion.Root, octave=octave)
             segment = synth.generate_voicing_audio(voicing, audio_duration, overtones=overtones)
             segments.append(segment)
 
@@ -127,9 +130,11 @@ def chords(  # noqa: PLR0913
 def song(  # noqa: PLR0913
     query: str,
     octave: Annotated[int, Option("--octave")] = 4,
+    transpose: Annotated[int, Option("--transpose")] = 0,
     tempo: Annotated[Optional[float], Option("--tempo")] = None,
     chord_duration: Optional[Duration] = None,
     beat_duration: Optional[Duration] = None,
+    repeat: Annotated[int, Option("--repeat")] = 1,
     overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     sample_rate: int = 44_100,
     play: Annotated[bool, Option("--play/--no-play")] = True,
@@ -155,7 +160,8 @@ def song(  # noqa: PLR0913
         console.print(f"Chord Duration: [bold][white]{song.chord_duration}")
         console.print("Chords:")
         for chord_line in song.chords:
-            chord_line_str = "[white] | [bold][blue]".join(str(chord) for chord in chord_line)
+            chords = [chord.transpose(transpose) for chord in chord_line]
+            chord_line_str = "[white] | [bold][blue]".join(str(chord) for chord in chords)
             console.print(f"[bold][blue]{chord_line_str}")
     except StopIteration:
         msg = f"No song found for query: {query}"
@@ -173,16 +179,17 @@ def song(  # noqa: PLR0913
     audio_duration = seconds_per_chord - silence_duration
 
     segments: list[Tensor] = []
-    for chord_line_num, chord_line in enumerate(song.chords):
-        if chord_line_num < start_line:
-            continue
-        for chord in chord_line:
-            voicing = Voicing(chord=chord, inversion=Inversion.Root, octave=octave)
-            segment = synth.generate_voicing_audio(voicing, audio_duration, overtones=overtones)
-            segments.append(segment)
+    for _ in range(repeat):
+        for chord_line_num, chord_line in enumerate(song.chords):
+            if chord_line_num < start_line:
+                continue
+            for chord in chord_line:
+                voicing = Voicing(chord=chord.transpose(transpose), inversion=Inversion.Root, octave=octave)
+                segment = synth.generate_voicing_audio(voicing, audio_duration, overtones=overtones)
+                segments.append(segment)
 
-            audio_silence = synth.generate_silence(silence_duration)
-            segments.append(audio_silence)
+                audio_silence = synth.generate_silence(silence_duration)
+                segments.append(audio_silence)
 
     audio = synth.concat(segments)
 

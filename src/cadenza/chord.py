@@ -80,3 +80,14 @@ class Chord(BaseModel):
             case _:
                 msg = f"Getting chords by degree for quality {tonic.quality.to_written()} is not supported"
                 raise ValueError(msg)
+
+    def transpose(self, semitones: int) -> "Chord":
+        new_root = self.root + semitones
+        new_bass = self.bass + semitones if self.bass else None
+        return Chord(
+            root=new_root,
+            quality=self.quality,
+            extension=self.extension,
+            alteration=self.alteration,
+            bass=new_bass,
+        )
