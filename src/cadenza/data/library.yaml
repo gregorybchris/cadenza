@@ -210,3 +210,42 @@ songs:
       - { chord: F, inversion: second, octave: 3 }
       - { chord: F/G, inversion: second, octave: 3 }
       - { chord: F/A, inversion: second, octave: 3 }
+
+  - id: dc6c84f8-4725-4069-b37b-fe282f1ea904
+    title: Old Friends
+    artist: Ben Rector
+    chords: |
+      Ab Absus4 Ab Absus4
+      Ab Eb Fm Db
+      Ab Eb Fm Eaug
+      Ab/Eb Eb Fm Db
+      Ab Eb Fm Db
+      Ab Cm Fm Db
+    tempo: 40
+    tonic: Ab
+
+  - id: c303cf4f-5c8e-493d-8639-9026ddb48c8b
+    title: Ribbons
+    artist: Ryan Beatty
+    chords: |
+      Eb Eb Eb Eb/D
+      Cm Cm Cm Cm
+      F7 F7 F7 F7
+      Abmaj7 Abmaj7 Abmaj7 Abmaj7/F
+      Eb
+    tempo: 70
+    tonic: Eb
+
+  - id: 970023ca-31d3-42de-ae55-004e7143373d
+    title: Dawn
+    artist: Vulfmon
+    chords: |
+      Ab F Bbm Ebsus4
+      Ab F Bbm Ebsus4
+      Bbm7 Ebsus47
+      Bbm7 Ebsus47
+      Bbm7 C7 Fm F7/Eb
+      Bbm Dbm Ab F
+      Bbm Dbm Ab
+    tempo: 40
+    tonic: Ab
