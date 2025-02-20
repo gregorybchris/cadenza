@@ -1,8 +1,24 @@
 # Cadenza
 
-## About
+## Experiments
 
-Exploration of music theory
+This repository contains various loosely related experiments related to music theory and audio engineering. Below are some brief descriptions of the experiments.
+
+### Chord parser
+
+The chord parser evaluates a string representation of a chord. It parses out the chord quality, extensions, and alterations. This works for simple chords like C or more complex chords like F#maj7b5/D.
+
+### Overtone/tremolo synthesizer
+
+The synthesizer decomposes a voicing of a chord into frequencies and synthesizes them into an audio waveform. This component also augments the pure tones in the chord with harmonics of the fundamental. The synthesized audio has the timbre of a pipe organ.
+
+The synthesizer also supports tremolo of various speeds. There is a preset for a Hammond organ sound that combines high frequency tremolo with a low frequency Leslie tremolo effect.
+
+### Just intonation optimizer
+
+By default the synthesizer uses a reference frequency of 440.0 Hz (for the pitch A4) to compute other pitches. All pitches are tuned with equal temperament. If you want to convert a chord into just intonation you can run the optimizer to approximate simple ratios for all intervals in the chord.
+
+[A video of oscilloscope visualizations of just intonation vs equal temperament](https://www.youtube.com/watch?v=6NlI4No3s0M)
 
 ## Installation
 
