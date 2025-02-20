@@ -97,3 +97,21 @@ cz song homesick --filepath audio.wav --no-play
 # Save song audio to a file with a different sample rate
 cz song homesick --filepath audio.wav --sample-rate 48000
 ```
+
+### Optimize command
+
+Optimize a chord from equal temperament to just intonation
+
+```bash
+# Optimize a chord
+cz optimize C
+
+# Turn on debug logging to see the optimization trace
+cz optimize C --debug
+
+# Adjust the learning rate to speed up convergence
+cz optimize C --debug -lr 0.05
+
+# Optimizing chords with complex frequency ratios requires adjusting the granularity of optimization
+cz optimize Cmaj7 --debug --max-denominator 12
+```
