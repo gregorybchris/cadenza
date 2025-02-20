@@ -249,3 +249,15 @@ songs:
       Bbm Dbm Ab
     tempo: 40
     tonic: Ab
+
+  - id: 56dc3b71-cc28-4010-a6fd-a7113d731749
+    title: Golf On TV
+    artist: Lennon Stella
+    chords: |
+      Bb Bb F/A F/A Csus4 Csus4 Csus4 Csus4
+      Bb Bb F/A F/A C Dbdim Dm F7/C 
+      Bb
+    tempo: 50
+    beat_duration: quarter
+    chord_duration: quarter
+    tonic: F
