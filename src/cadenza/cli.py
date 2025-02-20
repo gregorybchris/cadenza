@@ -318,7 +318,7 @@ def optimize(  # noqa: PLR0913
     n_epochs: Annotated[int, Option("--n-epochs")] = 1000,
     learning_rate: Annotated[float, Option("--learning-rate", "-lr")] = 0.01,
     max_denominator: Annotated[int, Option("--max-denominator")] = 6,
-    convergence_threshold: Annotated[float, Option("--convergence-threshold")] = 1e-10,
+    convergence_threshold: Annotated[int, Option("--convergence-threshold")] = 10,
     status_interval: Annotated[int, Option("--status-interval")] = 100,
     info: bool = False,
     debug: bool = False,

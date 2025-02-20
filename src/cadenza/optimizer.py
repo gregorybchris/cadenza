@@ -15,7 +15,7 @@ class OptimizerArgs:
     n_epochs: int
     learning_rate: float
     max_denominator: int
-    convergence_threshold: float
+    convergence_threshold: int
     status_interval: int
 
 
@@ -26,18 +26,22 @@ class Optimizer:
     def optimize(self, frequencies: Tensor) -> Tensor:
         chord = frequencies.clone().detach().requires_grad_(True)
         optim = torch.optim.Adam([chord], lr=self.args.learning_rate)
+        trace = []
         for i in range(self.args.n_epochs):
             optim.zero_grad()
             loss = self._ratio_simplicity_loss(chord, max_denominator=self.args.max_denominator)
+            trace.append(loss.item())
             loss.backward()  # type: ignore
             optim.step()
 
             if i % self.args.status_interval == 0:
                 logger.debug(f"Iteration {i:3d}, Loss: {loss.item():.6f}, Chord: {chord.detach().numpy().round(1)}")  # noqa: G004
 
-            if loss < self.args.convergence_threshold:
-                logger.debug(f"Converged at iteration {i}")  # noqa: G004
-                break
+            # Check if the loss hasn't changed in the last k epochs
+            if len(trace) > self.args.convergence_threshold:  # noqa: SIM102
+                if torch.allclose(torch.tensor(trace[-self.args.convergence_threshold :]), loss):
+                    logger.debug(f"Converged after {i} iterations")  # noqa: G004
+                    break
 
         return chord.detach()
 
