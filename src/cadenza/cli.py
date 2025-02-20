@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 from typing import TYPE_CHECKING, Annotated, Optional
 
+import torch
 from rich.console import Console
 from rich.logging import RichHandler
 from typer import Argument, Option, Typer
@@ -11,6 +12,7 @@ from cadenza.duration import Duration
 from cadenza.inversion import Inversion
 from cadenza.library import Library
 from cadenza.note import Note
+from cadenza.optimizer import Optimizer, OptimizerArgs
 from cadenza.pitch import Pitch
 from cadenza.player import Player
 from cadenza.saver import Saver
@@ -298,3 +300,77 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     if play:
         player = Player(sample_rate=sample_rate)
         player.play(audio)
+
+
+@app.command()
+def optimize(  # noqa: PLR0913
+    chord_str: Annotated[str, Argument(...)],
+    octave: Annotated[int, Option("--octave")] = 4,
+    inversion_num: Annotated[int, Option("--inversion")] = 0,
+    transpose: Annotated[int, Option("--transpose")] = 0,
+    duration_s: Annotated[float, Option("--duration", "-d")] = 3.0,
+    sample_rate: Annotated[int, Option("--sample-rate", "-sr")] = 44_100,
+    include_left_hand: Annotated[bool, Option("--include-left-hand/--no-include-left-hand")] = False,
+    play: Annotated[bool, Option("--play/--no-play")] = True,
+    show_pitches: Annotated[bool, Option("--pitches/--no-pitches")] = True,
+    unoptimized_filepath: Optional[Path] = None,
+    optimized_filepath: Optional[Path] = None,
+    n_epochs: Annotated[int, Option("--n-epochs")] = 1000,
+    learning_rate: Annotated[float, Option("--learning-rate", "-lr")] = 0.01,
+    max_denominator: Annotated[int, Option("--max-denominator")] = 6,
+    convergence_threshold: Annotated[float, Option("--convergence-threshold")] = 1e-10,
+    status_interval: Annotated[int, Option("--status-interval")] = 100,
+    info: bool = False,
+    debug: bool = False,
+) -> None:
+    set_logger_config(info, debug)
+
+    inversion = Inversion.from_number(inversion_num)
+    chord = Chord.from_str(chord_str)
+    chord = chord.transpose(transpose)
+    console.print(chord)
+    console.print(f"[red]{chord}")
+
+    voicing = Voicing(chord=chord, inversion=inversion, octave=octave, include_left_hand=include_left_hand)
+    pitches = voicing.get_pitches()
+    unoptimized_frequencies = torch.tensor([pitch.get_frequency() for pitch in pitches])
+
+    optimizer_args = OptimizerArgs(
+        n_epochs=n_epochs,
+        learning_rate=learning_rate,
+        max_denominator=max_denominator,
+        convergence_threshold=convergence_threshold,
+        status_interval=status_interval,
+    )
+    optimizer = Optimizer(args=optimizer_args)
+    optimized_frequencies = optimizer.optimize(unoptimized_frequencies)
+
+    synth_args = SynthArgs(sample_rate=sample_rate)
+    synth = Synth(args=synth_args)
+    unoptimized_audio = synth.generate_voicing_audio(voicing, duration_s)
+    optimized_audio = synth.generate(optimized_frequencies, duration_s)
+
+    if show_pitches:
+        pitches = voicing.get_pitches()
+        for pitch in pitches:
+            console.print(
+                f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{pitch.get_frequency():.1f} Hz"
+            )
+
+    console.print("\nInitial Chord:", unoptimized_frequencies.numpy().round(1))
+    optimizer.print_frequency_ratios(console, unoptimized_frequencies)
+    console.print("\nFinal Chord:", optimized_frequencies.numpy().round(1))
+    optimizer.print_frequency_ratios(console, optimized_frequencies)
+
+    if unoptimized_filepath:
+        saver = Saver(sample_rate=sample_rate)
+        saver.save(unoptimized_audio, unoptimized_filepath)
+
+    if optimized_filepath:
+        saver = Saver(sample_rate=sample_rate)
+        saver.save(optimized_audio, optimized_filepath)
+
+    if play:
+        player = Player(sample_rate=sample_rate)
+        player.play(unoptimized_audio)
+        player.play(optimized_audio)

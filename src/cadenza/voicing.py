@@ -18,6 +18,7 @@ class Voicing(BaseModel):
     chord: Chord
     inversion: Inversion
     octave: int
+    include_left_hand: bool = True
 
     @classmethod
     def from_chord(cls, chord: Chord, inversion: Inversion, octave: int) -> Self:
@@ -72,11 +73,13 @@ class Voicing(BaseModel):
     def get_pitches(self) -> list[Pitch]:
         # Get pitches for left hand
         lh_intervals: list[Interval] = []
-        lh_intervals += self._get_intervals_from_bass()
-        if len(lh_intervals) == 0:
-            lh_intervals += [Interval.Unison]
-        lh_notes = [self.chord.root + interval.to_int() for interval in lh_intervals]
-        lh_pitches = [Pitch(note=note, octave=self.octave - 2) for note in lh_notes]
+        lh_pitches: list[Pitch] = []
+        if self.include_left_hand:
+            lh_intervals += self._get_intervals_from_bass()
+            if len(lh_intervals) == 0:
+                lh_intervals += [Interval.Unison]
+            lh_notes = [self.chord.root + interval.to_int() for interval in lh_intervals]
+            lh_pitches = [Pitch(note=note, octave=self.octave - 2) for note in lh_notes]
 
         # Get pitches for right hand
         rh_intervals: list[Interval] = []
