@@ -33,6 +33,23 @@ class ScaleDegree(StrEnum):
             case ScaleDegree.LeadingTone:
                 return "leading tone"
 
+    def to_symbol(self) -> str:  # noqa: PLR0911
+        match self:
+            case ScaleDegree.Tonic:
+                return "I"
+            case ScaleDegree.Supertonic:
+                return "II"
+            case ScaleDegree.Mediant:
+                return "III"
+            case ScaleDegree.Subdominant:
+                return "IV"
+            case ScaleDegree.Dominant:
+                return "V"
+            case ScaleDegree.Submediant:
+                return "VI"
+            case ScaleDegree.LeadingTone:
+                return "VII"
+
     @classmethod
     def from_int(cls, degree: int) -> "ScaleDegree":
         degree = degree % 8

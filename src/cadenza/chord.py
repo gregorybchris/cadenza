@@ -57,7 +57,15 @@ class Chord(BaseModel):
         extension_str = self.extension.to_str() if self.extension else ""
         alterations_str = self.alteration.to_str() if self.alteration else ""
         bass_str = f"/{self.bass.to_str()}" if self.bass else ""
-        return f"{self.root}{self.quality}{extension_str}{alterations_str}{bass_str}"
+        ret = str(self.root)
+        if self.quality.is_prefix():
+            ret += str(self.quality)
+        ret += str(extension_str)
+        ret += str(alterations_str)
+        if self.quality.is_suffix():
+            ret += str(self.quality)
+        ret += str(bass_str)
+        return ret
 
     @classmethod
     def from_scale_degree(cls, tonic: "Chord", scale_degree: ScaleDegree) -> Self:
@@ -108,31 +116,23 @@ class Chord(BaseModel):
             msg = f"Failed to convert chord {self} to a scale degree: {exc}"
             logger.debug(msg)
             return str(self)
-        function_map = {
-            ScaleDegree.Tonic: "I",
-            ScaleDegree.Supertonic: "II",
-            ScaleDegree.Mediant: "III",
-            ScaleDegree.Subdominant: "IV",
-            ScaleDegree.Dominant: "V",
-            ScaleDegree.Submediant: "VI",
-            ScaleDegree.LeadingTone: "VII",
-        }
-        func = function_map[scale_degree]
-        ret = func
+
+        function = scale_degree.to_symbol()
+
         if self.quality in [Quality.Minor, Quality.Diminished]:
-            ret = ret.lower()
+            function = function.lower()
         if self.quality == Quality.Diminished:
-            ret += "°"
+            function += Quality.Diminished.to_str()
         if self.quality == Quality.Augmented:
-            ret += "+"
-        if self.quality == Quality.SusTwo:
-            ret += "sus2"
-        if self.quality == Quality.SusFour:
-            ret += "sus4"
+            function += Quality.Augmented.to_str()
         if self.extension == Extension.Seven:
-            ret += "7"
+            function += Extension.Seven.to_str()
         if self.extension == Extension.MajorSeven:
-            ret += "maj7"
+            function += Extension.MajorSeven.to_str()
+        if self.quality == Quality.SusTwo:
+            function += Quality.SusTwo.to_str()
+        if self.quality == Quality.SusFour:
+            function += Quality.SusFour.to_str()
 
         if self.bass is not None:
             base_interval_num = (self.bass.to_index() - tonic_root.to_index()) % 12
@@ -143,10 +143,10 @@ class Chord(BaseModel):
                 msg = f"Failed to convert chord {self} bass to a scale degree: {exc}"
                 logger.debug(msg)
                 return str(self)
-            base_func = function_map[base_scale_degree]
-            ret += f"/{base_func}"
+            base_function = base_scale_degree.to_symbol()
+            function += f"/{base_function}"
 
-        return ret
+        return function
 
     def to_key(self) -> str:
         match self.quality:

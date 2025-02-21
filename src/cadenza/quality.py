@@ -33,6 +33,12 @@ class Quality(StrEnum):
             case Quality.SusFour:
                 return "suspended fourth"
 
+    def is_suffix(self) -> bool:
+        return self in [Quality.SusTwo, Quality.SusFour]
+
+    def is_prefix(self) -> bool:
+        return not self.is_suffix()
+
     @classmethod
     def from_str(cls, quality_str: str) -> "Quality":
         quality_str = remove_symbols(quality_str)
