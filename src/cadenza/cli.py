@@ -66,7 +66,7 @@ def note(  # noqa: PLR0913
 
     if show_pitch:
         console.print(
-            f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{pitch.get_frequency():.1f} Hz"
+            f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{pitch.to_frequency():.1f} Hz"
         )
 
     if filepath:
@@ -113,10 +113,10 @@ def chord(  # noqa: PLR0913
         audio = synth.apply_hammond_tremolo(audio)
 
     if show_pitches:
-        pitches = voicing.get_pitches()
+        pitches = voicing.to_pitches()
         for pitch in pitches:
             console.print(
-                f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{pitch.get_frequency():.1f} Hz"
+                f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{pitch.to_frequency():.1f} Hz"
             )
 
     if filepath:
@@ -341,8 +341,8 @@ def optimize(  # noqa: PLR0913
     console.print(f"[red]{chord}")
 
     voicing = Voicing(chord=chord, inversion=inversion, octave=octave, include_left_hand=include_left_hand)
-    pitches = voicing.get_pitches()
-    unoptimized_frequencies = torch.tensor([pitch.get_frequency() for pitch in pitches])
+    pitches = voicing.to_pitches()
+    unoptimized_frequencies = torch.tensor([pitch.to_frequency() for pitch in pitches])
 
     optimizer_args = OptimizerArgs(
         n_epochs=n_epochs,
@@ -360,10 +360,10 @@ def optimize(  # noqa: PLR0913
     optimized_audio = synth.generate(optimized_frequencies, duration_s)
 
     if show_pitches:
-        pitches = voicing.get_pitches()
+        pitches = voicing.to_pitches()
         for pitch in pitches:
             console.print(
-                f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{pitch.get_frequency():.1f} Hz"
+                f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{pitch.to_frequency():.1f} Hz"
             )
 
     console.print("\nInitial Chord:", unoptimized_frequencies.numpy().round(1))

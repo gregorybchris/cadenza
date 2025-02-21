@@ -84,7 +84,7 @@ class Voicing(BaseModel):
         return [Interval.from_int(self.chord.bass.to_index() - self.chord.root.to_index())]
 
     def _apply_inversion(self, pitches: list[Pitch]) -> list[Pitch]:
-        inversion_number = self.inversion.get_number()
+        inversion_number = self.inversion.to_number()
         n_notes = len(pitches)
         if inversion_number >= n_notes:
             msg = f"The {self.inversion.to_written()} does not exist for a voicing with {n_notes} right hand notes."
@@ -95,7 +95,7 @@ class Voicing(BaseModel):
             pitches = pitches[1:] + [pitches[0]]
         return pitches
 
-    def get_pitches(self) -> list[Pitch]:
+    def to_pitches(self) -> list[Pitch]:
         lh_pitches: list[Pitch] = []
         if self.include_left_hand:
             lh_intervals: list[Interval] = []

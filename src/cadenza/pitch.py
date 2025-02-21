@@ -18,7 +18,7 @@ class Pitch(BaseModel):
     note: Note
     octave: int
 
-    def get_frequency(self) -> float:
+    def to_frequency(self) -> float:
         degree_difference = self.note.to_index() - self.REFERENCE_NOTE.to_index()
         octave_difference = self.octave - self.REFERENCE_OCTAVE
         n_semitones = degree_difference + octave_difference * 12

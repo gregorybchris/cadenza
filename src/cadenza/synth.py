@@ -77,7 +77,7 @@ class Synth:
         duration_s: float,
         overtones: bool = False,
     ) -> Tensor:
-        frequency = pitch.get_frequency()
+        frequency = pitch.to_frequency()
         frequencies = torch.tensor([frequency])
         return self.generate(frequencies, duration_s, overtones=overtones)
 
@@ -87,8 +87,8 @@ class Synth:
         duration_s: float,
         overtones: bool = False,
     ) -> Tensor:
-        pitches = voicing.get_pitches()
-        frequencies = torch.tensor([pitch.get_frequency() for pitch in pitches])
+        pitches = voicing.to_pitches()
+        frequencies = torch.tensor([pitch.to_frequency() for pitch in pitches])
         return self.generate(frequencies, duration_s, overtones=overtones)
 
     def apply_tremolo(self, audio: Tensor, *, frequency: float, dip: float) -> Tensor:

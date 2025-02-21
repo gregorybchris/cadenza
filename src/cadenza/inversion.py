@@ -10,7 +10,7 @@ class Inversion(StrEnum):
     Second = auto()
     Third = auto()
 
-    def get_number(self) -> int:
+    def to_number(self) -> int:
         return {
             Inversion.Root: 0,
             Inversion.First: 1,
