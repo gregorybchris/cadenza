@@ -101,7 +101,6 @@ class Voicing(BaseModel):
         rh_intervals: list[Interval] = []
         rh_intervals += [Interval.Unison]
         rh_intervals += self._get_intervals_from_quality()
-        # TODO: Avoid modulus here to actually get an upper extension
         rh_intervals += self._get_intervals_from_extension()
         rh_intervals += self._get_intervals_from_alteration()
 
