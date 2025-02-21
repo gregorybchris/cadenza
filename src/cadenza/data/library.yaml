@@ -242,8 +242,8 @@ songs:
     chords: |
       Ab F Bbm Ebsus4
       Ab F Bbm Ebsus4
-      Bbm7 Ebsus47
-      Bbm7 Ebsus47
+      Bbm7 Eb7sus4
+      Bbm7 Eb7sus4
       Bbm7 C7 Fm F7/Eb
       Bbm Dbm Ab F
       Bbm Dbm Ab
@@ -280,4 +280,20 @@ songs:
       - { chord: C, inversion: second, octave: 3 }
       - { chord: A#7, inversion: first, octave: 4 }
     tempo: 45
+    tonic: C
+
+  - id: 597ec8ae-c3dd-42a4-bf7e-5cf1942a48ef
+    title: Outro
+    artist: Vulfpeck
+    chords: |
+      C C D7 D7 F F Eb6 Dbmaj7
+      C C D7 F F F F F
+      C C D7 D7 F F Eb6 Dbmaj7
+      C C Bbmaj7 Bbmaj7 A7 A7 A7 A7
+      Dm7 Dm7 C/E F F F F#dim F#dim
+      G7sus4 G7sus4 G7sus4 G7sus4 G7sus4 G7sus4 G7sus4 G7sus4
+      C C D7 D7 F
+    voicings:
+      - { chord: Dbmaj7, inversion: second, octave: 3 }
+    tempo: 65
     tonic: C

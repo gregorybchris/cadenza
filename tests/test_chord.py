@@ -32,6 +32,8 @@ class TestChord:
             ("D2", Note.D, Quality.Major, None, Alteration.AddTwo, None),
             ("E4", Note.E, Quality.Major, None, Alteration.AddFour, None),
             ("F6", Note.F, Quality.Major, None, Alteration.AddSix, None),
+            ("G7sus4", Note.G, Quality.SusFour, Extension.Seven, None, None),
+            ("A7b5sus2/D#", Note.A, Quality.SusTwo, Extension.Seven, Alteration.FlatFive, Note.D_SHARP),
         ],
     )
     def test_from_str(  # noqa: PLR0913
