@@ -297,3 +297,15 @@ songs:
       - { chord: Dbmaj7, inversion: second, octave: 3 }
     tempo: 65
     tonic: C
+
+  - id: 4d9a117e-ab13-471c-b369-bce9b14dc8f8
+    title: Good Morning Beauty Queen
+    artist: Jacob Sigman
+    chords: |
+      Db Ab/C Db/Bb Ab
+      Db Ab/C Bbm7 Ab
+      Db Ab/C C Fm7 Bb7 Db/Eb
+      Ab Bb7 Db Ab Ab/C Bb7 Bbm/Eb
+      Ab
+    tempo: 40
+    tonic: Ab
