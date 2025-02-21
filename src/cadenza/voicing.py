@@ -84,6 +84,8 @@ class Voicing(BaseModel):
         return [Interval.from_int(self.chord.bass.to_index() - self.chord.root.to_index())]
 
     def get_pitches(self) -> list[Pitch]:
+        root_pitch = Pitch(note=self.chord.root, octave=self.octave)
+
         # Get pitches for left hand
         lh_intervals: list[Interval] = []
         lh_pitches: list[Pitch] = []
@@ -91,8 +93,9 @@ class Voicing(BaseModel):
             lh_intervals += self._get_intervals_from_bass()
             if len(lh_intervals) == 0:
                 lh_intervals += [Interval.Unison]
-            lh_notes = [self.chord.root + interval.to_int() for interval in lh_intervals]
-            lh_pitches = [Pitch(note=note, octave=self.octave - 2) for note in lh_notes]
+            lh_pitches = [root_pitch + interval.to_int() for interval in lh_intervals]
+            for pitch in lh_pitches:
+                pitch.octave -= 2
 
         # Get pitches for right hand
         rh_intervals: list[Interval] = []
@@ -102,16 +105,17 @@ class Voicing(BaseModel):
         rh_intervals += self._get_intervals_from_extension()
         rh_intervals += self._get_intervals_from_alteration()
 
-        rh_notes = [self.chord.root + interval.to_int() for interval in rh_intervals]
-
         # Apply inversions
         inversion_number = self.inversion.get_number()
-        n_rh_notes = len(rh_notes)
-        if inversion_number >= n_rh_notes:
-            msg = f"The {self.inversion.to_written()} does not exist for a voicing with {n_rh_notes} right hand notes."
+        n_rh_intervals = len(rh_intervals)
+        if inversion_number >= n_rh_intervals:
+            msg = (
+                f"The {self.inversion.to_written()} does not exist for a voicing"
+                f" with {n_rh_intervals} right hand notes."
+            )
             raise ValueError(msg)
 
-        rh_pitches = [Pitch(note=note, octave=self.octave) for note in rh_notes]
+        rh_pitches = [root_pitch + interval.to_int() for interval in rh_intervals]
 
         for _ in range(inversion_number):
             transposed_pitch = rh_pitches[0]

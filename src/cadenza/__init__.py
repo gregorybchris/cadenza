@@ -7,6 +7,7 @@ from cadenza.extension import Extension
 from cadenza.interval import Interval
 from cadenza.inversion import Inversion
 from cadenza.note import Note
+from cadenza.pitch import Pitch
 from cadenza.quality import Quality
 
 __version__ = importlib.metadata.version("cadenza")
@@ -19,6 +20,7 @@ __all__ = [
     "Interval",
     "Inversion",
     "Note",
+    "Pitch",
     "Quality",
     "__version__",
 ]

@@ -206,7 +206,7 @@ songs:
     chord_duration: half
     tonic: C
     voicings:
-      - { chord: Am7, inversion: first, octave: 4 }
+      - { chord: Am7, inversion: first, octave: 3 }
       - { chord: F, inversion: second, octave: 3 }
       - { chord: F/G, inversion: second, octave: 3 }
       - { chord: F/A, inversion: second, octave: 3 }
@@ -277,8 +277,8 @@ songs:
       Am C/G F C/E D7
       C A#7 Am C/G F C/E
     voicings:
-      - { chord: C, inversion: second, octave: 3 }
-      - { chord: A#7, inversion: first, octave: 4 }
+      - { chord: C, inversion: second, octave: 4 }
+      - { chord: A#7, inversion: first, octave: 3 }
     tempo: 45
     tonic: C
 
@@ -294,7 +294,10 @@ songs:
       G7sus4 G7sus4 G7sus4 G7sus4 G7sus4 G7sus4 G7sus4 G7sus4
       C C D7 D7 F
     voicings:
-      - { chord: Dbmaj7, inversion: second, octave: 3 }
+      - { chord: Dbmaj7, inversion: first, octave: 4 }
+      - { chord: Bbmaj7, inversion: second, octave: 3 }
+      - { chord: G7sus4, inversion: second, octave: 3 }
+      - { chord: A7, inversion: first, octave: 3 }
     tempo: 65
     tonic: C
 

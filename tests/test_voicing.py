@@ -70,6 +70,6 @@ class TestVoicing:
         assert pitches == [
             Pitch(note=Note.G_SHARP, octave=2),
             Pitch(note=Note.G_SHARP, octave=4),
-            Pitch(note=Note.C, octave=4),
-            Pitch(note=Note.D_SHARP, octave=4),
+            Pitch(note=Note.C, octave=5),
+            Pitch(note=Note.D_SHARP, octave=5),
         ]

@@ -68,61 +68,61 @@ class Note(StrEnum):
 
     def to_index(self) -> int:
         mapping = {
-            Note.A: 0,
-            Note.A_SHARP: 1,
-            Note.B_FLAT: 1,
-            Note.B: 2,
-            Note.C: 3,
-            Note.C_SHARP: 4,
-            Note.D_FLAT: 4,
-            Note.D: 5,
-            Note.D_SHARP: 6,
-            Note.E_FLAT: 6,
-            Note.E: 7,
-            Note.F: 8,
-            Note.F_SHARP: 9,
-            Note.G_FLAT: 9,
-            Note.G: 10,
-            Note.G_SHARP: 11,
-            Note.A_FLAT: 11,
+            Note.C: 0,
+            Note.C_SHARP: 1,
+            Note.D_FLAT: 1,
+            Note.D: 2,
+            Note.D_SHARP: 3,
+            Note.E_FLAT: 3,
+            Note.E: 4,
+            Note.F: 5,
+            Note.F_SHARP: 6,
+            Note.G_FLAT: 6,
+            Note.G: 7,
+            Note.G_SHARP: 8,
+            Note.A_FLAT: 8,
+            Note.A: 9,
+            Note.A_SHARP: 10,
+            Note.B_FLAT: 10,
+            Note.B: 11,
         }
         return mapping[self]
 
     @classmethod
     def from_index(cls, index: int, accidental: Accidental = Accidental.Sharp) -> "Note":
         mapping = {
-            0: Note.A,
-            1: Note.A_SHARP if accidental == Accidental.Sharp else Note.B_FLAT,
-            2: Note.B,
-            3: Note.C,
-            4: Note.C_SHARP if accidental == Accidental.Sharp else Note.D_FLAT,
-            5: Note.D,
-            6: Note.D_SHARP if accidental == Accidental.Sharp else Note.E_FLAT,
-            7: Note.E,
-            8: Note.F,
-            9: Note.F_SHARP if accidental == Accidental.Sharp else Note.G_FLAT,
-            10: Note.G,
-            11: Note.G_SHARP if accidental == Accidental.Sharp else Note.A_FLAT,
+            0: Note.C,
+            1: Note.C_SHARP if accidental == Accidental.Sharp else Note.D_FLAT,
+            2: Note.D,
+            3: Note.D_SHARP if accidental == Accidental.Sharp else Note.E_FLAT,
+            4: Note.E,
+            5: Note.F,
+            6: Note.F_SHARP if accidental == Accidental.Sharp else Note.G_FLAT,
+            7: Note.G,
+            8: Note.G_SHARP if accidental == Accidental.Sharp else Note.A_FLAT,
+            9: Note.A,
+            10: Note.A_SHARP if accidental == Accidental.Sharp else Note.B_FLAT,
+            11: Note.B,
         }
         return mapping[index]
 
-    def add(self, interval: int, accidental: Accidental) -> "Note":
-        new_index = (self.to_index() + interval) % 12
+    def add(self, semitones: int, accidental: Accidental) -> "Note":
+        new_index = (self.to_index() + semitones) % 12
         return Note.from_index(new_index, accidental)
 
-    def __add__(self, other: Any) -> "Note":
-        if not isinstance(other, int):
-            msg = f"Cannot add type with Note: {type(other)}"
+    def __add__(self, semitones: Any) -> "Note":
+        if not isinstance(semitones, int):
+            msg = f"Cannot add type with Note: {type(semitones)}"
             raise ValueError(msg)
         accidental = Accidental.Flat if self.is_flat() else Accidental.Sharp
-        return self.add(other, accidental)
+        return self.add(semitones, accidental)
 
-    def __sub__(self, other: Any) -> "Note":
-        if not isinstance(other, int):
-            msg = f"Cannot subtract type with Note: {type(other)}"
+    def __sub__(self, semitones: Any) -> "Note":
+        if not isinstance(semitones, int):
+            msg = f"Cannot subtract type with Note: {type(semitones)}"
             raise ValueError(msg)
         accidental = Accidental.Flat if self.is_flat() else Accidental.Sharp
-        return self.add(-other, accidental)
+        return self.add(-semitones, accidental)
 
     def __str__(self) -> str:
         return self.to_str()
