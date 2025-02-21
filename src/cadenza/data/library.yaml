@@ -261,3 +261,23 @@ songs:
     beat_duration: quarter
     chord_duration: quarter
     tonic: F
+
+  - id: 77b6fa3e-2276-4e58-b43c-d125807fd137
+    title: Lay It On Me
+    artist: Gabe Dixon
+    chords: |
+      C A#7 C A#7
+      Am C/G F
+      C A#7 C A#7
+      Am C/G C/E F
+      F#dim C/G G
+      E7 Am C/E F
+      F#dim C/G F/G C
+      C A#7
+      Am C/G F C/E D7
+      C A#7 Am C/G F C/E
+    voicings:
+      - { chord: C, inversion: second, octave: 3 }
+      - { chord: A#7, inversion: first, octave: 4 }
+    tempo: 45
+    tonic: C
