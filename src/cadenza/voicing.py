@@ -114,5 +114,4 @@ class Voicing(BaseModel):
         rh_pitches = [rh_root_pitch + interval.to_int() for interval in rh_intervals]
         rh_pitches = self._apply_inversion(rh_pitches)
 
-        # Apply inversions
         return lh_pitches + rh_pitches
