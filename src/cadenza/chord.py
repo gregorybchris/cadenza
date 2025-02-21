@@ -53,7 +53,7 @@ class Chord(BaseModel):
         bass = Note.from_str(bass_str) if bass_str else None
         return cls(root=root, quality=quality, extension=extension, alteration=alteration, bass=bass)
 
-    def to_str(self, symbols: bool = False) -> str:
+    def to_str(self, symbols: bool = True) -> str:
         extension_str = self.extension.to_str() if self.extension else ""
         alterations_str = self.alteration.to_str(symbols=symbols) if self.alteration else ""
         bass_str = f"/{self.bass.to_str(symbols=symbols)}" if self.bass else ""
