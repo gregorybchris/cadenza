@@ -309,3 +309,34 @@ songs:
       Ab
     tempo: 40
     tonic: Ab
+
+  - id: e8304f04-f082-4766-91e7-44b8c24a1a36
+    title: Everybody
+    artist: Sara Keden
+    chords: |
+      A A A A A A A A
+      A A A A A A E E
+      F#m F#m F#m F#m F#m F#m F#m F#m
+      F#m F#m F#m F#m F#m F#m F#m F#m
+      E E E E D D D D
+      A A A A A A A A
+      A A A A A A A A
+      F#m F#m A A A A A A
+      E E D D F#m
+    tempo: 110
+
+  - id: 10840d26-124e-4f51-9db0-55878db92db1
+    title: AUATC
+    artist: Bon Iver
+    chords: |
+      Am7 G/B C9
+      Em7 Bm7
+      Am7 G/B C9
+      Em7 Dsus4
+      Am7 G/B C9
+      Em7 Bm7
+      C Em7
+      Csus2 G
+      Dsus4 C9 G
+      Em7 Dm
+      C9 G/B G
