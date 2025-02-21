@@ -1,5 +1,6 @@
 import logging
-from typing import Any, ClassVar
+import math
+from typing import Any, ClassVar, Self
 
 from pydantic import BaseModel
 
@@ -23,6 +24,21 @@ class Pitch(BaseModel):
         octave_difference = self.octave - self.REFERENCE_OCTAVE
         n_semitones = degree_difference + octave_difference * 12
         return self.REFERENCE_FREQUENCY * 2 ** (n_semitones / 12)
+
+    @classmethod
+    def from_frequency(cls, frequency: float) -> Self:
+        lowest_pitch = cls(note=Note.C, octave=1)
+        lowest_pitch_frequency = lowest_pitch.to_frequency() - 0.1  # Offset slightly to allow for rounding errors
+        if frequency < lowest_pitch_frequency:
+            msg = f"Frequency {frequency} is lower than lowest allowed frequency {lowest_pitch_frequency}"
+            raise ValueError(msg)
+
+        n_semitones = round(12 * (math.log2(frequency) - math.log2(cls.REFERENCE_FREQUENCY)))
+        n_octaves = n_semitones // 12
+        n_degrees = n_semitones % 12
+        note = cls.REFERENCE_NOTE + n_degrees
+        octave = cls.REFERENCE_OCTAVE + n_octaves
+        return cls(note=note, octave=octave)
 
     def add(self, semitones: int) -> "Pitch":
         new_note = self.note + semitones
