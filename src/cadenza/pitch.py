@@ -10,8 +10,9 @@ logger = logging.getLogger(__name__)
 
 
 class Pitch(BaseModel):
-    # Middle C (C4) is 3 semitones above A3 (220 Hz)
-    # A4 is 440 Hz and C4 is 261.63 Hz
+    # NOTE: We start at C because the octave numbers typically change at C
+    # A4 (concert A) = 440.0 Hz
+    # C4 (middle C) = 261.63 Hz
     REFERENCE_OCTAVE: ClassVar[int] = 4
     REFERENCE_FREQUENCY: ClassVar[float] = 261.63
     REFERENCE_NOTE: ClassVar[Note] = Note.C
