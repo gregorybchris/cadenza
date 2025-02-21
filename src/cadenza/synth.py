@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import torch
 from torch import Tensor
 
-from cadenza.organ_stop import OrganStop
+from cadenza.organ_pipe_length import OrganPipeLength
 from cadenza.pitch import Pitch
 from cadenza.voicing import Voicing
 
@@ -34,9 +34,9 @@ class Synth:
         if overtones:
             # Add overtones using organ stops
             for freq in frequencies:
-                for stop in OrganStop:
-                    multiplier = stop.get_multiplier()
-                    decay = stop.get_decay()
+                for pipe_length in OrganPipeLength:
+                    multiplier = pipe_length.get_multiplier()
+                    decay = self._get_overtone_decay(pipe_length)
                     overtone = freq * multiplier
                     overtone_amplitude = decay * amplitude
                     overtone_waveform = overtone_amplitude * torch.sin(2 * torch.pi * overtone * t)
@@ -45,6 +45,21 @@ class Synth:
         # Normalize to prevent clipping
         audio /= len(frequencies)
         return audio
+
+    def _get_overtone_decay(self, pipe_length: OrganPipeLength) -> float:
+        match pipe_length:
+            case OrganPipeLength.TwoFoot:
+                return 1 / 9
+            case OrganPipeLength.FourFoot:
+                return 1 / 4
+            case OrganPipeLength.EightFoot:
+                return 1
+            case OrganPipeLength.SixteenFoot:
+                return 1 / 4
+            case OrganPipeLength.ThirtyTwoFoot:
+                return 1 / 9
+            case OrganPipeLength.SixtyFourFoot:
+                return 1 / 16
 
     def concat(self, segments: list[Tensor]) -> Tensor:
         fade_duration_s = 0.05

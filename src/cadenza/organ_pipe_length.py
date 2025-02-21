@@ -27,17 +27,17 @@ class OrganPipeLength(StrEnum):
             case OrganPipeLength.SixtyFourFoot:
                 return 4
 
-    def get_decay(self) -> float:
+    def get_number(self) -> int:
         match self:
             case OrganPipeLength.TwoFoot:
-                return 1 / 9
+                return 2
             case OrganPipeLength.FourFoot:
-                return 1 / 4
+                return 4
             case OrganPipeLength.EightFoot:
-                return 1
+                return 8
             case OrganPipeLength.SixteenFoot:
-                return 1 / 4
+                return 16
             case OrganPipeLength.ThirtyTwoFoot:
-                return 1 / 9
+                return 32
             case OrganPipeLength.SixtyFourFoot:
-                return 1 / 16
+                return 64
