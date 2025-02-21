@@ -88,6 +88,7 @@ def chord(  # noqa: PLR0913
     overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
     sample_rate: Annotated[int, Option("--sample-rate", "-sr")] = 44_100,
+    include_left_hand: Annotated[bool, Option("--include-left-hand/--no-left-hand")] = False,
     play: Annotated[bool, Option("--play/--no-play")] = True,
     show_pitches: Annotated[bool, Option("--pitches/--no-pitches")] = True,
     filepath: Optional[Path] = None,
@@ -105,7 +106,7 @@ def chord(  # noqa: PLR0913
     synth_args = SynthArgs(sample_rate=sample_rate)
     synth = Synth(args=synth_args)
 
-    voicing = Voicing(chord=chord, inversion=inversion, octave=octave)
+    voicing = Voicing(chord=chord, inversion=inversion, octave=octave, include_left_hand=include_left_hand)
     audio = synth.generate_voicing_audio(voicing, duration_s, overtones=overtones)
 
     if tremolo:
@@ -131,6 +132,7 @@ def chord(  # noqa: PLR0913
 def chords(  # noqa: PLR0913
     chords_str: str,
     octave: Annotated[int, Option("--octave")] = 4,
+    inversion_num: Annotated[int, Option("--inversion")] = 0,
     transpose: Annotated[int, Option("--transpose")] = 0,
     tempo: Annotated[float, Option("--tempo")] = 80.0,
     chord_duration: Duration = Duration.Quarter,
@@ -139,6 +141,7 @@ def chords(  # noqa: PLR0913
     overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
     sample_rate: int = 44_100,
+    include_left_hand: Annotated[bool, Option("--include-left-hand/--no-left-hand")] = False,
     play: Annotated[bool, Option("--play/--no-play")] = True,
     filepath: Optional[Path] = None,
     info: bool = False,
@@ -157,10 +160,16 @@ def chords(  # noqa: PLR0913
 
     segments: list[Tensor] = []
     chords = [Chord.from_str(chord_str) for chord_str in chords_str.split()]
+    inversion = Inversion.from_number(inversion_num)
     for _ in range(repeat):
         for chord in chords:
             transposed_chord = chord.transpose(transpose)
-            voicing = Voicing(chord=transposed_chord, inversion=Inversion.Root, octave=octave)
+            voicing = Voicing(
+                chord=transposed_chord,
+                inversion=inversion,
+                octave=octave,
+                include_left_hand=include_left_hand,
+            )
             segment = synth.generate_voicing_audio(voicing, audio_duration, overtones=overtones)
             segments.append(segment)
 
@@ -310,7 +319,7 @@ def optimize(  # noqa: PLR0913
     transpose: Annotated[int, Option("--transpose")] = 0,
     duration_s: Annotated[float, Option("--duration", "-d")] = 3.0,
     sample_rate: Annotated[int, Option("--sample-rate", "-sr")] = 44_100,
-    include_left_hand: Annotated[bool, Option("--include-left-hand/--no-include-left-hand")] = False,
+    include_left_hand: Annotated[bool, Option("--include-left-hand/--no-left-hand")] = False,
     play: Annotated[bool, Option("--play/--no-play")] = True,
     show_pitches: Annotated[bool, Option("--pitches/--no-pitches")] = True,
     unoptimized_filepath: Optional[Path] = None,

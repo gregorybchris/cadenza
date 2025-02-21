@@ -49,17 +49,30 @@ class Voicing(BaseModel):
                 return [Interval.MinorSeventh]
             case Extension.MajorSeven:
                 return [Interval.MajorSeventh]
-            case Extension.AddNine:
-                return [Interval.MajorSecond]
-            case Extension.AddEleven:
-                return [Interval.PerfectFourth]
-            case Extension.AddThirteen:
-                return [Interval.MajorSixth]
+            case Extension.Nine:
+                return [Interval.MinorSeventh, Interval.MajorSecond]
+            case Extension.Eleven:
+                return [Interval.MinorSeventh, Interval.MajorSecond, Interval.PerfectFourth]
+            case Extension.Thirteen:
+                return [Interval.MinorSeventh, Interval.MajorSecond, Interval.MajorSixth]
 
-    def _get_intervals_from_alteration(self) -> list[Interval]:
+    def _get_intervals_from_alteration(self) -> list[Interval]:  # noqa: PLR0911
         if not self.chord.alteration:
             return []
         match self.chord.alteration:
+            case Alteration.AddTwo:
+                return [Interval.MajorSecond]
+            case Alteration.AddFour:
+                return [Interval.PerfectFourth]
+            case Alteration.AddSix:
+                match self.chord.quality:
+                    case Quality.Major:
+                        return [Interval.MajorSixth]
+                    case Quality.Minor:
+                        return [Interval.MinorSixth]
+                    case _:
+                        msg = f"Invalid quality for add6: {self.chord.quality}"
+                        raise ValueError(msg)
             case Alteration.FlatFive:
                 return [Interval.Tritone]
             case Alteration.FlatNine:

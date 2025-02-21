@@ -9,21 +9,18 @@ logger = logging.getLogger(__name__)
 class Extension(StrEnum):
     Seven = auto()
     MajorSeven = auto()
-    AddNine = auto()
-    AddEleven = auto()
-    AddThirteen = auto()
+    Nine = auto()
+    Eleven = auto()
+    Thirteen = auto()
 
     @classmethod
     def from_str(cls, extension_str: str) -> "Extension":
         mapping = {
             "7": cls.Seven,
             "maj7": cls.MajorSeven,
-            "add9": cls.AddNine,
-            "9": cls.AddNine,
-            "add11": cls.AddEleven,
-            "11": cls.AddEleven,
-            "add13": cls.AddThirteen,
-            "13": cls.AddThirteen,
+            "9": cls.Nine,
+            "11": cls.Eleven,
+            "13": cls.Thirteen,
         }
         if extension_str not in mapping:
             msg = f"Invalid extension: {extension_str}"
@@ -36,12 +33,12 @@ class Extension(StrEnum):
                 return "7"
             case Extension.MajorSeven:
                 return "maj7"
-            case Extension.AddNine:
-                return "add9"
-            case Extension.AddEleven:
-                return "add11"
-            case Extension.AddThirteen:
-                return "add13"
+            case Extension.Nine:
+                return "9"
+            case Extension.Eleven:
+                return "11"
+            case Extension.Thirteen:
+                return "13"
 
     def __str__(self) -> str:
         return self.to_str()

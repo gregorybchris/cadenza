@@ -27,8 +27,8 @@ class Chord(BaseModel):
         regex = (
             r"^([A-Ga-g](♯|#|♭|b)?)"  # Root
             r"(m|min|dim|aug|\+|ø|halfdim|sus2|sus4)?"  # Quality
-            r"(add\d+|7|maj7|9|11|13)?"  # Extension
-            r"([♯#♭b]\d+)?"  # Alteration
+            r"(7|maj7|9|11|13)?"  # Extension
+            r"((♯|#|♭|b|sharp|flat|add)?\d+)?"  # Alteration
             r"(/([A-Ga-g](♯|#|♭|b)?))?$"  # Optional bass note
         )
 
@@ -36,7 +36,7 @@ class Chord(BaseModel):
         if not match:
             msg = f"Failed to parse chord string: {chord_str}"
             raise ParseError(msg)
-        root_str, _, quality_str, extension_str, alteration_str, _, bass_str, _ = match.groups()
+        root_str, _, quality_str, extension_str, alteration_str, _, _, bass_str, _ = match.groups()
 
         root = Note.from_str(root_str)
         quality = Quality.from_str(quality_str) if quality_str else Quality.Major

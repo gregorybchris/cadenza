@@ -23,6 +23,15 @@ class TestChord:
             ("F/G", Note.F, Quality.Major, None, None, Note.G),
             ("Dm/F", Note.D, Quality.Minor, None, None, Note.F),
             ("E7b9/G#", Note.E, Quality.Major, Extension.Seven, Alteration.FlatNine, Note.G_SHARP),
+            ("C9", Note.C, Quality.Major, Extension.Nine, None, None),
+            ("C11", Note.C, Quality.Major, Extension.Eleven, None, None),
+            ("C13", Note.C, Quality.Major, Extension.Thirteen, None, None),
+            ("Aadd2", Note.A, Quality.Major, None, Alteration.AddTwo, None),
+            ("Badd4", Note.B, Quality.Major, None, Alteration.AddFour, None),
+            ("Cadd6", Note.C, Quality.Major, None, Alteration.AddSix, None),
+            ("D2", Note.D, Quality.Major, None, Alteration.AddTwo, None),
+            ("E4", Note.E, Quality.Major, None, Alteration.AddFour, None),
+            ("F6", Note.F, Quality.Major, None, Alteration.AddSix, None),
         ],
     )
     def test_from_str(  # noqa: PLR0913
