@@ -10,22 +10,22 @@ logger = logging.getLogger(__name__)
 
 class Note(StrEnum):
     A = "A"
-    A_SHARP = "A#"
-    B_FLAT = "Bb"
+    ASharp = "A#"
+    BFlat = "Bb"
     B = "B"
     C = "C"
-    C_SHARP = "C#"
-    D_FLAT = "Db"
+    CSharp = "C#"
+    DFlat = "Db"
     D = "D"
-    D_SHARP = "D#"
-    E_FLAT = "Eb"
+    DSharp = "D#"
+    EFlat = "Eb"
     E = "E"
     F = "F"
-    F_SHARP = "F#"
-    G_FLAT = "Gb"
+    FSharp = "F#"
+    GFlat = "Gb"
     G = "G"
-    G_SHARP = "G#"
-    A_FLAT = "Ab"
+    GSharp = "G#"
+    AFlat = "Ab"
 
     @classmethod
     def from_str(cls, note_str: str) -> Self:
@@ -44,11 +44,11 @@ class Note(StrEnum):
 
     def as_sharp(self) -> "Note":
         mapping = {
-            Note.B_FLAT: Note.A_SHARP,
-            Note.E_FLAT: Note.D_SHARP,
-            Note.A_FLAT: Note.G_SHARP,
-            Note.D_FLAT: Note.C_SHARP,
-            Note.G_FLAT: Note.F_SHARP,
+            Note.BFlat: Note.ASharp,
+            Note.EFlat: Note.DSharp,
+            Note.AFlat: Note.GSharp,
+            Note.DFlat: Note.CSharp,
+            Note.GFlat: Note.FSharp,
         }
         if self in mapping:
             return mapping[self]
@@ -56,11 +56,11 @@ class Note(StrEnum):
 
     def as_flat(self) -> "Note":
         mapping = {
-            Note.A_SHARP: Note.B_FLAT,
-            Note.D_SHARP: Note.E_FLAT,
-            Note.G_SHARP: Note.A_FLAT,
-            Note.C_SHARP: Note.D_FLAT,
-            Note.F_SHARP: Note.G_FLAT,
+            Note.ASharp: Note.BFlat,
+            Note.DSharp: Note.EFlat,
+            Note.GSharp: Note.AFlat,
+            Note.CSharp: Note.DFlat,
+            Note.FSharp: Note.GFlat,
         }
         if self in mapping:
             return mapping[self]
@@ -69,21 +69,21 @@ class Note(StrEnum):
     def to_index(self) -> int:
         mapping = {
             Note.C: 0,
-            Note.C_SHARP: 1,
-            Note.D_FLAT: 1,
+            Note.CSharp: 1,
+            Note.DFlat: 1,
             Note.D: 2,
-            Note.D_SHARP: 3,
-            Note.E_FLAT: 3,
+            Note.DSharp: 3,
+            Note.EFlat: 3,
             Note.E: 4,
             Note.F: 5,
-            Note.F_SHARP: 6,
-            Note.G_FLAT: 6,
+            Note.FSharp: 6,
+            Note.GFlat: 6,
             Note.G: 7,
-            Note.G_SHARP: 8,
-            Note.A_FLAT: 8,
+            Note.GSharp: 8,
+            Note.AFlat: 8,
             Note.A: 9,
-            Note.A_SHARP: 10,
-            Note.B_FLAT: 10,
+            Note.ASharp: 10,
+            Note.BFlat: 10,
             Note.B: 11,
         }
         return mapping[self]
@@ -92,16 +92,16 @@ class Note(StrEnum):
     def from_index(cls, index: int, accidental: Accidental = Accidental.Sharp) -> "Note":
         mapping = {
             0: Note.C,
-            1: Note.C_SHARP if accidental == Accidental.Sharp else Note.D_FLAT,
+            1: Note.CSharp if accidental == Accidental.Sharp else Note.DFlat,
             2: Note.D,
-            3: Note.D_SHARP if accidental == Accidental.Sharp else Note.E_FLAT,
+            3: Note.DSharp if accidental == Accidental.Sharp else Note.EFlat,
             4: Note.E,
             5: Note.F,
-            6: Note.F_SHARP if accidental == Accidental.Sharp else Note.G_FLAT,
+            6: Note.FSharp if accidental == Accidental.Sharp else Note.GFlat,
             7: Note.G,
-            8: Note.G_SHARP if accidental == Accidental.Sharp else Note.A_FLAT,
+            8: Note.GSharp if accidental == Accidental.Sharp else Note.AFlat,
             9: Note.A,
-            10: Note.A_SHARP if accidental == Accidental.Sharp else Note.B_FLAT,
+            10: Note.ASharp if accidental == Accidental.Sharp else Note.BFlat,
             11: Note.B,
         }
         return mapping[index]

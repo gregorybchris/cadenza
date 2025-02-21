@@ -10,19 +10,19 @@ class TestChord:
     @pytest.mark.parametrize(
         ("chord_str", "root", "quality", "extension", "alteration", "bass"),
         [
-            ("Abm7", Note.A_FLAT, Quality.Minor, Extension.Seven, None, None),
+            ("Abm7", Note.AFlat, Quality.Minor, Extension.Seven, None, None),
             ("B7", Note.B, Quality.Major, Extension.Seven, None, None),
-            ("Bbmaj7", Note.B_FLAT, Quality.Major, Extension.MajorSeven, None, None),
-            ("C#dim", Note.C_SHARP, Quality.Diminished, None, None, None),
+            ("Bbmaj7", Note.BFlat, Quality.Major, Extension.MajorSeven, None, None),
+            ("C#dim", Note.CSharp, Quality.Diminished, None, None, None),
             ("Chalfdim", Note.C, Quality.HalfDiminished, None, None, None),
             ("D", Note.D, Quality.Major, None, None, None),
-            ("D#aug", Note.D_SHARP, Quality.Augmented, None, None, None),
+            ("D#aug", Note.DSharp, Quality.Augmented, None, None, None),
             ("Emaj7b5", Note.E, Quality.Major, Extension.MajorSeven, Alteration.FlatFive, None),
             ("Fsus2", Note.F, Quality.SusTwo, None, None, None),
             ("Gsus4", Note.G, Quality.SusFour, None, None, None),
             ("F/G", Note.F, Quality.Major, None, None, Note.G),
             ("Dm/F", Note.D, Quality.Minor, None, None, Note.F),
-            ("E7b9/G#", Note.E, Quality.Major, Extension.Seven, Alteration.FlatNine, Note.G_SHARP),
+            ("E7b9/G#", Note.E, Quality.Major, Extension.Seven, Alteration.FlatNine, Note.GSharp),
             ("C9", Note.C, Quality.Major, Extension.Nine, None, None),
             ("C11", Note.C, Quality.Major, Extension.Eleven, None, None),
             ("C13", Note.C, Quality.Major, Extension.Thirteen, None, None),
@@ -33,7 +33,7 @@ class TestChord:
             ("E4", Note.E, Quality.Major, None, Alteration.AddFour, None),
             ("F6", Note.F, Quality.Major, None, Alteration.AddSix, None),
             ("G7sus4", Note.G, Quality.SusFour, Extension.Seven, None, None),
-            ("A7b5sus2/D#", Note.A, Quality.SusTwo, Extension.Seven, Alteration.FlatFive, Note.D_SHARP),
+            ("A7b5sus2/D#", Note.A, Quality.SusTwo, Extension.Seven, Alteration.FlatFive, Note.DSharp),
         ],
     )
     def test_from_str(  # noqa: PLR0913
@@ -63,7 +63,7 @@ class TestChord:
         [
             (
                 Chord(
-                    root=Note.D_SHARP,
+                    root=Note.DSharp,
                     quality=Quality.Augmented,
                     extension=None,
                     alteration=None,
@@ -78,7 +78,7 @@ class TestChord:
                     quality=Quality.Major,
                     extension=Extension.Seven,
                     alteration=Alteration.FlatNine,
-                    bass=Note.G_SHARP,
+                    bass=Note.GSharp,
                 ),
                 "E7b9/G#",
                 "E7♭9/G♯",
@@ -89,7 +89,7 @@ class TestChord:
                     quality=Quality.SusTwo,
                     extension=Extension.Seven,
                     alteration=Alteration.FlatFive,
-                    bass=Note.D_SHARP,
+                    bass=Note.DSharp,
                 ),
                 "A7b5sus2/D#",
                 "A7♭5sus2/D♯",

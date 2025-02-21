@@ -47,29 +47,29 @@ class TestVoicing:
         assert pitches == [
             Pitch(note=Note.C, octave=2),
             Pitch(note=Note.G, octave=4),
-            Pitch(note=Note.A_SHARP, octave=4),
+            Pitch(note=Note.ASharp, octave=4),
             Pitch(note=Note.C, octave=5),
             Pitch(note=Note.E, octave=5),
         ]
 
     def test_get_pitches_flats(self) -> None:
-        chord = Chord(root=Note.E_FLAT, quality=Quality.Major)
+        chord = Chord(root=Note.EFlat, quality=Quality.Major)
         voicing = Voicing(chord=chord, inversion=Inversion.Root, octave=4)
         pitches = voicing.to_pitches()
         assert pitches == [
-            Pitch(note=Note.E_FLAT, octave=2),
-            Pitch(note=Note.E_FLAT, octave=4),
+            Pitch(note=Note.EFlat, octave=2),
+            Pitch(note=Note.EFlat, octave=4),
             Pitch(note=Note.G, octave=4),
-            Pitch(note=Note.B_FLAT, octave=4),
+            Pitch(note=Note.BFlat, octave=4),
         ]
 
     def test_get_pitches_sharps(self) -> None:
-        chord = Chord(root=Note.G_SHARP, quality=Quality.Major)
+        chord = Chord(root=Note.GSharp, quality=Quality.Major)
         voicing = Voicing(chord=chord, inversion=Inversion.Root, octave=4)
         pitches = voicing.to_pitches()
         assert pitches == [
-            Pitch(note=Note.G_SHARP, octave=2),
-            Pitch(note=Note.G_SHARP, octave=4),
+            Pitch(note=Note.GSharp, octave=2),
+            Pitch(note=Note.GSharp, octave=4),
             Pitch(note=Note.C, octave=5),
-            Pitch(note=Note.D_SHARP, octave=5),
+            Pitch(note=Note.DSharp, octave=5),
         ]
