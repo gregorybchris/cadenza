@@ -53,19 +53,22 @@ class Chord(BaseModel):
         bass = Note.from_str(bass_str) if bass_str else None
         return cls(root=root, quality=quality, extension=extension, alteration=alteration, bass=bass)
 
-    def __str__(self) -> str:
+    def to_str(self, symbols: bool = False) -> str:
         extension_str = self.extension.to_str() if self.extension else ""
-        alterations_str = self.alteration.to_str() if self.alteration else ""
-        bass_str = f"/{self.bass.to_str()}" if self.bass else ""
-        ret = str(self.root)
+        alterations_str = self.alteration.to_str(symbols=symbols) if self.alteration else ""
+        bass_str = f"/{self.bass.to_str(symbols=symbols)}" if self.bass else ""
+        ret = self.root.to_str(symbols=symbols)
         if self.quality.is_prefix():
-            ret += str(self.quality)
-        ret += str(extension_str)
-        ret += str(alterations_str)
+            ret += self.quality.to_str(symbols=symbols)
+        ret += extension_str
+        ret += alterations_str
         if self.quality.is_suffix():
-            ret += str(self.quality)
-        ret += str(bass_str)
+            ret += self.quality.to_str(symbols=symbols)
+        ret += bass_str
         return ret
+
+    def __str__(self) -> str:
+        return self.to_str()
 
     @classmethod
     def from_scale_degree(cls, tonic: "Chord", scale_degree: ScaleDegree) -> Self:
