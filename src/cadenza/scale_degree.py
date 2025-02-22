@@ -111,6 +111,33 @@ class ScaleDegree(StrEnum):
                 return cls.LeadingTone
             case Interval.Octave:
                 return cls.Tonic
+            case Interval.MinorNinth:
+                msg = "Minor ninth is not a valid interval for scale degrees"
+                raise ValueError(msg)
+            case Interval.MajorNinth:
+                msg = "Major ninth is not a valid interval for scale degrees"
+                raise ValueError(msg)
+            case Interval.MinorTenth:
+                msg = "Minor tenth is not a valid interval for scale degrees"
+                raise ValueError(msg)
+            case Interval.MajorTenth:
+                msg = "Major tenth is not a valid interval for scale degrees"
+                raise ValueError(msg)
+            case Interval.PerfectEleventh:
+                msg = "Perfect eleventh is not a valid interval for scale degrees"
+                raise ValueError(msg)
+            case Interval.AugmentedEleventh:
+                msg = "Augmented eleventh is not a valid interval for scale degrees"
+                raise ValueError(msg)
+            case Interval.PerfectTwelfth:
+                msg = "Perfect twelfth is not a valid interval for scale degrees"
+                raise ValueError(msg)
+            case Interval.MinorThirteenth:
+                msg = "Minor thirteenth is not a valid interval for scale degrees"
+                raise ValueError(msg)
+            case Interval.MajorThirteenth:
+                msg = "Major thirteenth is not a valid interval for scale degrees"
+                raise ValueError(msg)
 
     @classmethod
     def from_str(cls, mode_str: str) -> Self:
