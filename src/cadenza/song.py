@@ -28,6 +28,7 @@ class Song(BaseModel):
     @staticmethod
     def _parse_chords_str(chords_str: str) -> list[list[Chord]]:
         lines = chords_str.splitlines()
+        lines = [line for line in lines if not line.startswith("~")]
         chord_str_lines = [line.split() for line in lines]
         return [[Chord.from_str(chord_str) for chord_str in chord_strs] for chord_strs in chord_str_lines]
 
