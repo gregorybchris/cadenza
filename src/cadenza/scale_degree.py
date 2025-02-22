@@ -140,8 +140,8 @@ class ScaleDegree(StrEnum):
                 raise ValueError(msg)
 
     @classmethod
-    def from_str(cls, mode_str: str) -> Self:
-        return cls[mode_str]
+    def from_str(cls, scale_degree_str: str) -> Self:
+        return cls[scale_degree_str]
 
     def __str__(self) -> str:
         return self.to_written()
