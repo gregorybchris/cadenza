@@ -3,6 +3,7 @@ from enum import StrEnum
 from typing import Any, Self
 
 from cadenza.accidental import Accidental
+from cadenza.constants import N_NOTES
 from cadenza.utils.symbol_utils import add_symbols, remove_symbols
 
 logger = logging.getLogger(__name__)
@@ -107,7 +108,7 @@ class Note(StrEnum):
         return mapping[index]
 
     def add(self, semitones: int, accidental: Accidental) -> "Note":
-        new_index = (self.to_index() + semitones) % 12
+        new_index = (self.to_index() + semitones) % N_NOTES
         return Note.from_index(new_index, accidental)
 
     def __add__(self, semitones: Any) -> "Note":

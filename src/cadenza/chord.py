@@ -5,6 +5,7 @@ from typing import Optional, Self
 from pydantic import BaseModel
 
 from cadenza.alteration import Alteration
+from cadenza.constants import N_NOTES
 from cadenza.errors import ParseError
 from cadenza.extension import Extension
 from cadenza.interval import Interval
@@ -111,8 +112,8 @@ class Chord(BaseModel):
     def to_function(self, tonic: "Chord") -> str:
         tonic_root = tonic.root
 
-        interval_num = (self.root.to_index() - tonic_root.to_index()) % 12
-        interval = Interval.from_int(interval_num)
+        interval_int = (self.root.to_index() - tonic_root.to_index()) % N_NOTES
+        interval = Interval.from_int(interval_int)
         try:
             scale_degree = ScaleDegree.from_interval(interval)
         except ValueError as exc:
@@ -138,8 +139,8 @@ class Chord(BaseModel):
             function += Quality.SusFour.to_str()
 
         if self.bass is not None:
-            base_interval_num = (self.bass.to_index() - tonic_root.to_index()) % 12
-            base_interval = Interval.from_int(base_interval_num)
+            base_interval_int = (self.bass.to_index() - tonic_root.to_index()) % N_NOTES
+            base_interval = Interval.from_int(base_interval_int)
             try:
                 base_scale_degree = ScaleDegree.from_interval(base_interval)
             except ValueError as exc:

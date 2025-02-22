@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 from cadenza.alteration import Alteration
 from cadenza.chord import Chord
+from cadenza.constants import N_NOTES
 from cadenza.extension import Extension
 from cadenza.interval import Interval
 from cadenza.inversion import Inversion
@@ -87,7 +88,8 @@ class Voicing(BaseModel):
     def _get_intervals_from_bass(self) -> list[Interval]:
         if not self.chord.bass:
             return []
-        return [Interval.from_int(self.chord.bass.to_index() - self.chord.root.to_index())]
+        interval_int = (self.chord.bass.to_index() - self.chord.root.to_index()) % N_NOTES
+        return [Interval.from_int(interval_int)]
 
     def _apply_inversion(self, pitches: list[Pitch]) -> list[Pitch]:
         inversion_number = self.inversion.to_number()

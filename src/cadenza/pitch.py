@@ -4,6 +4,7 @@ from typing import Any, ClassVar, Self
 
 from pydantic import BaseModel
 
+from cadenza.constants import N_NOTES
 from cadenza.note import Note
 
 logger = logging.getLogger(__name__)
@@ -23,8 +24,8 @@ class Pitch(BaseModel):
     def to_frequency(self) -> float:
         degree_difference = self.note.to_index() - self.REFERENCE_NOTE.to_index()
         octave_difference = self.octave - self.REFERENCE_OCTAVE
-        n_semitones = degree_difference + octave_difference * 12
-        return self.REFERENCE_FREQUENCY * 2 ** (n_semitones / 12)
+        n_semitones = degree_difference + octave_difference * N_NOTES
+        return self.REFERENCE_FREQUENCY * 2 ** (n_semitones / N_NOTES)
 
     @classmethod
     def from_frequency(cls, frequency: float) -> Self:
@@ -34,16 +35,16 @@ class Pitch(BaseModel):
             msg = f"Frequency {frequency} is lower than lowest allowed frequency {lowest_pitch_frequency}"
             raise ValueError(msg)
 
-        n_semitones = round(12 * (math.log2(frequency) - math.log2(cls.REFERENCE_FREQUENCY)))
-        n_octaves = n_semitones // 12
-        n_degrees = n_semitones % 12
+        n_semitones = round(N_NOTES * (math.log2(frequency) - math.log2(cls.REFERENCE_FREQUENCY)))
+        n_octaves = n_semitones // N_NOTES
+        n_degrees = n_semitones % N_NOTES
         note = cls.REFERENCE_NOTE + n_degrees
         octave = cls.REFERENCE_OCTAVE + n_octaves
         return cls(note=note, octave=octave)
 
     def add(self, semitones: int) -> "Pitch":
         new_note = self.note + semitones
-        new_octave = self.octave + (self.note.to_index() + semitones) // 12
+        new_octave = self.octave + (self.note.to_index() + semitones) // N_NOTES
         return Pitch(note=new_note, octave=new_octave)
 
     def __add__(self, semitones: Any) -> "Pitch":
