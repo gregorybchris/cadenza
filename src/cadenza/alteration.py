@@ -11,6 +11,7 @@ class Alteration(StrEnum):
     AddTwo = auto()
     AddFour = auto()
     AddSix = auto()
+    AddNine = auto()
     FlatFive = auto()
     FlatNine = auto()
 
@@ -23,6 +24,7 @@ class Alteration(StrEnum):
             "4": cls.AddFour,
             "add4": cls.AddFour,
             "6": cls.AddSix,
+            "add9": cls.AddNine,
             "add6": cls.AddSix,
             "b5": cls.FlatFive,
             "b9": cls.FlatNine,
@@ -40,6 +42,8 @@ class Alteration(StrEnum):
                 return "4"
             case Alteration.AddSix:
                 return "6"
+            case Alteration.AddNine:
+                return "add9"
             case Alteration.FlatFive:
                 return "♭5" if symbols else "b5"
             case Alteration.FlatNine:

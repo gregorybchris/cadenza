@@ -34,6 +34,7 @@ class TestChord:
             ("F6", Note.F, Quality.Major, None, Alteration.AddSix, None),
             ("G7sus4", Note.G, Quality.SusFour, Extension.Seven, None, None),
             ("A7b5sus2/D#", Note.A, Quality.SusTwo, Extension.Seven, Alteration.FlatFive, Note.DSharp),
+            ("Eadd9", Note.E, Quality.Major, None, Alteration.AddNine, None),
         ],
     )
     def test_from_str(  # noqa: PLR0913
@@ -59,7 +60,7 @@ class TestChord:
         assert chord_c == chord_a
 
     @pytest.mark.parametrize(
-        ("chord", "expected_chord_str", "expected_chord_symbol_str"),
+        ("chord", "expected_chord_str_no_symbols", "expected_chord_str_with_symbols"),
         [
             (
                 Chord(
@@ -96,9 +97,14 @@ class TestChord:
             ),
         ],
     )
-    def test_to_str(self, chord: Chord, expected_chord_str: str, expected_chord_symbol_str: str) -> None:
+    def test_to_str(
+        self,
+        chord: Chord,
+        expected_chord_str_no_symbols: str,
+        expected_chord_str_with_symbols: str,
+    ) -> None:
         chord_str = str(chord)
-        assert chord_str == expected_chord_str
+        assert chord_str == expected_chord_str_with_symbols
 
-        chord_symbol_str = chord.to_str(symbols=True)
-        assert chord_symbol_str == expected_chord_symbol_str
+        chord_symbol_str = chord.to_str(symbols=False)
+        assert chord_symbol_str == expected_chord_str_no_symbols

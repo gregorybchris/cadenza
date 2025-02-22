@@ -50,11 +50,15 @@ class Voicing(BaseModel):
             case Extension.MajorSeven:
                 return [Interval.MajorSeventh]
             case Extension.Nine:
-                return [Interval.MinorSeventh, Interval.MajorSecond]
+                # NOTE: The 9 chord includes all previous extensions (the 7th).
+                return [Interval.MinorSeventh, Interval.MajorNinth]
             case Extension.Eleven:
-                return [Interval.MinorSeventh, Interval.MajorSecond, Interval.PerfectFourth]
+                # NOTE: The 11 chord includes all previous extensions (the 7th and 9th).
+                return [Interval.MinorSeventh, Interval.MajorNinth, Interval.PerfectEleventh]
             case Extension.Thirteen:
-                return [Interval.MinorSeventh, Interval.MajorSecond, Interval.MajorSixth]
+                # NOTE: Often the 13 chord is played without the 11th,
+                # though both are accepted voicings.
+                return [Interval.MinorSeventh, Interval.MajorNinth, Interval.MajorThirteenth]
 
     def _get_intervals_from_alteration(self) -> list[Interval]:  # noqa: PLR0911
         if not self.chord.alteration:
@@ -73,10 +77,12 @@ class Voicing(BaseModel):
                     case _:
                         msg = f"Invalid quality for add6: {self.chord.quality}"
                         raise ValueError(msg)
+            case Alteration.AddNine:
+                return [Interval.MajorNinth]
             case Alteration.FlatFive:
                 return [Interval.Tritone]
             case Alteration.FlatNine:
-                return [Interval.MinorSecond]
+                return [Interval.MinorNinth]
 
     def _get_intervals_from_bass(self) -> list[Interval]:
         if not self.chord.bass:
