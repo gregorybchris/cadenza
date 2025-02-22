@@ -22,6 +22,7 @@ songs:
       Em G C9 C Ahalfdim D#
       G G#dim7 Am7
       E Emaj7 E Emaj7
+      ~ Not sure about many of the chords after A here
       E Emaj7 A B B C#m7
       Am
       C D
@@ -42,6 +43,12 @@ songs:
       F Am F Am F Am F Am
       Fm C Bb F Fm C Bb F Fm C Bb F
       F Am F Am F Am F Am F Am F Am F Am F Am
+      ~ Riff:
+      ~ A A G A A A A G A A B B
+      ~ C C B C C C C C E E D A
+      ~ Riff durations:
+      ~ 8th 8th 8th Q Q Q Q 8th 8th 8th 8th 8th
+      ~ 8th 8th 8th Q Q Q Q 8th 8th 8th 8th 8th
     tempo: 80
     beat_duration: eighth
     chord_duration: quarter
@@ -289,15 +296,17 @@ songs:
       C C D7 D7 F F Eb6 Dbmaj7
       C C D7 F F F F F
       C C D7 D7 F F Eb6 Dbmaj7
-      C C Bbmaj7 Bbmaj7 A7 A7 A7 A7
+      C C Bbmaj7add9 Bbmaj7add9 Dbdimmaj7/A Dbdimmaj7/A Dbdimmaj7/A Dbdimmaj7/A
       Dm7 Dm7 C/E F F F F#dim F#dim
       G7sus4 G7sus4 G7sus4 G7sus4 G7sus4 G7sus4 G7sus4 G7sus4
       C C D7 D7 F
+      ~ Bbadd9 (Bbmaj7) = Bb | D F C
+      ~ A7addC (A7) = A | Db G C
     voicings:
       - { chord: Dbmaj7, inversion: first, octave: 4 }
-      - { chord: Bbmaj7, inversion: second, octave: 3 }
+      - { chord: Bbmaj7add9, inversion: second, octave: 3 }
       - { chord: G7sus4, inversion: second, octave: 3 }
-      - { chord: A7, inversion: first, octave: 3 }
+      - { chord: Dbdimmaj7/A, inversion: first, octave: 4 }
     tempo: 65
     tonic: C
 
@@ -310,6 +319,7 @@ songs:
       Db Ab/C C Fm7 Bb7 Db/Eb
       Ab Bb7 Db Ab Ab/C Bb7 Bbm/Eb
       Ab
+      ~ On guitar play it in E
     tempo: 40
     tonic: Ab
 
@@ -317,6 +327,8 @@ songs:
     title: Everybody
     artist: Sara Keden
     chords: |
+      ~ (intro melody)
+      ~ A G# F# E D
       A A A A A A A A
       A A A A A A E E
       F#m F#m F#m F#m F#m F#m F#m F#m
@@ -343,3 +355,35 @@ songs:
       Dsus4 C9 G
       Em7 Dm
       C9 G/B G
+
+  - id: 496b9f33-a339-4718-91a3-d82785fe7756
+    title: Orange Juice
+    artist: Noah Kahan
+    chords: |
+      A C#m/G# F#m A/E
+      D2 D2 F#m A/E
+      A C#m/G# F#m A/E
+      D2 D2 F#m A/E
+      ~ Riff: E -> F -> F#
+      F# A/E Dmaj7 Dmaj7
+      F# A/E Dmaj7 Dmaj7
+    voicings:
+      - { chord: C#m/G#, inversion: first, octave: 4 }
+      - { chord: A/E, inversion: second, octave: 3 }
+    tempo: 30
+
+  - id: 0ed5648c-d0e6-4d73-92bc-8c808c040531
+    title: I Wanted Summer With You
+    artist: Couch
+    chords: |
+      ~ Note: Timing might be slightly off here
+      Ab/F Fm7 Eb/G Ab Ab Bb Eb/C Cm7
+      Ab/F Fm7 Eb/G Ab Ab Bb Eb/C Cm7
+      ~ Riff:
+      ~ F Ab C Eb C Ab
+      ~ Bb Bb Bb C
+      ~ G F Eb C Bb
+      ~ F Eb
+    voicings:
+      - { chord: Fm7, inversion: third, octave: 3 }
+    tempo: 90

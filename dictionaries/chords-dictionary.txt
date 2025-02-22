@@ -15,6 +15,7 @@ Gbdim
 Gdim
 G#dim
 Abdim
+
 Aaug
 A#aug
 Bbaug
@@ -32,6 +33,7 @@ Gbaug
 Gaug
 G#aug
 Abaug
+
 Amaj
 A#maj
 Bbmaj
@@ -49,6 +51,7 @@ Gbmaj
 Gmaj
 G#maj
 Abmaj
+
 Ahalfdim
 A#halfdim
 Bbhalfdim
@@ -66,6 +69,7 @@ Gbhalfdim
 Ghalfdim
 G#halfdim
 Abhalfdim
+
 Asus
 A#sus
 Bbsus
@@ -83,6 +87,7 @@ Gbsus
 Gsus
 G#sus
 Absus
+
 Aadd
 Abadd
 Badd
@@ -97,3 +102,23 @@ Fadd
 Fbadd
 Gadd
 Gbadd
+
+dimmaj
+
+Adimmaj
+A#dimmaj
+Bbdimmaj
+Bdimmaj
+Cdimmaj
+C#dimmaj
+Dbdimmaj
+Ddimmaj
+D#dimmaj
+Ebdimmaj
+Edimmaj
+Fdimmaj
+F#dimmaj
+Gbdimmaj
+Gdimmaj
+G#dimmaj
+Abdimmaj
