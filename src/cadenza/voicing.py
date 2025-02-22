@@ -117,6 +117,7 @@ class Voicing(BaseModel):
         rh_intervals += [Interval.Unison]
         rh_intervals += self._get_intervals_from_quality()
         rh_intervals += self._get_intervals_from_extension()
+        # TODO: Fix the bug where flat5 is appended, but does not replace the 5th.
         rh_intervals += self._get_intervals_from_alteration()
         rh_root_pitch = Pitch(note=self.chord.root, octave=self.octave)
         rh_pitches = [rh_root_pitch + interval.to_int() for interval in rh_intervals]
