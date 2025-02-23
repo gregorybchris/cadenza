@@ -63,7 +63,7 @@ class Quality(StrEnum):
             case Quality.Minor:
                 return "m"
             case Quality.Diminished:
-                return "dim"
+                return "°" if symbols else "dim"
             case Quality.Augmented:
                 return "+" if symbols else "aug"
             case Quality.HalfDiminished:

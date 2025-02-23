@@ -27,7 +27,7 @@ class Chord(BaseModel):
     def from_str(cls, chord_str: str) -> Self:
         regex = (
             r"^([A-Ga-g](♯|#|♭|b)?)"  # Root
-            r"(m|dim|aug|\+|ø|halfdim)?"  # Quality pre
+            r"(m|dim|°|aug|\+|ø|halfdim)?"  # Quality pre
             r"(7|maj7|9|11|13)?"  # Extension
             r"((♯|#|♭|b|sharp|flat|add)?\d+)?"  # Alteration
             r"(sus2|sus4)?"  # Quality post
@@ -72,35 +72,35 @@ class Chord(BaseModel):
         return self.to_str()
 
     @classmethod
-    def from_scale_degree(cls, tonic: "Chord", scale_degree: ScaleDegree) -> Self:
+    def from_scale_degree_unsafe(cls, tonic: "Chord", scale_degree: ScaleDegree) -> Self:
         match tonic.quality:
             case Quality.Major:
                 return {
-                    ScaleDegree.Tonic: cls(root=tonic.root + 0, quality=Quality.Major),
-                    ScaleDegree.Supertonic: cls(root=tonic.root + 2, quality=Quality.Minor),
-                    ScaleDegree.Mediant: cls(root=tonic.root + 4, quality=Quality.Minor),
-                    ScaleDegree.Subdominant: cls(root=tonic.root + 5, quality=Quality.Major),
-                    ScaleDegree.Dominant: cls(root=tonic.root + 7, quality=Quality.Major),
-                    ScaleDegree.Submediant: cls(root=tonic.root + 9, quality=Quality.Minor),
-                    ScaleDegree.LeadingTone: cls(root=tonic.root + 11, quality=Quality.Diminished),
+                    ScaleDegree.Tonic: cls(root=tonic.root.transpose_unsafe(0), quality=Quality.Major),
+                    ScaleDegree.Supertonic: cls(root=tonic.root.transpose_unsafe(2), quality=Quality.Minor),
+                    ScaleDegree.Mediant: cls(root=tonic.root.transpose_unsafe(4), quality=Quality.Minor),
+                    ScaleDegree.Subdominant: cls(root=tonic.root.transpose_unsafe(5), quality=Quality.Major),
+                    ScaleDegree.Dominant: cls(root=tonic.root.transpose_unsafe(7), quality=Quality.Major),
+                    ScaleDegree.Submediant: cls(root=tonic.root.transpose_unsafe(9), quality=Quality.Minor),
+                    ScaleDegree.LeadingTone: cls(root=tonic.root.transpose_unsafe(11), quality=Quality.Diminished),
                 }[scale_degree]
             case Quality.Minor:
                 return {
-                    ScaleDegree.Tonic: cls(root=tonic.root + 0, quality=Quality.Minor),
-                    ScaleDegree.Supertonic: cls(root=tonic.root + 2, quality=Quality.Diminished),
-                    ScaleDegree.Mediant: cls(root=tonic.root + 3, quality=Quality.Major),
-                    ScaleDegree.Subdominant: cls(root=tonic.root + 5, quality=Quality.Minor),
-                    ScaleDegree.Dominant: cls(root=tonic.root + 7, quality=Quality.Minor),
-                    ScaleDegree.Submediant: cls(root=tonic.root + 8, quality=Quality.Major),
-                    ScaleDegree.LeadingTone: cls(root=tonic.root + 10, quality=Quality.Minor),
+                    ScaleDegree.Tonic: cls(root=tonic.root.transpose_unsafe(0), quality=Quality.Minor),
+                    ScaleDegree.Supertonic: cls(root=tonic.root.transpose_unsafe(2), quality=Quality.Diminished),
+                    ScaleDegree.Mediant: cls(root=tonic.root.transpose_unsafe(3), quality=Quality.Major),
+                    ScaleDegree.Subdominant: cls(root=tonic.root.transpose_unsafe(5), quality=Quality.Minor),
+                    ScaleDegree.Dominant: cls(root=tonic.root.transpose_unsafe(7), quality=Quality.Minor),
+                    ScaleDegree.Submediant: cls(root=tonic.root.transpose_unsafe(8), quality=Quality.Major),
+                    ScaleDegree.LeadingTone: cls(root=tonic.root.transpose_unsafe(10), quality=Quality.Minor),
                 }[scale_degree]
             case _:
                 msg = f"Getting chords by degree for quality {tonic.quality.to_written()} is not supported"
                 raise ValueError(msg)
 
-    def transpose(self, semitones: int) -> "Chord":
-        new_root = self.root + semitones
-        new_bass = self.bass + semitones if self.bass else None
+    def transpose_unsafe(self, semitones: int) -> "Chord":
+        new_root = self.root.transpose_unsafe(semitones)
+        new_bass = self.bass.transpose_unsafe(semitones) if self.bass else None
         return Chord(
             root=new_root,
             quality=self.quality,
@@ -109,10 +109,10 @@ class Chord(BaseModel):
             bass=new_bass,
         )
 
-    def to_function(self, tonic: "Chord") -> str:
+    def get_function_str(self, tonic: "Chord") -> str:
         tonic_root = tonic.root
 
-        interval_int = (self.root.to_index() - tonic_root.to_index()) % N_NOTES
+        interval_int = (self.root.to_integer() - tonic_root.to_integer()) % N_NOTES
         interval = Interval.from_int(interval_int)
         try:
             scale_degree = ScaleDegree.from_interval(interval)
@@ -139,7 +139,7 @@ class Chord(BaseModel):
             function += Quality.SusFour.to_str()
 
         if self.bass is not None:
-            base_interval_int = (self.bass.to_index() - tonic_root.to_index()) % N_NOTES
+            base_interval_int = (self.bass.to_integer() - tonic_root.to_integer()) % N_NOTES
             base_interval = Interval.from_int(base_interval_int)
             try:
                 base_scale_degree = ScaleDegree.from_interval(base_interval)
@@ -155,9 +155,9 @@ class Chord(BaseModel):
     def to_key(self) -> str:
         match self.quality:
             case Quality.Major:
-                return self.root.to_str() + " major"
+                return f"{self.root.to_str()} major"
             case Quality.Minor:
-                return self.root.to_str() + " minor"
+                return f"{self.root.to_str()} minor"
             case _:
                 msg = f"The chord {self} could not be converted to a key"
                 raise ValueError(msg)

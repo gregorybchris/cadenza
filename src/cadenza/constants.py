@@ -1,1 +1,14 @@
 N_NOTES = 12
+N_DIATONIC_SCALE_NOTES = 7
+
+SHARP_CHAR = "#"
+FLAT_CHAR = "b"
+HALFDIM_CHARS = "halfdim"
+DIM_CHARS = "dim"
+AUG_CHARS = "aug"
+
+SHARP_SYMBOL = "♯"
+FLAT_SYMBOL = "♭"
+HALFDIM_SYMBOL = "ø"
+DIM_SYMBOL = "°"
+AUG_SYMBOL = "+"

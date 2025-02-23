@@ -88,7 +88,7 @@ class Voicing(BaseModel):
     def _get_intervals_from_bass(self) -> list[Interval]:
         if not self.chord.bass:
             return []
-        interval_int = (self.chord.bass.to_index() - self.chord.root.to_index()) % N_NOTES
+        interval_int = (self.chord.bass.to_integer() - self.chord.root.to_integer()) % N_NOTES
         return [Interval.from_int(interval_int)]
 
     def _apply_inversion(self, pitches: list[Pitch]) -> list[Pitch]:
@@ -111,7 +111,7 @@ class Voicing(BaseModel):
             if len(lh_intervals) == 0:
                 lh_intervals += [Interval.Unison]
             lh_root_pitch = Pitch(note=self.chord.root, octave=self.octave - 2)
-            lh_pitches = [lh_root_pitch + interval.to_int() for interval in lh_intervals]
+            lh_pitches = [lh_root_pitch.transpose_unsafe(interval.to_int()) for interval in lh_intervals]
 
         rh_intervals: list[Interval] = []
         rh_intervals += [Interval.Unison]
@@ -120,7 +120,7 @@ class Voicing(BaseModel):
         # TODO: Fix the bug where flat5 is appended, but does not replace the 5th.
         rh_intervals += self._get_intervals_from_alteration()
         rh_root_pitch = Pitch(note=self.chord.root, octave=self.octave)
-        rh_pitches = [rh_root_pitch + interval.to_int() for interval in rh_intervals]
+        rh_pitches = [rh_root_pitch.transpose_unsafe(interval.to_int()) for interval in rh_intervals]
         rh_pitches = self._apply_inversion(rh_pitches)
 
         return lh_pitches + rh_pitches

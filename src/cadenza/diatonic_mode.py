@@ -51,7 +51,7 @@ class DiatonicMode(StrEnum):
             raise ParseError(msg)
         return mapping[mode_int]
 
-    def get_semitones(self) -> list[int]:  # noqa: PLR0911
+    def get_semitone_sequence(self) -> list[int]:  # noqa: PLR0911
         # NOTE: Each set of intervals for a mode is a rotation of the previous.
         match self:
             case DiatonicMode.Ionian:
@@ -75,7 +75,7 @@ class DiatonicMode(StrEnum):
     def iter_intervals(self) -> Iterator[Interval]:
         yield Interval.Unison
         interval_int = 0
-        for semitones in self.get_semitones():
+        for semitones in self.get_semitone_sequence():
             interval_int += semitones
             yield Interval.from_int(interval_int)
 

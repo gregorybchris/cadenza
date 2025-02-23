@@ -56,7 +56,7 @@ def note(  # noqa: PLR0913
     set_logger_config(info, debug)
 
     note = Note.from_str(note_str)
-    note = note + transpose
+    note = note.transpose_unsafe(transpose)
     pitch = Pitch(note=note, octave=octave)
 
     synth_args = SynthArgs(sample_rate=sample_rate)
@@ -99,7 +99,7 @@ def chord(  # noqa: PLR0913
 
     inversion = Inversion.from_number(inversion_num)
     chord = Chord.from_str(chord_str)
-    chord = chord.transpose(transpose)
+    chord = chord.transpose_unsafe(transpose)
     console.print(chord)
     console.print(f"[red]{chord}")
 
@@ -163,7 +163,7 @@ def chords(  # noqa: PLR0913
     inversion = Inversion.from_number(inversion_num)
     for _ in range(repeat):
         for chord in chords:
-            transposed_chord = chord.transpose(transpose)
+            transposed_chord = chord.transpose_unsafe(transpose)
             voicing = Voicing(
                 chord=transposed_chord,
                 inversion=inversion,
@@ -230,7 +230,7 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     tempo = tempo or song.tempo
     beat_duration = beat_duration or song.beat_duration
     chord_duration = chord_duration or song.chord_duration
-    transposed_tonic = None if song.tonic is None else song.tonic.transpose(transpose)
+    transposed_tonic = None if song.tonic is None else song.tonic.transpose_unsafe(transpose)
 
     console.print(f"Title: [bold][white]{song.title}")
     console.print(f"Artist: [bold][white]{song.artist}")
@@ -243,7 +243,7 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
         console.print(f"Transpose: [bold][white]{transpose}")
     console.print("Chords:")
     for chord_line in song.chords:
-        chords = [chord.transpose(transpose) for chord in chord_line]
+        chords = [chord.transpose_unsafe(transpose) for chord in chord_line]
 
         if show_functions:
             if transposed_tonic is None:
@@ -251,7 +251,7 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
                 console.print(f"[bold][red]{msg}")
                 return
 
-            functions = [chord.to_function(transposed_tonic) for chord in chords]
+            functions = [chord.get_function_str(transposed_tonic) for chord in chords]
             function_line_str = "[white]   [bold][green]".join(str(function) for function in functions)
             console.print(f"[bold][green]{function_line_str}")
 
@@ -278,12 +278,12 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
             if chord_line_num < start_line - 1:
                 continue
             for chord in chord_line:
-                transposed_chord = chord.transpose(transpose)
+                transposed_chord = chord.transpose_unsafe(transpose)
                 voicing = Voicing(chord=transposed_chord, inversion=Inversion.Root, octave=octave)
                 if song.voicings is not None:
                     for voicing_override in song.voicings:
                         if voicing_override.chord == chord:
-                            transposed_override_chord = voicing_override.chord.transpose(transpose)
+                            transposed_override_chord = voicing_override.chord.transpose_unsafe(transpose)
                             voicing = Voicing(
                                 chord=transposed_override_chord,
                                 inversion=voicing_override.inversion,
@@ -336,7 +336,7 @@ def optimize(  # noqa: PLR0913
 
     inversion = Inversion.from_number(inversion_num)
     chord = Chord.from_str(chord_str)
-    chord = chord.transpose(transpose)
+    chord = chord.transpose_unsafe(transpose)
     console.print(chord)
     console.print(f"[red]{chord}")
 

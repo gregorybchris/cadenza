@@ -1,132 +1,143 @@
 import logging
-from enum import StrEnum
-from typing import Any, Self
+from typing import Self
 
-from cadenza.accidental import Accidental
-from cadenza.constants import N_NOTES
+from pydantic import BaseModel
+
+from cadenza.constants import FLAT_CHAR, N_NOTES, SHARP_CHAR
+from cadenza.note_letter import NoteLetter
 from cadenza.utils.symbol_utils import add_symbols, remove_symbols
 
 logger = logging.getLogger(__name__)
 
 
-class Note(StrEnum):
-    A = "A"
-    ASharp = "A#"
-    BFlat = "Bb"
-    B = "B"
-    C = "C"
-    CSharp = "C#"
-    DFlat = "Db"
-    D = "D"
-    DSharp = "D#"
-    EFlat = "Eb"
-    E = "E"
-    F = "F"
-    FSharp = "F#"
-    GFlat = "Gb"
-    G = "G"
-    GSharp = "G#"
-    AFlat = "Ab"
+class Note(BaseModel):
+    letter: NoteLetter
+    n_sharps: int = 0
+    n_flats: int = 0
+
+    @classmethod
+    def new_c(cls) -> "Note":
+        return Note(letter=NoteLetter.C)
+
+    @classmethod
+    def new_c_sharp(cls) -> "Note":
+        return Note(letter=NoteLetter.C, n_sharps=1)
+
+    @classmethod
+    def new_d_flat(cls) -> "Note":
+        return Note(letter=NoteLetter.D, n_flats=1)
+
+    @classmethod
+    def new_d(cls) -> "Note":
+        return Note(letter=NoteLetter.D)
+
+    @classmethod
+    def new_d_sharp(cls) -> "Note":
+        return Note(letter=NoteLetter.D, n_sharps=1)
+
+    @classmethod
+    def new_e_flat(cls) -> "Note":
+        return Note(letter=NoteLetter.E, n_flats=1)
+
+    @classmethod
+    def new_e(cls) -> "Note":
+        return Note(letter=NoteLetter.E)
+
+    @classmethod
+    def new_f(cls) -> "Note":
+        return Note(letter=NoteLetter.F)
+
+    @classmethod
+    def new_f_sharp(cls) -> "Note":
+        return Note(letter=NoteLetter.F, n_sharps=1)
+
+    @classmethod
+    def new_g_flat(cls) -> "Note":
+        return Note(letter=NoteLetter.G, n_flats=1)
+
+    @classmethod
+    def new_g(cls) -> "Note":
+        return Note(letter=NoteLetter.G)
+
+    @classmethod
+    def new_g_sharp(cls) -> "Note":
+        return Note(letter=NoteLetter.G, n_sharps=1)
+
+    @classmethod
+    def new_a_flat(cls) -> "Note":
+        return Note(letter=NoteLetter.A, n_flats=1)
+
+    @classmethod
+    def new_a(cls) -> "Note":
+        return Note(letter=NoteLetter.A)
+
+    @classmethod
+    def new_a_sharp(cls) -> "Note":
+        return Note(letter=NoteLetter.A, n_sharps=1)
+
+    @classmethod
+    def new_b_flat(cls) -> "Note":
+        return Note(letter=NoteLetter.B, n_flats=1)
+
+    @classmethod
+    def new_b(cls) -> "Note":
+        return Note(letter=NoteLetter.B)
 
     @classmethod
     def from_str(cls, note_str: str) -> Self:
-        return cls(remove_symbols(note_str))
+        note_str = remove_symbols(note_str)
+        letter = NoteLetter.from_str(note_str[0])
+        n_sharps = note_str.count(SHARP_CHAR)
+        n_flats = note_str.count(FLAT_CHAR)
+        return cls(letter=letter, n_sharps=n_sharps, n_flats=n_flats)
 
     def to_str(self, symbols: bool = True) -> str:
+        ret = self.letter.to_str()
+        ret += SHARP_CHAR * self.n_sharps
+        ret += FLAT_CHAR * self.n_flats
         if symbols:
-            return add_symbols(self.value)
-        return self.value
+            ret = add_symbols(ret)
+        return ret
 
-    def is_sharp(self) -> bool:
-        return "#" in self.value
-
-    def is_flat(self) -> bool:
-        return "b" in self.value
-
-    def as_sharp(self) -> "Note":
-        mapping = {
-            Note.BFlat: Note.ASharp,
-            Note.EFlat: Note.DSharp,
-            Note.AFlat: Note.GSharp,
-            Note.DFlat: Note.CSharp,
-            Note.GFlat: Note.FSharp,
+    def to_integer(self) -> int:
+        letter_mapping = {
+            NoteLetter.C: 0,
+            NoteLetter.D: 2,
+            NoteLetter.E: 4,
+            NoteLetter.F: 5,
+            NoteLetter.G: 7,
+            NoteLetter.A: 9,
+            NoteLetter.B: 11,
         }
-        if self in mapping:
-            return mapping[self]
-        return self
-
-    def as_flat(self) -> "Note":
-        mapping = {
-            Note.ASharp: Note.BFlat,
-            Note.DSharp: Note.EFlat,
-            Note.GSharp: Note.AFlat,
-            Note.CSharp: Note.DFlat,
-            Note.FSharp: Note.GFlat,
-        }
-        if self in mapping:
-            return mapping[self]
-        return self
-
-    def to_index(self) -> int:
-        mapping = {
-            Note.C: 0,
-            Note.CSharp: 1,
-            Note.DFlat: 1,
-            Note.D: 2,
-            Note.DSharp: 3,
-            Note.EFlat: 3,
-            Note.E: 4,
-            Note.F: 5,
-            Note.FSharp: 6,
-            Note.GFlat: 6,
-            Note.G: 7,
-            Note.GSharp: 8,
-            Note.AFlat: 8,
-            Note.A: 9,
-            Note.ASharp: 10,
-            Note.BFlat: 10,
-            Note.B: 11,
-        }
-        return mapping[self]
+        return (letter_mapping[self.letter] + self.n_sharps - self.n_flats) % N_NOTES
 
     @classmethod
-    def from_index(cls, index: int, accidental: Accidental = Accidental.Sharp) -> "Note":
+    def from_integer_unsafe(cls, index: int) -> "Note":
+        # NOTE: This function is unsafe because it does not account for the key signature.
+        # It will always return a note with a single sharp or no accidentals.
+        index %= N_NOTES
         mapping = {
-            0: Note.C,
-            1: Note.CSharp if accidental == Accidental.Sharp else Note.DFlat,
-            2: Note.D,
-            3: Note.DSharp if accidental == Accidental.Sharp else Note.EFlat,
-            4: Note.E,
-            5: Note.F,
-            6: Note.FSharp if accidental == Accidental.Sharp else Note.GFlat,
-            7: Note.G,
-            8: Note.GSharp if accidental == Accidental.Sharp else Note.AFlat,
-            9: Note.A,
-            10: Note.ASharp if accidental == Accidental.Sharp else Note.BFlat,
-            11: Note.B,
+            0: Note.new_c(),
+            1: Note.new_c_sharp(),
+            2: Note.new_d(),
+            3: Note.new_d_sharp(),
+            4: Note.new_e(),
+            5: Note.new_f(),
+            6: Note.new_f_sharp(),
+            7: Note.new_g(),
+            8: Note.new_g_sharp(),
+            9: Note.new_a(),
+            10: Note.new_a_sharp(),
+            11: Note.new_b(),
         }
         return mapping[index]
 
-    def add(self, semitones: int, accidental: Accidental) -> "Note":
-        new_index = (self.to_index() + semitones) % N_NOTES
-        return Note.from_index(new_index, accidental)
-
-    def __add__(self, semitones: Any) -> "Note":
-        if not isinstance(semitones, int):
-            msg = f"Cannot add type with Note: {type(semitones)}"
-            raise ValueError(msg)
-        accidental = Accidental.Flat if self.is_flat() else Accidental.Sharp
-        return self.add(semitones, accidental)
-
-    def __sub__(self, semitones: Any) -> "Note":
-        if not isinstance(semitones, int):
-            msg = f"Cannot subtract type with Note: {type(semitones)}"
-            raise ValueError(msg)
-        accidental = Accidental.Flat if self.is_flat() else Accidental.Sharp
-        return self.add(-semitones, accidental)
+    def transpose_unsafe(self, semitones: int) -> "Note":
+        new_index = (self.to_integer() + semitones) % N_NOTES
+        return Note.from_integer_unsafe(new_index)
 
     def __str__(self) -> str:
         return self.to_str()
 
     def __repr__(self) -> str:
-        return self.value
+        return self.to_str()

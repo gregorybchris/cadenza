@@ -2,6 +2,7 @@ import logging
 from enum import StrEnum, auto
 from typing import Self
 
+from cadenza.constants import N_DIATONIC_SCALE_NOTES
 from cadenza.interval import Interval
 
 logger = logging.getLogger(__name__)
@@ -52,33 +53,33 @@ class ScaleDegree(StrEnum):
 
     @classmethod
     def from_int(cls, degree: int) -> "ScaleDegree":
-        degree = degree % 8
+        degree %= N_DIATONIC_SCALE_NOTES
         return {
-            1: cls.Tonic,
-            2: cls.Supertonic,
-            3: cls.Mediant,
-            4: cls.Subdominant,
-            5: cls.Dominant,
-            6: cls.Submediant,
-            7: cls.LeadingTone,
+            0: cls.Tonic,
+            1: cls.Supertonic,
+            2: cls.Mediant,
+            3: cls.Subdominant,
+            4: cls.Dominant,
+            5: cls.Submediant,
+            6: cls.LeadingTone,
         }[degree]
 
     def to_int(self) -> int:  # noqa: PLR0911
         match self:
             case ScaleDegree.Tonic:
-                return 1
+                return 0
             case ScaleDegree.Supertonic:
-                return 2
+                return 1
             case ScaleDegree.Mediant:
-                return 3
+                return 2
             case ScaleDegree.Subdominant:
-                return 4
+                return 3
             case ScaleDegree.Dominant:
-                return 5
+                return 4
             case ScaleDegree.Submediant:
-                return 6
+                return 5
             case ScaleDegree.LeadingTone:
-                return 7
+                return 6
 
     @classmethod
     def from_interval(cls, interval: Interval) -> "ScaleDegree":  # noqa: PLR0911, PLR0912
