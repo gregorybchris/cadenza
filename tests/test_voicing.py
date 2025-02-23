@@ -1,6 +1,7 @@
 import pytest
 
 from cadenza import Chord
+from cadenza.alteration import Alteration
 from cadenza.extension import Extension
 from cadenza.inversion import Inversion
 from cadenza.note import Note
@@ -73,4 +74,16 @@ class TestVoicing:
             Pitch(note=Note.new_g_sharp(), octave=4),
             Pitch(note=Note.new_c(), octave=5),
             Pitch(note=Note.new_d_sharp(), octave=5),
+        ]
+
+    @pytest.mark.skip(reason="Safe pitch transpose not yet implemented.")
+    def test_get_pitches_flat_five(self) -> None:
+        chord = Chord(root=Note.new_c(), quality=Quality.Major, alteration=Alteration.FlatFive)
+        voicing = Voicing(chord=chord, inversion=Inversion.Root, octave=4)
+        pitches = voicing.to_pitches()
+        assert pitches == [
+            Pitch(note=Note.new_c(), octave=2),
+            Pitch(note=Note.new_c(), octave=4),
+            Pitch(note=Note.new_e(), octave=4),
+            Pitch(note=Note.new_g_flat(), octave=4),
         ]

@@ -61,29 +61,30 @@ class Voicing(BaseModel):
                 # though both are accepted voicings.
                 return [Interval.MinorSeventh, Interval.MajorNinth, Interval.MajorThirteenth]
 
-    def _get_intervals_from_alteration(self) -> list[Interval]:  # noqa: PLR0911
+    def _update_intervals_from_alteration(self, intervals: list[Interval]) -> None:
         if not self.chord.alteration:
-            return []
+            return
         match self.chord.alteration:
             case Alteration.AddTwo:
-                return [Interval.MajorSecond]
+                intervals.append(Interval.MajorSecond)
             case Alteration.AddFour:
-                return [Interval.PerfectFourth]
+                intervals.append(Interval.PerfectFourth)
             case Alteration.AddSix:
                 match self.chord.quality:
                     case Quality.Major:
-                        return [Interval.MajorSixth]
+                        intervals.append(Interval.MajorSixth)
                     case Quality.Minor:
-                        return [Interval.MinorSixth]
+                        intervals.append(Interval.MinorSixth)
                     case _:
                         msg = f"Invalid quality for add6: {self.chord.quality}"
                         raise ValueError(msg)
             case Alteration.AddNine:
-                return [Interval.MajorNinth]
+                intervals.append(Interval.MajorNinth)
             case Alteration.FlatFive:
-                return [Interval.Tritone]
+                intervals.remove(Interval.PerfectFifth)
+                intervals.append(Interval.Tritone)
             case Alteration.FlatNine:
-                return [Interval.MinorNinth]
+                intervals.append(Interval.MinorNinth)
 
     def _get_intervals_from_bass(self) -> list[Interval]:
         if not self.chord.bass:
@@ -117,8 +118,7 @@ class Voicing(BaseModel):
         rh_intervals += [Interval.Unison]
         rh_intervals += self._get_intervals_from_quality()
         rh_intervals += self._get_intervals_from_extension()
-        # TODO: Fix the bug where flat5 is appended, but does not replace the 5th.
-        rh_intervals += self._get_intervals_from_alteration()
+        self._update_intervals_from_alteration(rh_intervals)
         rh_root_pitch = Pitch(note=self.chord.root, octave=self.octave)
         rh_pitches = [rh_root_pitch.transpose_unsafe(interval.to_int()) for interval in rh_intervals]
         rh_pitches = self._apply_inversion(rh_pitches)
