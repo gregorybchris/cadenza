@@ -27,16 +27,23 @@ class DiatonicScale(BaseModel):
         return list(self.iter_notes())
 
     def iter_notes(self) -> Iterator[Note]:
-        prev_note = self.root
+        note = self.root
         for step_size in self.mode.get_semitone_sequence():
-            yield prev_note
-            next_letter_index = (prev_note.letter.to_index() + 1) % N_DIATONIC_SCALE_NOTES
+            yield note
+
+            # Ensure next note has a different letter
+            next_letter_index = (note.letter.to_index() + 1) % N_DIATONIC_SCALE_NOTES
             next_letter = NoteLetter.from_index(next_letter_index)
             next_note_natural = Note(letter=next_letter)
             next_note_natural_integer = next_note_natural.to_integer()
-            next_note_integer = (prev_note.to_integer() + step_size) % N_NOTES
-            semitone_distance = next_note_natural_integer - next_note_integer
-            n_sharps = abs(min(0, semitone_distance))
-            n_flats = abs(max(0, semitone_distance))
+            next_note_integer = (note.to_integer() + step_size) % N_NOTES
+
+            # Calculate number of accidentals, taking into account wrap around
+            semitone_diff = next_note_integer - next_note_natural_integer
+            if abs(semitone_diff) > N_NOTES / 2:
+                semitone_diff = (N_NOTES - semitone_diff) * (-1 if semitone_diff > 0 else 1)
+            n_sharps = abs(max(0, semitone_diff))
+            n_flats = abs(min(0, semitone_diff))
+
             next_note = Note(letter=next_letter, n_sharps=n_sharps, n_flats=n_flats)
-            prev_note = next_note
+            note = next_note
