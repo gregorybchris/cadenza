@@ -114,27 +114,26 @@ class Note(BaseModel):
     @classmethod
     def from_integer_unsafe(cls, index: int) -> "Note":
         # NOTE: This function is unsafe because it does not account for the key signature.
-        # It will always return a note with a single sharp or no accidentals.
+        # It will always return a note with a single flat or no accidentals.
         index %= N_NOTES
         mapping = {
             0: Note.new_c(),
-            1: Note.new_c_sharp(),
+            1: Note.new_d_flat(),
             2: Note.new_d(),
-            3: Note.new_d_sharp(),
+            3: Note.new_e_flat(),
             4: Note.new_e(),
             5: Note.new_f(),
-            6: Note.new_f_sharp(),
+            6: Note.new_g_flat(),
             7: Note.new_g(),
-            8: Note.new_g_sharp(),
+            8: Note.new_a_flat(),
             9: Note.new_a(),
-            10: Note.new_a_sharp(),
+            10: Note.new_b_flat(),
             11: Note.new_b(),
         }
         return mapping[index]
 
-    def transpose_unsafe(self, semitones: int) -> "Note":
-        new_index = (self.to_integer() + semitones) % N_NOTES
-        return Note.from_integer_unsafe(new_index)
+    def is_enharmonic(self, other: "Note") -> bool:
+        return self.to_integer() == other.to_integer()
 
     def __str__(self) -> str:
         return self.to_str()

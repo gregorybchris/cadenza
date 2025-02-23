@@ -4,8 +4,6 @@ import torch
 from torch import Tensor
 
 from cadenza.organ_pipe_length import OrganPipeLength
-from cadenza.pitch import Pitch
-from cadenza.voicing import Voicing
 
 
 @dataclass(kw_only=True)
@@ -85,26 +83,6 @@ class Synth:
             new_segments.append(seg_b[fade_samples:])
 
         return torch.cat(new_segments)
-
-    def generate_pitch_audio(
-        self,
-        pitch: Pitch,
-        duration_s: float,
-        overtones: bool = False,
-    ) -> Tensor:
-        frequency = pitch.to_frequency()
-        frequencies = torch.tensor([frequency])
-        return self.generate(frequencies, duration_s, overtones=overtones)
-
-    def generate_voicing_audio(
-        self,
-        voicing: Voicing,
-        duration_s: float,
-        overtones: bool = False,
-    ) -> Tensor:
-        pitches = voicing.to_pitches()
-        frequencies = torch.tensor([pitch.to_frequency() for pitch in pitches])
-        return self.generate(frequencies, duration_s, overtones=overtones)
 
     def apply_tremolo(self, audio: Tensor, *, frequency: float, dip: float) -> Tensor:
         sample_rate = self.args.sample_rate

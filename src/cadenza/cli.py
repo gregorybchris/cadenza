@@ -7,8 +7,11 @@ from rich.console import Console
 from rich.logging import RichHandler
 from typer import Argument, Option, Typer
 
-from cadenza import Chord
+from cadenza.chord import Chord
+from cadenza.composer import Composer
+from cadenza.diatonic_scale import DiatonicScale
 from cadenza.duration import Duration
+from cadenza.functional_analysis import FunctionalAnalysis
 from cadenza.inversion import Inversion
 from cadenza.library import Library
 from cadenza.note import Note
@@ -17,6 +20,7 @@ from cadenza.pitch import Pitch
 from cadenza.player import Player
 from cadenza.saver import Saver
 from cadenza.synth import Synth, SynthArgs
+from cadenza.transposer import Transposer
 from cadenza.voicing import Voicing
 
 if TYPE_CHECKING:
@@ -56,18 +60,18 @@ def note(  # noqa: PLR0913
     set_logger_config(info, debug)
 
     note = Note.from_str(note_str)
-    note = note.transpose_unsafe(transpose)
+    note = Transposer.transpose_note(note, transpose, scale=DiatonicScale.major(note))
     pitch = Pitch(note=note, octave=octave)
 
     synth_args = SynthArgs(sample_rate=sample_rate)
     synth = Synth(args=synth_args)
 
-    audio = synth.generate_pitch_audio(pitch, duration_s, overtones=overtones)
+    frequencies = torch.tensor([Composer.pitch_to_frequency(pitch)])
+    audio = synth.generate(frequencies, duration_s, overtones=overtones)
 
     if show_pitch:
-        console.print(
-            f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{pitch.to_frequency():.1f} Hz"
-        )
+        frequency = Composer.pitch_to_frequency(pitch)
+        console.print(f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{frequency:.1f} Hz")
 
     if filepath:
         saver = Saver(sample_rate=sample_rate)
@@ -99,7 +103,7 @@ def chord(  # noqa: PLR0913
 
     inversion = Inversion.from_number(inversion_num)
     chord = Chord.from_str(chord_str)
-    chord = chord.transpose_unsafe(transpose)
+    chord = Transposer.transpose_chord_unsafe(chord, transpose)
     console.print(chord)
     console.print(f"[red]{chord}")
 
@@ -107,17 +111,17 @@ def chord(  # noqa: PLR0913
     synth = Synth(args=synth_args)
 
     voicing = Voicing(chord=chord, inversion=inversion, octave=octave, include_left_hand=include_left_hand)
-    audio = synth.generate_voicing_audio(voicing, duration_s, overtones=overtones)
+    pitches = Composer.voicing_to_pitches(voicing)
+    frequencies = torch.tensor([Composer.pitch_to_frequency(pitch) for pitch in pitches])
+    audio = synth.generate(frequencies, duration_s, overtones=overtones)
 
     if tremolo:
         audio = synth.apply_hammond_tremolo(audio)
 
     if show_pitches:
-        pitches = voicing.to_pitches()
         for pitch in pitches:
-            console.print(
-                f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{pitch.to_frequency():.1f} Hz"
-            )
+            frequency = Composer.pitch_to_frequency(pitch)
+            console.print(f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{frequency:.1f} Hz")
 
     if filepath:
         saver = Saver(sample_rate=sample_rate)
@@ -160,17 +164,14 @@ def chords(  # noqa: PLR0913
 
     segments: list[Tensor] = []
     chords = [Chord.from_str(chord_str) for chord_str in chords_str.split()]
+    chords = [Transposer.transpose_chord_unsafe(chord, transpose) for chord in chords]
     inversion = Inversion.from_number(inversion_num)
     for _ in range(repeat):
         for chord in chords:
-            transposed_chord = chord.transpose_unsafe(transpose)
-            voicing = Voicing(
-                chord=transposed_chord,
-                inversion=inversion,
-                octave=octave,
-                include_left_hand=include_left_hand,
-            )
-            segment = synth.generate_voicing_audio(voicing, audio_duration, overtones=overtones)
+            voicing = Voicing.from_chord(chord, inversion, octave, include_left_hand=include_left_hand)
+            pitches = Composer.voicing_to_pitches(voicing)
+            frequencies = torch.tensor([Composer.pitch_to_frequency(pitch) for pitch in pitches])
+            segment = synth.generate(frequencies, audio_duration, overtones=overtones)
             segments.append(segment)
 
             audio_silence = synth.generate_silence(silence_duration)
@@ -226,36 +227,36 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
         console.print(f"[bold][red]{msg}")
         return
 
+    # TODO: Update this to the safe version by parsing the song key into a DiatonicScale
+    song = Transposer.transpose_song_unsafe(song, transpose)
+
     # Apply overrides
     tempo = tempo or song.tempo
     beat_duration = beat_duration or song.beat_duration
     chord_duration = chord_duration or song.chord_duration
-    transposed_tonic = None if song.tonic is None else song.tonic.transpose_unsafe(transpose)
 
     console.print(f"Title: [bold][white]{song.title}")
     console.print(f"Artist: [bold][white]{song.artist}")
     console.print(f"Tempo: [bold][white]{tempo:.0f}bpm")
     console.print(f"Beat duration: [bold][white]{beat_duration}")
     console.print(f"Chord duration: [bold][white]{chord_duration}")
-    if transposed_tonic is not None:
-        console.print(f"Tonic: [bold][white]{transposed_tonic.to_key()}")
+    if song.tonic is not None:
+        console.print(f"Tonic: [bold][white]{song.tonic.to_str()}")
     if transpose != 0:
         console.print(f"Transpose: [bold][white]{transpose}")
     console.print("Chords:")
     for chord_line in song.chords:
-        chords = [chord.transpose_unsafe(transpose) for chord in chord_line]
-
         if show_functions:
-            if transposed_tonic is None:
+            if song.tonic is None:
                 msg = "Cannot display functional analysis with an unknown tonic"
                 console.print(f"[bold][red]{msg}")
                 return
 
-            functions = [chord.get_function_str(transposed_tonic) for chord in chords]
+            functions = [FunctionalAnalysis.get_chord_function_str(chord, song.tonic) for chord in chord_line]
             function_line_str = "[white]   [bold][green]".join(str(function) for function in functions)
             console.print(f"[bold][green]{function_line_str}")
 
-        chord_line_str = "[white] | [bold][blue]".join(str(chord) for chord in chords)
+        chord_line_str = "[white] | [bold][blue]".join(str(chord) for chord in chord_line)
         console.print(f"[bold][blue]{chord_line_str}")
 
         if spacious:
@@ -278,20 +279,20 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
             if chord_line_num < start_line - 1:
                 continue
             for chord in chord_line:
-                transposed_chord = chord.transpose_unsafe(transpose)
-                voicing = Voicing(chord=transposed_chord, inversion=Inversion.Root, octave=octave)
+                voicing = Voicing.from_chord(chord, Inversion.Root, octave)
                 if song.voicings is not None:
                     for voicing_override in song.voicings:
                         if voicing_override.chord == chord:
-                            transposed_override_chord = voicing_override.chord.transpose_unsafe(transpose)
                             voicing = Voicing(
-                                chord=transposed_override_chord,
+                                chord=voicing_override.chord,
                                 inversion=voicing_override.inversion,
                                 octave=voicing_override.octave,
                             )
                             break
 
-                segment = synth.generate_voicing_audio(voicing, audio_duration, overtones=overtones)
+                pitches = Composer.voicing_to_pitches(voicing)
+                frequencies = torch.tensor([Composer.pitch_to_frequency(pitch) for pitch in pitches])
+                segment = synth.generate(frequencies, audio_duration, overtones=overtones)
                 segments.append(segment)
 
                 audio_silence = synth.generate_silence(silence_duration)
@@ -336,13 +337,13 @@ def optimize(  # noqa: PLR0913
 
     inversion = Inversion.from_number(inversion_num)
     chord = Chord.from_str(chord_str)
-    chord = chord.transpose_unsafe(transpose)
+    chord = Transposer.transpose_chord_unsafe(chord, transpose)
     console.print(chord)
     console.print(f"[red]{chord}")
 
     voicing = Voicing(chord=chord, inversion=inversion, octave=octave, include_left_hand=include_left_hand)
-    pitches = voicing.to_pitches()
-    unoptimized_frequencies = torch.tensor([pitch.to_frequency() for pitch in pitches])
+    pitches = Composer.voicing_to_pitches(voicing)
+    unoptimized_frequencies = torch.tensor([Composer.pitch_to_frequency(pitch) for pitch in pitches])
 
     optimizer_args = OptimizerArgs(
         n_epochs=n_epochs,
@@ -356,15 +357,13 @@ def optimize(  # noqa: PLR0913
 
     synth_args = SynthArgs(sample_rate=sample_rate)
     synth = Synth(args=synth_args)
-    unoptimized_audio = synth.generate_voicing_audio(voicing, duration_s)
-    optimized_audio = synth.generate(optimized_frequencies, duration_s)
+    unoptimized_audio = synth.generate(unoptimized_frequencies, duration_s, overtones=False)
+    optimized_audio = synth.generate(optimized_frequencies, duration_s, overtones=False)
 
     if show_pitches:
-        pitches = voicing.to_pitches()
         for pitch in pitches:
-            console.print(
-                f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{pitch.to_frequency():.1f} Hz"
-            )
+            frequency = Composer.pitch_to_frequency(pitch)
+            console.print(f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{frequency:.1f} Hz")
 
     console.print("\nInitial Chord:", unoptimized_frequencies.numpy().round(1))
     optimizer.print_frequency_ratios(console, unoptimized_frequencies)

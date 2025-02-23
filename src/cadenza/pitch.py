@@ -1,10 +1,8 @@
 import logging
-import math
-from typing import ClassVar, Self
+from typing import ClassVar
 
 from pydantic import BaseModel
 
-from cadenza.constants import N_NOTES
 from cadenza.note import Note
 
 logger = logging.getLogger(__name__)
@@ -20,32 +18,6 @@ class Pitch(BaseModel):
 
     note: Note
     octave: int
-
-    def to_frequency(self) -> float:
-        degree_difference = self.note.to_integer() - self.REFERENCE_NOTE.to_integer()
-        octave_difference = self.octave - self.REFERENCE_OCTAVE
-        n_semitones = degree_difference + octave_difference * N_NOTES
-        return self.REFERENCE_FREQUENCY * 2 ** (n_semitones / N_NOTES)
-
-    @classmethod
-    def from_frequency(cls, frequency: float) -> Self:
-        lowest_pitch = cls(note=Note.new_c(), octave=1)
-        lowest_pitch_frequency = lowest_pitch.to_frequency() - 0.1  # Offset slightly to allow for rounding errors
-        if frequency < lowest_pitch_frequency:
-            msg = f"Frequency {frequency} is lower than lowest allowed frequency {lowest_pitch_frequency}"
-            raise ValueError(msg)
-
-        n_semitones = round(N_NOTES * (math.log2(frequency) - math.log2(cls.REFERENCE_FREQUENCY)))
-        n_octaves = n_semitones // N_NOTES
-        n_degrees = n_semitones % N_NOTES
-        note = cls.REFERENCE_NOTE.transpose_unsafe(n_degrees)
-        octave = cls.REFERENCE_OCTAVE + n_octaves
-        return cls(note=note, octave=octave)
-
-    def transpose_unsafe(self, semitones: int) -> "Pitch":
-        new_note = self.note.transpose_unsafe(semitones)
-        new_octave = self.octave + (self.note.to_integer() + semitones) // N_NOTES
-        return Pitch(note=new_note, octave=new_octave)
 
     def __str__(self) -> str:
         return f"{self.note.to_str()}{self.octave}"

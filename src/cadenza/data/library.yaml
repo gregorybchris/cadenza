@@ -285,7 +285,9 @@ songs:
       C A#7 Am C/G F C/E
     voicings:
       - { chord: C, inversion: second, octave: 4 }
-      - { chord: A#7, inversion: first, octave: 3 }
+      - { chord: A#7, inversion: second, octave: 3 }
+      - { chord: C/G, inversion: second, octave: 4 }
+      - { chord: C/E, inversion: second, octave: 4 }
     tempo: 45
     tonic: C
 
@@ -387,3 +389,4 @@ songs:
     voicings:
       - { chord: Fm7, inversion: third, octave: 3 }
     tempo: 90
+    tonic: Ab

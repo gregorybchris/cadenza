@@ -41,7 +41,7 @@ class DiatonicScale(BaseModel):
             # Calculate number of accidentals, taking into account wrap around
             semitone_diff = next_note_integer - next_note_natural_integer
             if abs(semitone_diff) > N_NOTES / 2:
-                semitone_diff = (N_NOTES - semitone_diff) * (-1 if semitone_diff > 0 else 1)
+                semitone_diff = (N_NOTES - abs(semitone_diff)) * (-1 if semitone_diff > 0 else 1)
             n_sharps = abs(max(0, semitone_diff))
             n_flats = abs(min(0, semitone_diff))
 
