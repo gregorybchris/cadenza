@@ -47,3 +47,20 @@ class DiatonicScale(BaseModel):
 
             next_note = Note(letter=next_letter, n_sharps=n_sharps, n_flats=n_flats)
             note = next_note
+
+    def iter_key_signature(self) -> Iterator[Note]:
+        # TODO: Sort key signature using circle of fifths
+        for note in self.iter_notes():
+            if note.n_sharps > 1 or note.n_flats > 1:
+                accidental_str = "sharp" if note.n_sharps > 1 else "flat"
+                msg = (
+                    f"The diatonic scale {self.root.to_str()} {self.mode.to_written()}"
+                    f" has a double {accidental_str} and does not have a standard key signature."
+                )
+                raise ValueError(msg)
+
+            if note.n_sharps > 0 or note.n_flats > 0:
+                yield note
+
+    def get_key_signature(self) -> list[Note]:
+        return list(self.iter_key_signature())

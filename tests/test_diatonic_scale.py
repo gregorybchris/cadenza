@@ -1,3 +1,5 @@
+import pytest
+
 from cadenza.diatonic_mode import DiatonicMode
 from cadenza.diatonic_scale import DiatonicScale
 from cadenza.note import Note
@@ -49,3 +51,22 @@ class TestDiatonicScale:
             Note(letter=NoteLetter.C, n_flats=1),
             Note(letter=NoteLetter.D, n_flats=1),
         ]
+
+    def test_get_key_signature(self) -> None:
+        root = Note.new_e_flat()
+        mode = DiatonicMode.Ionian
+        scale = DiatonicScale(root=root, mode=mode)
+        key_signature = scale.get_key_signature()
+        assert key_signature == [
+            Note.new_e_flat(),
+            Note.new_a_flat(),
+            Note.new_b_flat(),
+        ]
+
+    def test_get_invalid_key_signature(self) -> None:
+        root = Note.new_e_flat()
+        mode = DiatonicMode.Locrian
+        scale = DiatonicScale(root=root, mode=mode)
+        msg = "The diatonic scale E♭ locrian has a double flat and does not have a standard key signature."
+        with pytest.raises(ValueError, match=msg):
+            scale.get_key_signature()
