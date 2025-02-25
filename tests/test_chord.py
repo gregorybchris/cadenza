@@ -62,17 +62,9 @@ class TestChord:
     @pytest.mark.parametrize(
         ("chord", "expected_chord_str_no_symbols", "expected_chord_str_with_symbols"),
         [
-            (
-                Chord(
-                    root=Note.new_d_sharp(),
-                    quality=Quality.Augmented,
-                    extension=None,
-                    alteration=None,
-                    bass=None,
-                ),
-                "D#aug",
-                "D♯+",
-            ),
+            (Chord(root=Note.new_d_sharp(), quality=Quality.Augmented), "D#aug", "D♯+"),
+            (Chord(root=Note.new_f(), quality=Quality.Diminished), "Fdim", "F°"),
+            (Chord(root=Note.new_a(), quality=Quality.Minor), "Am", "Am"),
             (
                 Chord(
                     root=Note.new_e(),

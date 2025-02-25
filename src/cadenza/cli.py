@@ -50,7 +50,9 @@ def note(  # noqa: PLR0913
     transpose: Annotated[int, Option("--transpose")] = 0,
     duration_s: Annotated[float, Option("--duration", "-d")] = 3.0,
     overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
+    tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
     sample_rate: int = 44_100,
+    show_symbols: Annotated[bool, Option("--symbols/--no-symbols")] = True,
     play: Annotated[bool, Option("--play/--no-play")] = True,
     show_pitch: Annotated[bool, Option("--pitch/--no-pitch")] = True,
     filepath: Optional[Path] = None,
@@ -69,9 +71,15 @@ def note(  # noqa: PLR0913
     frequencies = torch.tensor([Composer.pitch_to_frequency(pitch)])
     audio = synth.generate(frequencies, duration_s, overtones=overtones)
 
+    if tremolo:
+        audio = synth.apply_hammond_tremolo(audio)
+
     if show_pitch:
         frequency = Composer.pitch_to_frequency(pitch)
-        console.print(f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{frequency:.1f} Hz")
+        console.print(
+            f"[bold][white]{pitch.note.to_str(symbols=show_symbols)}"
+            f"[blue]{pitch.octave}[bright_black]: [green]{frequency:.1f} Hz"
+        )
 
     if filepath:
         saver = Saver(sample_rate=sample_rate)
@@ -92,6 +100,7 @@ def chord(  # noqa: PLR0913
     overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
     sample_rate: Annotated[int, Option("--sample-rate", "-sr")] = 44_100,
+    show_symbols: Annotated[bool, Option("--symbols/--no-symbols")] = True,
     include_left_hand: Annotated[bool, Option("--include-left-hand/--no-left-hand")] = False,
     play: Annotated[bool, Option("--play/--no-play")] = True,
     show_pitches: Annotated[bool, Option("--pitches/--no-pitches")] = True,
@@ -104,8 +113,7 @@ def chord(  # noqa: PLR0913
     inversion = Inversion.from_number(inversion_num)
     chord = Chord.from_str(chord_str)
     chord = Transposer.transpose_chord_unsafe(chord, transpose)
-    console.print(chord)
-    console.print(f"[red]{chord}")
+    console.print(f"[red]{chord.to_str(symbols=show_symbols)}")
 
     synth_args = SynthArgs(sample_rate=sample_rate)
     synth = Synth(args=synth_args)
@@ -121,7 +129,10 @@ def chord(  # noqa: PLR0913
     if show_pitches:
         for pitch in pitches:
             frequency = Composer.pitch_to_frequency(pitch)
-            console.print(f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{frequency:.1f} Hz")
+            console.print(
+                f"[bold][white]{pitch.note.to_str(symbols=show_symbols)}"
+                f"[blue]{pitch.octave}[bright_black]: [green]{frequency:.1f} Hz"
+            )
 
     if filepath:
         saver = Saver(sample_rate=sample_rate)
@@ -203,6 +214,7 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
     sample_rate: int = 44_100,
+    show_symbols: Annotated[bool, Option("--symbols/--no-symbols")] = True,
     show_functions: Annotated[bool, Option("--functions/--no-functions")] = False,
     play: Annotated[bool, Option("--play/--no-play")] = True,
     start_line: Annotated[int, Option("--line")] = 1,
@@ -241,7 +253,7 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     console.print(f"Beat duration: [bold][white]{beat_duration}")
     console.print(f"Chord duration: [bold][white]{chord_duration}")
     if song.tonic is not None:
-        console.print(f"Tonic: [bold][white]{song.tonic.to_str()}")
+        console.print(f"Tonic: [bold][white]{song.tonic.to_str(symbols=show_symbols)}")
     if transpose != 0:
         console.print(f"Transpose: [bold][white]{transpose}")
     console.print("Chords:")
@@ -256,7 +268,7 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
             function_line_str = "[white]   [bold][green]".join(str(function) for function in functions)
             console.print(f"[bold][green]{function_line_str}")
 
-        chord_line_str = "[white] | [bold][blue]".join(str(chord) for chord in chord_line)
+        chord_line_str = "[white] | [bold][blue]".join(chord.to_str(symbols=show_symbols) for chord in chord_line)
         console.print(f"[bold][blue]{chord_line_str}")
 
         if spacious:
@@ -320,6 +332,7 @@ def optimize(  # noqa: PLR0913
     transpose: Annotated[int, Option("--transpose")] = 0,
     duration_s: Annotated[float, Option("--duration", "-d")] = 3.0,
     sample_rate: Annotated[int, Option("--sample-rate", "-sr")] = 44_100,
+    show_symbols: Annotated[bool, Option("--symbols/--no-symbols")] = True,
     include_left_hand: Annotated[bool, Option("--include-left-hand/--no-left-hand")] = False,
     play: Annotated[bool, Option("--play/--no-play")] = True,
     show_pitches: Annotated[bool, Option("--pitches/--no-pitches")] = True,
@@ -339,7 +352,7 @@ def optimize(  # noqa: PLR0913
     chord = Chord.from_str(chord_str)
     chord = Transposer.transpose_chord_unsafe(chord, transpose)
     console.print(chord)
-    console.print(f"[red]{chord}")
+    console.print(f"[red]{chord.to_str(symbols=show_symbols)}")
 
     voicing = Voicing(chord=chord, inversion=inversion, octave=octave, include_left_hand=include_left_hand)
     pitches = Composer.voicing_to_pitches(voicing)
@@ -363,7 +376,10 @@ def optimize(  # noqa: PLR0913
     if show_pitches:
         for pitch in pitches:
             frequency = Composer.pitch_to_frequency(pitch)
-            console.print(f"[bold][white]{pitch.note}[blue]{pitch.octave}[bright_black]: [green]{frequency:.1f} Hz")
+            console.print(
+                f"[bold][white]{pitch.note.to_str(symbols=show_symbols)}"
+                f"[blue]{pitch.octave}[bright_black]: [green]{frequency:.1f} Hz"
+            )
 
     console.print("\nInitial Chord:", unoptimized_frequencies.numpy().round(1))
     optimizer.print_frequency_ratios(console, unoptimized_frequencies)

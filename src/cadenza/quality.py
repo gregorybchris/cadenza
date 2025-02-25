@@ -1,6 +1,18 @@
 import logging
 from enum import StrEnum, auto
 
+from cadenza.constants import (
+    AUG_CHARS,
+    AUG_SYMBOL,
+    DIM_CHARS,
+    DIM_SYMBOL,
+    HALFDIM_CHARS,
+    HALFDIM_SYMBOL,
+    MAJ_CHARS,
+    MAJ_SYMBOL,
+    MIN_CHARS,
+    MIN_SYMBOL,
+)
 from cadenza.errors import ParseError
 from cadenza.utils.symbol_utils import remove_symbols
 
@@ -43,11 +55,11 @@ class Quality(StrEnum):
     def from_str(cls, quality_str: str) -> "Quality":
         quality_str = remove_symbols(quality_str)
         mapping = {
-            "": cls.Major,
-            "m": cls.Minor,
-            "dim": cls.Diminished,
-            "aug": cls.Augmented,
-            "halfdim": cls.HalfDiminished,
+            MAJ_CHARS: cls.Major,
+            MIN_CHARS: cls.Minor,
+            DIM_CHARS: cls.Diminished,
+            AUG_CHARS: cls.Augmented,
+            HALFDIM_CHARS: cls.HalfDiminished,
             "sus2": cls.SusTwo,
             "sus4": cls.SusFour,
         }
@@ -59,15 +71,15 @@ class Quality(StrEnum):
     def to_str(self, symbols: bool = True) -> str:  # noqa: PLR0911
         match self:
             case Quality.Major:
-                return ""
+                return MAJ_SYMBOL if symbols else MAJ_CHARS
             case Quality.Minor:
-                return "m"
+                return MIN_SYMBOL if symbols else MIN_CHARS
             case Quality.Diminished:
-                return "°" if symbols else "dim"
+                return DIM_SYMBOL if symbols else DIM_CHARS
             case Quality.Augmented:
-                return "+" if symbols else "aug"
+                return AUG_SYMBOL if symbols else AUG_CHARS
             case Quality.HalfDiminished:
-                return "ø" if symbols else "halfdim"
+                return HALFDIM_SYMBOL if symbols else HALFDIM_CHARS
             case Quality.SusTwo:
                 return "sus2"
             case Quality.SusFour:
