@@ -239,8 +239,11 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
         console.print(f"[bold][red]{msg}")
         return
 
-    # TODO: Update this to the safe version by parsing the song key into a DiatonicScale
-    song = Transposer.transpose_song_unsafe(song, transpose)
+    if song.tonic is None:
+        song = Transposer.transpose_song_unsafe(song, transpose)
+    else:
+        scale = DiatonicScale.major(song.tonic.root)
+        song = Transposer.transpose_song(song, transpose, scale=scale)
 
     # Apply overrides
     tempo = tempo or song.tempo
