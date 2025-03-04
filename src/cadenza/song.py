@@ -1,3 +1,4 @@
+import re
 from typing import Any, ClassVar, Iterator, Optional
 
 from pydantic import BaseModel, model_validator
@@ -26,11 +27,32 @@ class Song(BaseModel):
     voicings: Optional[list[Voicing]] = None
 
     @staticmethod
+    def _parse_chord_line(str_line: str) -> list[list[Chord]]:
+        if str_line.startswith("~"):
+            return []
+
+        # Regex pulls off a suffix of (x2) from the end of the chord line, e.g. "C G Am F (x2)" and returns the number 2
+        chord_lines = []
+        repeat_pattern = r"^(.*)\s+\(x(\d+)\)$"
+        repeat_match = re.match(repeat_pattern, str_line)
+        if repeat_match:
+            str_line = repeat_match.group(1)
+            repeat_count = int(repeat_match.group(2))
+        else:
+            repeat_count = 1
+
+        for _ in range(repeat_count):
+            chord_line = [Chord.from_str(chord_str) for chord_str in str_line.split()]
+            chord_lines.append(chord_line)
+        return chord_lines
+
+    @staticmethod
     def _parse_chords_str(chords_str: str) -> list[list[Chord]]:
-        lines = chords_str.splitlines()
-        lines = [line for line in lines if not line.startswith("~")]
-        chord_str_lines = [line.split() for line in lines]
-        return [[Chord.from_str(chord_str) for chord_str in chord_strs] for chord_strs in chord_str_lines]
+        str_lines = chords_str.splitlines()
+        chord_lines = []
+        for str_line in str_lines:
+            chord_lines.extend(Song._parse_chord_line(str_line))
+        return chord_lines
 
     @model_validator(mode="before")
     def transform_fields(cls, values: JsonDict) -> JsonDict:  # noqa: N805

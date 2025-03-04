@@ -57,10 +57,8 @@ songs:
     title: Homesick
     artist: Noah Kahan
     chords: |
-      F# D#m C# B
-      F# D#m C# B
-      F# G#m D#m B
-      F# G#m D#m B
+      F# D#m C# B (x2)
+      F# G#m D#m B (x2)
     tempo: 150
     beat_duration: quarter
     chord_duration: whole
@@ -70,8 +68,7 @@ songs:
     title: Put Your Records On
     artist: Corinne Bailey Rae
     chords: |
-      Bb C7 Eb/F Bb
-      Bb C7 Eb/F Bb
+      Bb C7 Eb/F Bb (x2)
       Gm7 D7/F# Gm7 C
       Cm F7 Bb
     tempo: 90
@@ -106,8 +103,7 @@ songs:
     title: Don't Stop Believin'
     artist: Journey
     chords: |
-      E B C#m A
-      E B C#m A
+      E B C#m A (x2)
     tempo: 130
     beat_duration: quarter
     chord_duration: whole
@@ -117,12 +113,9 @@ songs:
     title: Talk is Cheap
     artist: Kyle Thornton
     chords: |
-      Bbm7 Bbm7/Eb Abmaj7 F7/A
-      Bbm7 Bbm7/Eb Abmaj7 F7/A
-      Bbm7 Bbm7/Eb Abmaj7 F7/A
+      Bbm7 Bbm7/Eb Abmaj7 F7/A (x3)
       Bbm7 Bbm7/Eb Ab
-      Bbm7 Ab Bbm7 Ab
-      Bbm7 Ab Bbm7 Ab
+      Bbm7 Ab Bbm7 Ab (x2)
       Ab F7 F7/A Bbm7
     tempo: 105
     beat_duration: quarter
@@ -133,10 +126,7 @@ songs:
     title: Get Lucky
     artist: Daft Punk (feat. Pharrell Williams and Nile Rodgers)
     chords: |
-      Bm7 D F#m7 E
-      Bm7 D F#m7 E
-      Bm7 D F#m7 E
-      Bm7 D F#m7 E
+      Bm7 D F#m7 E (x4)
     tempo: 130
     beat_duration: quarter
     chord_duration: whole
@@ -146,12 +136,8 @@ songs:
     title: Happy Ending
     artist: MIKA
     chords: |
-      Db Ab Bbm Gb
-      Db Ab Bbm Gb
-      Bbm Ab Gb Db
-      Bbm Ab Gb Db
-      Bbm Ab Gb Db
-      Bbm Ab Gb Db
+      Db Ab Bbm Gb (x2)
+      Bbm Ab Gb Db (x4)
       Bbm Ab Gb Ab Db
       Ab Bbm Gb
       Db Ab Bbm Gb
@@ -192,8 +178,7 @@ songs:
     chords: |
       Gm7 Gm7 Ebmaj7 Ebmaj7 Cm7 Cm7 Eb/F F#dim7
       Gm7 Gm7 Ebmaj7 Ebmaj7 Cm7 Cm7 F#dim7 F#dim7
-      Bb Bb Ebmaj7 Ebmaj7 Cm7 Cm7 Eb/F F#dim7
-      Bb Bb Ebmaj7 Ebmaj7 Cm7 Cm7 Eb/F F#dim7
+      Bb Bb Ebmaj7 Ebmaj7 Cm7 Cm7 Eb/F F#dim7 (x2)
       Bb
     tempo: 110
     beat_duration: quarter
@@ -247,10 +232,8 @@ songs:
     title: Dawn
     artist: Vulfmon
     chords: |
-      Ab F Bbm Ebsus4
-      Ab F Bbm Ebsus4
-      Bbm7 Eb7sus4
-      Bbm7 Eb7sus4
+      Ab F Bbm Ebsus4 (x2)
+      Bbm7 Eb7sus4 (x2)
       Bbm7 C7 Fm F7/Eb
       Bbm Dbm Ab F
       Bbm Dbm Ab
@@ -333,11 +316,9 @@ songs:
       ~ A G# F# E D
       A A A A A A A A
       A A A A A A E E
-      F#m F#m F#m F#m F#m F#m F#m F#m
-      F#m F#m F#m F#m F#m F#m F#m F#m
+      F#m F#m F#m F#m F#m F#m F#m F#m (x2)
       E E E E D D D D
-      A A A A A A A A
-      A A A A A A A A
+      A A A A A A A A (x2)
       F#m F#m A A A A A A
       E E D D F#m
     tempo: 110
@@ -367,8 +348,7 @@ songs:
       A C#m/G# F#m A/E
       D2 D2 F#m A/E
       ~ Riff: E -> F -> F#
-      F# A/E Dmaj7 Dmaj7
-      F# A/E Dmaj7 Dmaj7
+      F# A/E Dmaj7 Dmaj7 (x2)
     voicings:
       - { chord: C#m/G#, inversion: first, octave: 4 }
       - { chord: A/E, inversion: second, octave: 3 }
@@ -379,8 +359,7 @@ songs:
     artist: Couch
     chords: |
       ~ Note: Timing might be slightly off here
-      Ab/F Fm7 Eb/G Ab Ab Bb Eb/C Cm7
-      Ab/F Fm7 Eb/G Ab Ab Bb Eb/C Cm7
+      Ab/F Fm7 Eb/G Ab Ab Bb Eb/C Cm7 (x2)
       ~ Riff:
       ~ F Ab C Eb C Ab
       ~ Bb Bb Bb C
@@ -395,12 +374,8 @@ songs:
     title: I'm Ready
     artist: AJR
     chords: |
-      F#m F#m D D A A A/E Faug
-      F#m F#m D D A A A/E Faug
-      A A D A/C# D/B D/B D/E D/E
-      A A D A/C# D/B D/B D/E D/E
-      A A D A/C# D/B D/B D/E D/E
-      A A D A/C# D/B D/B D/E D/E
+      F#m F#m D D A A A/E Faug (x2)
+      A A D A/C# D/B D/B D/E D/E (x4)
       D D A/C# A/C# C#7 C#7 F#m Aadd6/E D D D/E D/E
     tempo: 63
     tonic: A
