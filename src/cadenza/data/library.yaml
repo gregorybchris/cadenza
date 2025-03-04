@@ -390,3 +390,17 @@ songs:
       - { chord: Fm7, inversion: third, octave: 3 }
     tempo: 90
     tonic: Ab
+
+  - id: 30a552d4-d24c-484d-8e8e-6b4ab108634c
+    title: I'm Ready
+    artist: AJR
+    chords: |
+      F#m F#m D D A A A/E Faug
+      F#m F#m D D A A A/E Faug
+      A A D A/C# D/B D/B D/E D/E
+      A A D A/C# D/B D/B D/E D/E
+      A A D A/C# D/B D/B D/E D/E
+      A A D A/C# D/B D/B D/E D/E
+      D D A/C# A/C# C#7 C#7 F#m Aadd6/E D D D/E D/E
+    tempo: 63
+    tonic: A
