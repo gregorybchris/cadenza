@@ -44,6 +44,14 @@ class Note(BaseModel):
         return Note(letter=NoteLetter.E)
 
     @classmethod
+    def new_e_sharp(cls) -> "Note":
+        return Note(letter=NoteLetter.E, n_sharps=1)
+
+    @classmethod
+    def new_f_flat(cls) -> "Note":
+        return Note(letter=NoteLetter.F, n_flats=1)
+
+    @classmethod
     def new_f(cls) -> "Note":
         return Note(letter=NoteLetter.F)
 
@@ -82,6 +90,14 @@ class Note(BaseModel):
     @classmethod
     def new_b(cls) -> "Note":
         return Note(letter=NoteLetter.B)
+
+    @classmethod
+    def new_b_sharp(cls) -> "Note":
+        return Note(letter=NoteLetter.B, n_sharps=1)
+
+    @classmethod
+    def new_c_flat(cls) -> "Note":
+        return Note(letter=NoteLetter.C, n_flats=1)
 
     @classmethod
     def from_str(cls, note_str: str) -> Self:

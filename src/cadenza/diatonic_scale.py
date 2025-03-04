@@ -49,7 +49,7 @@ class DiatonicScale(BaseModel):
             note = next_note
 
     def iter_key_signature(self) -> Iterator[Note]:
-        # TODO: Sort key signature using circle of fifths
+        notes = []
         for note in self.iter_notes():
             if note.n_sharps > 1 or note.n_flats > 1:
                 accidental_str = "sharp" if note.n_sharps > 1 else "flat"
@@ -60,6 +60,35 @@ class DiatonicScale(BaseModel):
                 raise ValueError(msg)
 
             if note.n_sharps > 0 or note.n_flats > 0:
+                notes.append(note)
+
+        # NOTE: The order of the sharps/flats can be determined quickly from the circle of fifths,
+        # but hardcoding the order is simpler. They can also be derived by enumerating the number of
+        # accidentals in all scales and sorting them by the number of accidentals.
+        sharp_notes_order = [
+            Note.new_f_sharp(),
+            Note.new_c_sharp(),
+            Note.new_g_sharp(),
+            Note.new_d_sharp(),
+            Note.new_a_sharp(),
+            Note.new_e_sharp(),
+            Note.new_b_sharp(),
+        ]
+        flat_notes_order = [
+            Note.new_b_flat(),
+            Note.new_e_flat(),
+            Note.new_a_flat(),
+            Note.new_d_flat(),
+            Note.new_g_flat(),
+            Note.new_c_flat(),
+            Note.new_f_flat(),
+        ]
+
+        for note in sharp_notes_order:
+            if note in notes:
+                yield note
+        for note in flat_notes_order:
+            if note in notes:
                 yield note
 
     def get_key_signature(self) -> list[Note]:

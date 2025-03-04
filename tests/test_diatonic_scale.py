@@ -52,15 +52,49 @@ class TestDiatonicScale:
             Note(letter=NoteLetter.D, n_flats=1),
         ]
 
-    def test_get_key_signature(self) -> None:
+    def test_get_key_signature_flats_major(self) -> None:
         root = Note.new_e_flat()
         mode = DiatonicMode.Ionian
         scale = DiatonicScale(root=root, mode=mode)
         key_signature = scale.get_key_signature()
         assert key_signature == [
+            Note.new_b_flat(),
             Note.new_e_flat(),
             Note.new_a_flat(),
+        ]
+
+    def test_get_key_signature_sharps_major(self) -> None:
+        root = Note.new_e()
+        mode = DiatonicMode.Ionian
+        scale = DiatonicScale(root=root, mode=mode)
+        key_signature = scale.get_key_signature()
+        assert key_signature == [
+            Note.new_f_sharp(),
+            Note.new_c_sharp(),
+            Note.new_g_sharp(),
+            Note.new_d_sharp(),
+        ]
+
+    def test_get_key_signature_flats_minor(self) -> None:
+        root = Note.new_d()
+        mode = DiatonicMode.Aeolian
+        scale = DiatonicScale(root=root, mode=mode)
+        key_signature = scale.get_key_signature()
+        assert key_signature == [
             Note.new_b_flat(),
+        ]
+
+    def test_get_key_signature_sharps_minor(self) -> None:
+        root = Note.new_g_sharp()
+        mode = DiatonicMode.Aeolian
+        scale = DiatonicScale(root=root, mode=mode)
+        key_signature = scale.get_key_signature()
+        assert key_signature == [
+            Note.new_f_sharp(),
+            Note.new_c_sharp(),
+            Note.new_g_sharp(),
+            Note.new_d_sharp(),
+            Note.new_a_sharp(),
         ]
 
     def test_get_invalid_key_signature(self) -> None:
