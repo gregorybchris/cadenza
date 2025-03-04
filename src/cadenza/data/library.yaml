@@ -10,7 +10,9 @@ songs:
     tempo: 35
     beat_duration: whole
     chord_duration: whole
-    tonic: D
+    key:
+      root: D
+      mode: major
 
   - id: 9e7f9d1c-7f96-4f17-b7c0-b49e01eba51f
     title: Dancing Through Life
@@ -62,7 +64,9 @@ songs:
     tempo: 150
     beat_duration: quarter
     chord_duration: whole
-    tonic: F#
+    key:
+      root: F#
+      mode: major
 
   - id: 16020461-d7d2-43cd-a804-eb246f62af67
     title: Put Your Records On
@@ -74,7 +78,9 @@ songs:
     tempo: 90
     beat_duration: quarter
     chord_duration: whole
-    tonic: Bb
+    key:
+      root: Bb
+      mode: major
 
   - id: 604da82b-1577-4ee0-86c8-43447895edf2
     title: Only Home I've Ever Known
@@ -92,7 +98,9 @@ songs:
     tempo: 40
     beat_duration: quarter
     chord_duration: quarter
-    tonic: Eb
+    key:
+      root: Eb
+      mode: major
     voicings:
       - { chord: Eb, inversion: second, octave: 3 }
       - { chord: G, inversion: first, octave: 3 }
@@ -107,7 +115,9 @@ songs:
     tempo: 130
     beat_duration: quarter
     chord_duration: whole
-    tonic: E
+    key:
+      root: E
+      mode: major
 
   - id: 322899b2-908f-4025-ae3c-eadd76ed6b02
     title: Talk is Cheap
@@ -120,7 +130,9 @@ songs:
     tempo: 105
     beat_duration: quarter
     chord_duration: whole
-    tonic: Ab
+    key:
+      root: Ab
+      mode: major
 
   - id: e66378ba-045c-4f6f-929f-1b3a204b15a7
     title: Get Lucky
@@ -130,7 +142,9 @@ songs:
     tempo: 130
     beat_duration: quarter
     chord_duration: whole
-    tonic: A
+    key:
+      root: A
+      mode: major
 
   - id: ead79bd9-6463-475f-a55c-edb15329cab6
     title: Happy Ending
@@ -144,7 +158,9 @@ songs:
     tempo: 100
     beat_duration: quarter
     chord_duration: half
-    tonic: Db
+    key:
+      root: Db
+      mode: major
 
   - id: bda1ab2f-6d97-4459-aa11-65509fc419f1
     title: Don't Know Why
@@ -170,7 +186,9 @@ songs:
     tempo: 50
     beat_duration: quarter
     chord_duration: quarter
-    tonic: A
+    key:
+      root: A
+      mode: major
 
   - id: 7d039f86-3353-4b72-9b6e-83ddf36d2c25
     title: It Might Have To Be You
@@ -183,7 +201,9 @@ songs:
     tempo: 110
     beat_duration: quarter
     chord_duration: half
-    tonic: Bb
+    key:
+      root: Bb
+      mode: major
 
   - id: 0972c1c1-ef69-4de7-be15-c3263e9c1c60
     title: Letting Things Go
@@ -196,7 +216,9 @@ songs:
     tempo: 110
     beat_duration: quarter
     chord_duration: half
-    tonic: C
+    key:
+      root: C
+      mode: major
     voicings:
       - { chord: Am7, inversion: first, octave: 3 }
       - { chord: F, inversion: second, octave: 3 }
@@ -214,7 +236,9 @@ songs:
       Ab Eb Fm Db
       Ab Cm Fm Db
     tempo: 40
-    tonic: Ab
+    key:
+      root: Ab
+      mode: major
 
   - id: c303cf4f-5c8e-493d-8639-9026ddb48c8b
     title: Ribbons
@@ -226,7 +250,9 @@ songs:
       Abmaj7 Abmaj7 Abmaj7 Abmaj7/F
       Eb
     tempo: 70
-    tonic: Eb
+    key:
+      root: Eb
+      mode: major
 
   - id: 970023ca-31d3-42de-ae55-004e7143373d
     title: Dawn
@@ -238,7 +264,9 @@ songs:
       Bbm Dbm Ab F
       Bbm Dbm Ab
     tempo: 40
-    tonic: Ab
+    key:
+      root: Ab
+      mode: major
 
   - id: 56dc3b71-cc28-4010-a6fd-a7113d731749
     title: Golf On TV
@@ -250,7 +278,9 @@ songs:
     tempo: 50
     beat_duration: quarter
     chord_duration: quarter
-    tonic: F
+    key:
+      root: F
+      mode: major
 
   - id: 77b6fa3e-2276-4e58-b43c-d125807fd137
     title: Lay It On Me
@@ -272,7 +302,9 @@ songs:
       - { chord: C/G, inversion: second, octave: 4 }
       - { chord: C/E, inversion: second, octave: 4 }
     tempo: 45
-    tonic: C
+    key:
+      root: C
+      mode: major
 
   - id: 597ec8ae-c3dd-42a4-bf7e-5cf1942a48ef
     title: Outro
@@ -293,7 +325,9 @@ songs:
       - { chord: G7sus4, inversion: second, octave: 3 }
       - { chord: Dbdimmaj7/A, inversion: first, octave: 4 }
     tempo: 65
-    tonic: C
+    key:
+      root: C
+      mode: major
 
   - id: 4d9a117e-ab13-471c-b369-bce9b14dc8f8
     title: Good Morning Beauty Queen
@@ -306,7 +340,9 @@ songs:
       Ab
       ~ On guitar play it in E
     tempo: 40
-    tonic: Ab
+    key:
+      root: Ab
+      mode: major
 
   - id: e8304f04-f082-4766-91e7-44b8c24a1a36
     title: Everybody
@@ -368,7 +404,9 @@ songs:
     voicings:
       - { chord: Fm7, inversion: third, octave: 3 }
     tempo: 90
-    tonic: Ab
+    key:
+      root: Ab
+      mode: major
 
   - id: 30a552d4-d24c-484d-8e8e-6b4ab108634c
     title: I'm Ready
@@ -378,4 +416,6 @@ songs:
       A A D A/C# D/B D/B D/E D/E (x4)
       D D A/C# A/C# C#7 C#7 F#m Aadd6/E D D D/E D/E
     tempo: 63
-    tonic: A
+    key:
+      root: A
+      mode: major

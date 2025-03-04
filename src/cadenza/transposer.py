@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 from cadenza.chord import Chord
 from cadenza.constants import N_NOTES
+from cadenza.diatonic_key import DiatonicKey
 from cadenza.diatonic_scale import DiatonicScale
 from cadenza.note import Note
 from cadenza.pitch import Pitch
@@ -41,7 +42,9 @@ class Transposer:
     def transpose_song(cls, song: Song, semitones: int, *, scale: DiatonicScale) -> Song:
         new_song = deepcopy(song)
         new_song.chords = [[cls.transpose_chord(c, semitones, scale=scale) for c in line] for line in song.chords]
-        new_song.tonic = None if new_song.tonic is None else cls.transpose_chord(new_song.tonic, semitones, scale=scale)
+        if new_song.key is not None:
+            new_root = cls.transpose_note(new_song.key.root, semitones, scale=scale)
+            new_song.key = DiatonicKey(root=new_root, mode=new_song.key.mode)
         new_voicings = None
         if new_song.voicings is not None:
             new_voicings = []
@@ -79,7 +82,9 @@ class Transposer:
     def transpose_song_unsafe(cls, song: Song, semitones: int) -> Song:
         new_song = deepcopy(song)
         new_song.chords = [[cls.transpose_chord_unsafe(c, semitones) for c in line] for line in song.chords]
-        new_song.tonic = None if new_song.tonic is None else cls.transpose_chord_unsafe(new_song.tonic, semitones)
+        if new_song.key is not None:
+            new_root = cls.transpose_note_unsafe(new_song.key.root, semitones)
+            new_song.key = DiatonicKey(root=new_root, mode=new_song.key.mode)
         new_voicings = None
         if new_song.voicings is not None:
             new_voicings = []

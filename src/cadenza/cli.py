@@ -239,10 +239,10 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
         console.print(f"[bold][red]{msg}")
         return
 
-    if song.tonic is None:
+    if song.key is None:
         song = Transposer.transpose_song_unsafe(song, transpose)
     else:
-        scale = DiatonicScale.major(song.tonic.root)
+        scale = DiatonicScale.major(song.key.root)
         song = Transposer.transpose_song(song, transpose, scale=scale)
 
     # Apply overrides
@@ -255,19 +255,19 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     console.print(f"Tempo: [bold][white]{tempo:.0f}bpm")
     console.print(f"Beat duration: [bold][white]{beat_duration}")
     console.print(f"Chord duration: [bold][white]{chord_duration}")
-    if song.tonic is not None:
-        console.print(f"Tonic: [bold][white]{song.tonic.to_str(symbols=show_symbols)}")
+    if song.key is not None:
+        console.print(f"Key: [bold][white]{song.key.root.to_str(symbols=show_symbols)} {song.key.mode.to_str()}")
     if transpose != 0:
         console.print(f"Transpose: [bold][white]{transpose}")
     console.print("Chords:")
     for chord_line in song.chords:
         if show_functions:
-            if song.tonic is None:
-                msg = "Cannot display functional analysis with an unknown tonic"
+            if song.key is None:
+                msg = "Cannot display functional analysis with an unknown key"
                 console.print(f"[bold][red]{msg}")
                 return
 
-            functions = [FunctionalAnalysis.get_chord_function_str(chord, song.tonic) for chord in chord_line]
+            functions = [FunctionalAnalysis.get_chord_function_str(chord, song.key.root) for chord in chord_line]
             function_line_str = "[white]   [bold][green]".join(str(function) for function in functions)
             console.print(f"[bold][green]{function_line_str}")
 

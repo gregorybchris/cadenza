@@ -100,8 +100,22 @@ class DiatonicMode(StrEnum):
     def to_written(self) -> str:
         return self.value
 
+    def to_str(self, convert_to_quality: bool = True) -> str:
+        if convert_to_quality:
+            if self == DiatonicMode.Ionian:
+                return "major"
+            if self == DiatonicMode.Aeolian:
+                return "minor"
+        return self.value
+
     @classmethod
     def from_str(cls, mode_str: str) -> Self:
+        if mode_str == "major":
+            mode_str = "Ionian"
+
+        if mode_str == "minor":
+            mode_str = "Aeolian"
+
         return cls[mode_str]
 
     def __str__(self) -> str:

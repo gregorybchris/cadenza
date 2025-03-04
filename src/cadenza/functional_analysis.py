@@ -5,6 +5,7 @@ from cadenza.constants import N_NOTES
 from cadenza.diatonic_scale import DiatonicScale
 from cadenza.extension import Extension
 from cadenza.interval import Interval
+from cadenza.note import Note
 from cadenza.quality import Quality
 from cadenza.scale_degree import ScaleDegree
 from cadenza.transposer import Transposer
@@ -14,10 +15,8 @@ logger = logging.getLogger(__name__)
 
 class FunctionalAnalysis:
     @classmethod
-    def get_chord_function_str(cls, chord: Chord, tonic: Chord) -> str:
-        tonic_root = tonic.root
-
-        interval_int = (chord.root.to_integer() - tonic_root.to_integer()) % N_NOTES
+    def get_chord_function_str(cls, chord: Chord, root: Note) -> str:
+        interval_int = (chord.root.to_integer() - root.to_integer()) % N_NOTES
         interval = Interval.from_int(interval_int)
         try:
             scale_degree = ScaleDegree.from_interval(interval)
@@ -44,7 +43,7 @@ class FunctionalAnalysis:
             function += Quality.SusFour.to_str()
 
         if chord.bass is not None:
-            base_interval_int = (chord.bass.to_integer() - tonic_root.to_integer()) % N_NOTES
+            base_interval_int = (chord.bass.to_integer() - root.to_integer()) % N_NOTES
             base_interval = Interval.from_int(base_interval_int)
             try:
                 base_scale_degree = ScaleDegree.from_interval(base_interval)
