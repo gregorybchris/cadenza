@@ -21,6 +21,7 @@ from cadenza.player import Player
 from cadenza.saver import Saver
 from cadenza.synth import Synth, SynthArgs
 from cadenza.transposer import Transposer
+from cadenza.visualizer import Visualizer, VisualizerArgs
 from cadenza.voicing import Voicing
 
 if TYPE_CHECKING:
@@ -57,6 +58,7 @@ def note(  # noqa: PLR0913
     show_symbols: Annotated[bool, Option("--symbols/--no-symbols")] = True,
     play: Annotated[bool, Option("--play/--no-play")] = True,
     show_pitch: Annotated[bool, Option("--pitch/--no-pitch")] = True,
+    visualize: Annotated[bool, Option("--visualize/--no-visualize")] = False,
     filepath: Optional[Path] = None,
     info: bool = False,
     debug: bool = False,
@@ -90,6 +92,11 @@ def note(  # noqa: PLR0913
         saver = Saver(sample_rate=sample_rate)
         saver.save(audio, filepath)
 
+    if visualize:
+        visualizer_args = VisualizerArgs(sample_rate=sample_rate)
+        visualizer = Visualizer(args=visualizer_args)
+        visualizer.visualize(audio)
+
     if play:
         player = Player(sample_rate=sample_rate)
         player.play(audio)
@@ -111,6 +118,7 @@ def chord(  # noqa: PLR0913
     include_left_hand: Annotated[bool, Option("--include-left-hand/--no-left-hand")] = False,
     play: Annotated[bool, Option("--play/--no-play")] = True,
     show_pitches: Annotated[bool, Option("--pitches/--no-pitches")] = True,
+    visualize: Annotated[bool, Option("--visualize/--no-visualize")] = False,
     filepath: Optional[Path] = None,
     info: bool = False,
     debug: bool = False,
@@ -148,6 +156,11 @@ def chord(  # noqa: PLR0913
         saver = Saver(sample_rate=sample_rate)
         saver.save(audio, filepath)
 
+    if visualize:
+        visualizer_args = VisualizerArgs(sample_rate=sample_rate)
+        visualizer = Visualizer(args=visualizer_args)
+        visualizer.visualize(audio)
+
     if play:
         player = Player(sample_rate=sample_rate)
         player.play(audio)
@@ -170,6 +183,7 @@ def chords(  # noqa: PLR0913
     sample_rate: int = 44_100,
     include_left_hand: Annotated[bool, Option("--include-left-hand/--no-left-hand")] = False,
     play: Annotated[bool, Option("--play/--no-play")] = True,
+    visualize: Annotated[bool, Option("--visualize/--no-visualize")] = False,
     filepath: Optional[Path] = None,
     info: bool = False,
     debug: bool = False,
@@ -213,6 +227,11 @@ def chords(  # noqa: PLR0913
         saver = Saver(sample_rate=sample_rate)
         saver.save(audio, filepath)
 
+    if visualize:
+        visualizer_args = VisualizerArgs(sample_rate=sample_rate)
+        visualizer = Visualizer(args=visualizer_args)
+        visualizer.visualize(audio)
+
     if play:
         player = Player(sample_rate=sample_rate)
         player.play(audio)
@@ -237,6 +256,7 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     play: Annotated[bool, Option("--play/--no-play")] = True,
     start_line: Annotated[int, Option("--line")] = 1,
     spacious: Annotated[bool, Option("--spacious/--no-spacious")] = False,
+    visualize: Annotated[bool, Option("--visualize/--no-visualize")] = False,
     filepath: Optional[Path] = None,
     info: bool = False,
     debug: bool = False,
@@ -342,6 +362,11 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     if filepath:
         saver = Saver(sample_rate=sample_rate)
         saver.save(audio, filepath)
+
+    if visualize:
+        visualizer_args = VisualizerArgs(sample_rate=sample_rate)
+        visualizer = Visualizer(args=visualizer_args)
+        visualizer.visualize(audio)
 
     if play:
         player = Player(sample_rate=sample_rate)

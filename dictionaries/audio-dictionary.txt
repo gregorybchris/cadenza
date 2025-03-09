@@ -3,3 +3,5 @@ FFT
 bandpass
 highpass
 lowpass
+mels
+melspec
