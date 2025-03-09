@@ -1,8 +1,12 @@
 {
   "version": "0.2",
   "language": "en",
-  "dictionaries": ["chords-dictionary", "songs-dictionary", "theory-dictionary"],
+  "dictionaries": ["audio-dictionary", "chords-dictionary", "songs-dictionary", "theory-dictionary"],
   "dictionaryDefinitions": [
+    {
+      "name": "audio-dictionary",
+      "path": "./dictionaries/audio-dictionary.txt"
+    },
     {
       "name": "chords-dictionary",
       "path": "./dictionaries/chords-dictionary.txt"

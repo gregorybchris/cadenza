@@ -51,6 +51,8 @@ def note(  # noqa: PLR0913
     duration_s: Annotated[float, Option("--duration", "-d")] = 3.0,
     use_overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     use_tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
+    lowpass_cutoff: Annotated[Optional[float], Option("--lowpass")] = None,
+    highpass_cutoff: Annotated[Optional[float], Option("--highpass")] = None,
     sample_rate: int = 44_100,
     show_symbols: Annotated[bool, Option("--symbols/--no-symbols")] = True,
     play: Annotated[bool, Option("--play/--no-play")] = True,
@@ -69,6 +71,8 @@ def note(  # noqa: PLR0913
         sample_rate=sample_rate,
         use_tremolo=use_tremolo,
         use_overtones=use_overtones,
+        lowpass_cutoff=lowpass_cutoff,
+        highpass_cutoff=highpass_cutoff,
     )
     synth = Synth(args=synth_args)
 
@@ -100,6 +104,8 @@ def chord(  # noqa: PLR0913
     duration_s: Annotated[float, Option("--duration", "-d")] = 3.0,
     use_overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     use_tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
+    lowpass_cutoff: Annotated[Optional[float], Option("--lowpass")] = None,
+    highpass_cutoff: Annotated[Optional[float], Option("--highpass")] = None,
     sample_rate: Annotated[int, Option("--sample-rate", "-sr")] = 44_100,
     show_symbols: Annotated[bool, Option("--symbols/--no-symbols")] = True,
     include_left_hand: Annotated[bool, Option("--include-left-hand/--no-left-hand")] = False,
@@ -120,6 +126,8 @@ def chord(  # noqa: PLR0913
         sample_rate=sample_rate,
         use_tremolo=use_tremolo,
         use_overtones=use_overtones,
+        lowpass_cutoff=lowpass_cutoff,
+        highpass_cutoff=highpass_cutoff,
     )
     synth = Synth(args=synth_args)
 
@@ -157,6 +165,8 @@ def chords(  # noqa: PLR0913
     repeat: Annotated[int, Option("--repeat")] = 1,
     use_overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     use_tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
+    lowpass_cutoff: Annotated[Optional[float], Option("--lowpass")] = None,
+    highpass_cutoff: Annotated[Optional[float], Option("--highpass")] = None,
     sample_rate: int = 44_100,
     include_left_hand: Annotated[bool, Option("--include-left-hand/--no-left-hand")] = False,
     play: Annotated[bool, Option("--play/--no-play")] = True,
@@ -170,6 +180,8 @@ def chords(  # noqa: PLR0913
         sample_rate=sample_rate,
         use_tremolo=use_tremolo,
         use_overtones=use_overtones,
+        lowpass_cutoff=lowpass_cutoff,
+        highpass_cutoff=highpass_cutoff,
     )
     synth = Synth(args=synth_args)
 
@@ -217,6 +229,8 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     repeat: Annotated[int, Option("--repeat")] = 1,
     use_overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     use_tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
+    lowpass_cutoff: Annotated[Optional[float], Option("--lowpass")] = None,
+    highpass_cutoff: Annotated[Optional[float], Option("--highpass")] = None,
     sample_rate: int = 44_100,
     show_symbols: Annotated[bool, Option("--symbols/--no-symbols")] = True,
     show_functions: Annotated[bool, Option("--functions/--no-functions")] = False,
@@ -233,6 +247,8 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
         sample_rate=sample_rate,
         use_tremolo=use_tremolo,
         use_overtones=use_overtones,
+        lowpass_cutoff=lowpass_cutoff,
+        highpass_cutoff=highpass_cutoff,
     )
     synth = Synth(args=synth_args)
 

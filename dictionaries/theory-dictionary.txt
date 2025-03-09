@@ -1,5 +1,4 @@
 Aeolian
-ADSR
 Dorian
 halfdim
 Ionian

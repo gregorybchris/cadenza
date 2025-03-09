@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 import torch
+import torch.fft
 from torch import Tensor
 
 from cadenza.envelope import Envelope
@@ -11,8 +12,10 @@ from cadenza.organ_pipe_length import OrganPipeLength
 @dataclass(kw_only=True)
 class SynthArgs:
     sample_rate: int
-    use_tremolo: bool
-    use_overtones: bool
+    use_tremolo: bool = False
+    use_overtones: bool = False
+    lowpass_cutoff: Optional[float] = None
+    highpass_cutoff: Optional[float] = None
     envelope: Optional[Envelope] = field(default_factory=Envelope)
 
 
@@ -45,13 +48,16 @@ class Synth:
                     overtone_waveform = overtone_amplitude * torch.sin(2 * torch.pi * overtone * t)
                     audio += overtone_waveform
 
+        if self.args.use_tremolo:
+            # Apply tremolo effect
+            audio = self._apply_hammond_tremolo(audio)
+
         # Apply ADSR envelope
         if self.args.envelope is not None:
             audio = self._apply_envelope(audio, self.args.envelope)
 
-        if self.args.use_tremolo:
-            # Apply tremolo effect
-            audio = self._apply_hammond_tremolo(audio)
+        # Apply band-pass filter
+        audio = self._apply_bandpass_filter(audio, self.args.lowpass_cutoff, self.args.highpass_cutoff)
 
         # Normalize to prevent clipping
         audio /= len(frequencies)
@@ -138,3 +144,21 @@ class Synth:
         envelope_mask[n_ads:n_adsr] = torch.linspace(envelope.sustain_level, 0, n_r)
 
         return audio * envelope_mask
+
+    def _apply_bandpass_filter(
+        self,
+        audio: Tensor,
+        lowpass_cutoff: Optional[float],
+        highpass_cutoff: Optional[float],
+    ) -> Tensor:
+        freqs = torch.fft.fftfreq(audio.shape[0], d=1 / 16000)
+        mask = torch.ones_like(freqs, dtype=torch.bool)
+        abs_freqs = torch.abs(freqs)
+        if lowpass_cutoff is not None:
+            mask &= abs_freqs <= lowpass_cutoff
+        if highpass_cutoff is not None:
+            mask &= abs_freqs >= highpass_cutoff
+
+        fft_audio = torch.fft.fft(audio)
+        fft_filtered = fft_audio * mask
+        return torch.fft.ifft(fft_filtered).real

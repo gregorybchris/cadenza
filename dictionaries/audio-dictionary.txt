@@ -1,0 +1,5 @@
+ADSR
+FFT
+bandpass
+highpass
+lowpass

@@ -15,5 +15,5 @@
   "prettier.printWidth": 120,
   "ruff.configuration": "pyproject.toml",
   "ruff.nativeServer": true,
-  "cSpell.words": ["allclose", "numpy", "randn", "samplerate", "soundfile", "torchaudio", "typer"]
+  "cSpell.words": ["allclose", "fftfreq", "ifft", "numpy", "randn", "samplerate", "soundfile", "torchaudio", "typer"]
 }
