@@ -64,6 +64,9 @@ cz chord F/G --filepath audio.wav
 
 # Save chord audio to a file with a different sample rate
 cz chord Cmaj7/A --filepath audio.wav --sample-rate 48000
+
+# Visualize the mel spectrogram
+cz chord A7b5sus2 --visualize
 ```
 
 ### Chords command
@@ -115,6 +118,9 @@ cz song homesick --filepath audio.wav --no-play
 
 # Save song audio to a file with a different sample rate
 cz song homesick --filepath audio.wav --sample-rate 48000
+
+# Visualize the mel spectrogram
+cz song homesick --visualize
 ```
 
 ### Optimize command
