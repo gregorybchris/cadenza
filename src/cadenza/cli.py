@@ -228,7 +228,7 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     synth_args = SynthArgs(sample_rate=sample_rate)
     synth = Synth(args=synth_args)
 
-    library_filepath = Path(__file__).parent / "data" / "library.yaml"
+    library_filepath = Path(__file__).parent / "data" / "songs.yaml"
     library = Library.from_file(library_filepath)
     results_iter = library.search(query)
 
