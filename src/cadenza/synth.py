@@ -9,6 +9,8 @@ from cadenza.organ_pipe_length import OrganPipeLength
 @dataclass(kw_only=True)
 class SynthArgs:
     sample_rate: int
+    use_tremolo: bool
+    use_overtones: bool
 
 
 @dataclass(kw_only=True)
@@ -18,7 +20,7 @@ class Synth:
     def generate_silence(self, duration_s: float) -> Tensor:
         return torch.zeros(int(self.args.sample_rate * duration_s), dtype=torch.float32)
 
-    def generate(self, frequencies: Tensor, duration_s: float, overtones: bool = False) -> Tensor:
+    def generate(self, frequencies: Tensor, duration_s: float) -> Tensor:
         # Time vector
         t = torch.linspace(0, duration_s, int(self.args.sample_rate * duration_s), dtype=torch.float32)
 
@@ -29,19 +31,24 @@ class Synth:
         # Merge tones by summing them
         audio = tones.sum(dim=0)
 
-        if overtones:
+        if self.args.use_overtones:
             # Add overtones using organ stops
             for freq in frequencies:
                 for pipe_length in OrganPipeLength:
                     multiplier = pipe_length.get_multiplier()
-                    decay = self._get_overtone_decay(pipe_length)
+                    overtone_decay = self._get_overtone_decay(pipe_length)
                     overtone = freq * multiplier
-                    overtone_amplitude = decay * amplitude
+                    overtone_amplitude = overtone_decay * amplitude
                     overtone_waveform = overtone_amplitude * torch.sin(2 * torch.pi * overtone * t)
                     audio += overtone_waveform
 
         # Normalize to prevent clipping
         audio /= len(frequencies)
+
+        if self.args.use_tremolo:
+            # Apply tremolo effect
+            audio = self._apply_hammond_tremolo(audio)
+
         return audio
 
     def _get_overtone_decay(self, pipe_length: OrganPipeLength) -> float:
@@ -84,7 +91,7 @@ class Synth:
 
         return torch.cat(new_segments)
 
-    def apply_tremolo(self, audio: Tensor, *, frequency: float, dip: float) -> Tensor:
+    def _apply_tremolo(self, audio: Tensor, *, frequency: float, dip: float) -> Tensor:
         sample_rate = self.args.sample_rate
         audio_duration = len(audio) / sample_rate
 
@@ -93,11 +100,11 @@ class Synth:
         amplitude = dip + height * torch.sin(2 * torch.pi * frequency * t)
         return audio * amplitude
 
-    def apply_hammond_tremolo(self, audio: Tensor) -> Tensor:
+    def _apply_hammond_tremolo(self, audio: Tensor) -> Tensor:
         # Apply high frequency tremolo
-        audio = self.apply_tremolo(audio, frequency=5.2, dip=0.92)
+        audio = self._apply_tremolo(audio, frequency=5.2, dip=0.92)
 
         # Apply low frequency tremolo, like the Leslie effect on a Hammond organ
-        audio = self.apply_tremolo(audio, frequency=1.7, dip=0.92)
+        audio = self._apply_tremolo(audio, frequency=1.7, dip=0.92)
 
         return audio  # noqa: RET504

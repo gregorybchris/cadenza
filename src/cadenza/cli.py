@@ -49,8 +49,8 @@ def note(  # noqa: PLR0913
     octave: Annotated[int, Option("--octave")] = 4,
     transpose: Annotated[int, Option("--transpose")] = 0,
     duration_s: Annotated[float, Option("--duration", "-d")] = 3.0,
-    overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
-    tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
+    use_overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
+    use_tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
     sample_rate: int = 44_100,
     show_symbols: Annotated[bool, Option("--symbols/--no-symbols")] = True,
     play: Annotated[bool, Option("--play/--no-play")] = True,
@@ -65,14 +65,15 @@ def note(  # noqa: PLR0913
     note = Transposer.transpose_note(note, transpose, scale=DiatonicScale.major(note))
     pitch = Pitch(note=note, octave=octave)
 
-    synth_args = SynthArgs(sample_rate=sample_rate)
+    synth_args = SynthArgs(
+        sample_rate=sample_rate,
+        use_tremolo=use_tremolo,
+        use_overtones=use_overtones,
+    )
     synth = Synth(args=synth_args)
 
     frequencies = torch.tensor([Composer.pitch_to_frequency(pitch)])
-    audio = synth.generate(frequencies, duration_s, overtones=overtones)
-
-    if tremolo:
-        audio = synth.apply_hammond_tremolo(audio)
+    audio = synth.generate(frequencies, duration_s)
 
     if show_pitch:
         frequency = Composer.pitch_to_frequency(pitch)
@@ -97,8 +98,8 @@ def chord(  # noqa: PLR0913
     inversion_num: Annotated[int, Option("--inversion")] = 0,
     transpose: Annotated[int, Option("--transpose")] = 0,
     duration_s: Annotated[float, Option("--duration", "-d")] = 3.0,
-    overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
-    tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
+    use_overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
+    use_tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
     sample_rate: Annotated[int, Option("--sample-rate", "-sr")] = 44_100,
     show_symbols: Annotated[bool, Option("--symbols/--no-symbols")] = True,
     include_left_hand: Annotated[bool, Option("--include-left-hand/--no-left-hand")] = False,
@@ -115,16 +116,17 @@ def chord(  # noqa: PLR0913
     chord = Transposer.transpose_chord_unsafe(chord, transpose)
     console.print(f"[red]{chord.to_str(symbols=show_symbols)}")
 
-    synth_args = SynthArgs(sample_rate=sample_rate)
+    synth_args = SynthArgs(
+        sample_rate=sample_rate,
+        use_tremolo=use_tremolo,
+        use_overtones=use_overtones,
+    )
     synth = Synth(args=synth_args)
 
     voicing = Voicing(chord=chord, inversion=inversion, octave=octave, include_left_hand=include_left_hand)
     pitches = Composer.voicing_to_pitches(voicing)
     frequencies = torch.tensor([Composer.pitch_to_frequency(pitch) for pitch in pitches])
-    audio = synth.generate(frequencies, duration_s, overtones=overtones)
-
-    if tremolo:
-        audio = synth.apply_hammond_tremolo(audio)
+    audio = synth.generate(frequencies, duration_s)
 
     if show_pitches:
         for pitch in pitches:
@@ -153,8 +155,8 @@ def chords(  # noqa: PLR0913
     chord_duration: Duration = Duration.Quarter,
     beat_duration: Duration = Duration.Quarter,
     repeat: Annotated[int, Option("--repeat")] = 1,
-    overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
-    tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
+    use_overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
+    use_tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
     sample_rate: int = 44_100,
     include_left_hand: Annotated[bool, Option("--include-left-hand/--no-left-hand")] = False,
     play: Annotated[bool, Option("--play/--no-play")] = True,
@@ -164,9 +166,14 @@ def chords(  # noqa: PLR0913
 ) -> None:
     set_logger_config(info, debug)
 
-    synth_args = SynthArgs(sample_rate=sample_rate)
+    synth_args = SynthArgs(
+        sample_rate=sample_rate,
+        use_tremolo=use_tremolo,
+        use_overtones=use_overtones,
+    )
     synth = Synth(args=synth_args)
 
+    # TODO: Use envelope to control this silence
     beats_per_chord = chord_duration.get_n_quarter_notes() / beat_duration.get_n_quarter_notes()
     beats_per_second = tempo / 60
     seconds_per_chord = beats_per_chord / beats_per_second
@@ -182,16 +189,13 @@ def chords(  # noqa: PLR0913
             voicing = Voicing.from_chord(chord, inversion, octave, include_left_hand=include_left_hand)
             pitches = Composer.voicing_to_pitches(voicing)
             frequencies = torch.tensor([Composer.pitch_to_frequency(pitch) for pitch in pitches])
-            segment = synth.generate(frequencies, audio_duration, overtones=overtones)
+            segment = synth.generate(frequencies, audio_duration)
             segments.append(segment)
 
             audio_silence = synth.generate_silence(silence_duration)
             segments.append(audio_silence)
 
     audio = synth.concat(segments)
-
-    if tremolo:
-        audio = synth.apply_hammond_tremolo(audio)
 
     if filepath:
         saver = Saver(sample_rate=sample_rate)
@@ -211,8 +215,8 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     chord_duration: Optional[Duration] = None,
     beat_duration: Optional[Duration] = None,
     repeat: Annotated[int, Option("--repeat")] = 1,
-    overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
-    tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
+    use_overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
+    use_tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
     sample_rate: int = 44_100,
     show_symbols: Annotated[bool, Option("--symbols/--no-symbols")] = True,
     show_functions: Annotated[bool, Option("--functions/--no-functions")] = False,
@@ -225,7 +229,11 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
 ) -> None:
     set_logger_config(info, debug)
 
-    synth_args = SynthArgs(sample_rate=sample_rate)
+    synth_args = SynthArgs(
+        sample_rate=sample_rate,
+        use_tremolo=use_tremolo,
+        use_overtones=use_overtones,
+    )
     synth = Synth(args=synth_args)
 
     library_filepath = Path(__file__).parent / "data" / "songs.yaml"
@@ -307,16 +315,13 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
 
                 pitches = Composer.voicing_to_pitches(voicing)
                 frequencies = torch.tensor([Composer.pitch_to_frequency(pitch) for pitch in pitches])
-                segment = synth.generate(frequencies, audio_duration, overtones=overtones)
+                segment = synth.generate(frequencies, audio_duration)
                 segments.append(segment)
 
                 audio_silence = synth.generate_silence(silence_duration)
                 segments.append(audio_silence)
 
     audio = synth.concat(segments)
-
-    if tremolo:
-        audio = synth.apply_hammond_tremolo(audio)
 
     if filepath:
         saver = Saver(sample_rate=sample_rate)
@@ -371,10 +376,14 @@ def optimize(  # noqa: PLR0913
     optimizer = Optimizer(args=optimizer_args)
     optimized_frequencies = optimizer.optimize(unoptimized_frequencies)
 
-    synth_args = SynthArgs(sample_rate=sample_rate)
+    synth_args = SynthArgs(
+        sample_rate=sample_rate,
+        use_tremolo=False,
+        use_overtones=False,
+    )
     synth = Synth(args=synth_args)
-    unoptimized_audio = synth.generate(unoptimized_frequencies, duration_s, overtones=False)
-    optimized_audio = synth.generate(optimized_frequencies, duration_s, overtones=False)
+    unoptimized_audio = synth.generate(unoptimized_frequencies, duration_s)
+    optimized_audio = synth.generate(optimized_frequencies, duration_s)
 
     if show_pitches:
         for pitch in pitches:
