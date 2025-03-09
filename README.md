@@ -104,6 +104,9 @@ cz song homesick --overtones
 # Add tremolo
 cz song homesick --tremolo
 
+# Add reverb
+cz song homesick --reverb
+
 # Save song audio to a file
 cz song homesick --filepath audio.wav
 

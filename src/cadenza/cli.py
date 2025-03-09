@@ -52,6 +52,7 @@ def note(  # noqa: PLR0913
     duration_s: Annotated[float, Option("--duration", "-d")] = 3.0,
     use_overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     use_tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
+    use_reverb: Annotated[bool, Option("--reverb/--no-reverb")] = False,
     lowpass_cutoff: Annotated[Optional[float], Option("--lowpass")] = None,
     highpass_cutoff: Annotated[Optional[float], Option("--highpass")] = None,
     sample_rate: int = 44_100,
@@ -80,6 +81,8 @@ def note(  # noqa: PLR0913
 
     frequencies = torch.tensor([Composer.pitch_to_frequency(pitch)])
     audio = synth.generate(frequencies, duration_s)
+    if use_reverb:
+        audio = synth.apply_cathedral_reverb(audio)
 
     if show_pitch:
         frequency = Composer.pitch_to_frequency(pitch)
@@ -111,6 +114,7 @@ def chord(  # noqa: PLR0913
     duration_s: Annotated[float, Option("--duration", "-d")] = 3.0,
     use_overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     use_tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
+    use_reverb: Annotated[bool, Option("--reverb/--no-reverb")] = False,
     lowpass_cutoff: Annotated[Optional[float], Option("--lowpass")] = None,
     highpass_cutoff: Annotated[Optional[float], Option("--highpass")] = None,
     sample_rate: Annotated[int, Option("--sample-rate", "-sr")] = 44_100,
@@ -143,6 +147,8 @@ def chord(  # noqa: PLR0913
     pitches = Composer.voicing_to_pitches(voicing)
     frequencies = torch.tensor([Composer.pitch_to_frequency(pitch) for pitch in pitches])
     audio = synth.generate(frequencies, duration_s)
+    if use_reverb:
+        audio = synth.apply_cathedral_reverb(audio)
 
     if show_pitches:
         for pitch in pitches:
@@ -178,6 +184,7 @@ def chords(  # noqa: PLR0913
     repeat: Annotated[int, Option("--repeat")] = 1,
     use_overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     use_tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
+    use_reverb: Annotated[bool, Option("--reverb/--no-reverb")] = False,
     lowpass_cutoff: Annotated[Optional[float], Option("--lowpass")] = None,
     highpass_cutoff: Annotated[Optional[float], Option("--highpass")] = None,
     sample_rate: int = 44_100,
@@ -222,6 +229,8 @@ def chords(  # noqa: PLR0913
             segments.append(audio_silence)
 
     audio = synth.concat(segments)
+    if use_reverb:
+        audio = synth.apply_cathedral_reverb(audio)
 
     if filepath:
         saver = Saver(sample_rate=sample_rate)
@@ -248,6 +257,7 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     repeat: Annotated[int, Option("--repeat")] = 1,
     use_overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     use_tremolo: Annotated[bool, Option("--tremolo/--no-tremolo")] = False,
+    use_reverb: Annotated[bool, Option("--reverb/--no-reverb")] = False,
     lowpass_cutoff: Annotated[Optional[float], Option("--lowpass")] = None,
     highpass_cutoff: Annotated[Optional[float], Option("--highpass")] = None,
     sample_rate: int = 44_100,
@@ -358,6 +368,8 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
                 segments.append(audio_silence)
 
     audio = synth.concat(segments)
+    if use_reverb:
+        audio = synth.apply_cathedral_reverb(audio)
 
     if filepath:
         saver = Saver(sample_rate=sample_rate)

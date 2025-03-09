@@ -7,6 +7,7 @@ from torch import Tensor
 
 from cadenza.envelope import Envelope
 from cadenza.organ_pipe_length import OrganPipeLength
+from cadenza.reverb_model import ReverbModel
 
 
 @dataclass(kw_only=True)
@@ -162,3 +163,11 @@ class Synth:
         fft_audio = torch.fft.fft(audio)
         fft_filtered = fft_audio * mask
         return torch.fft.ifft(fft_filtered).real
+
+    def apply_cathedral_reverb(self, audio: Tensor) -> Tensor:
+        return self.apply_reverb(audio, delay_s=0.3, feedback=0.5)
+
+    def apply_reverb(self, audio: Tensor, delay_s: float, feedback: float) -> Tensor:
+        delay_samples = int(self.args.sample_rate * delay_s)
+        model = ReverbModel(delay_samples=delay_samples, feedback=feedback)
+        return model(audio)
