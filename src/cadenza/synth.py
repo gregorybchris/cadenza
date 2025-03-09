@@ -1,8 +1,10 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Optional
 
 import torch
 from torch import Tensor
 
+from cadenza.envelope import Envelope
 from cadenza.organ_pipe_length import OrganPipeLength
 
 
@@ -11,6 +13,7 @@ class SynthArgs:
     sample_rate: int
     use_tremolo: bool
     use_overtones: bool
+    envelope: Optional[Envelope] = field(default_factory=Envelope)
 
 
 @dataclass(kw_only=True)
@@ -42,12 +45,16 @@ class Synth:
                     overtone_waveform = overtone_amplitude * torch.sin(2 * torch.pi * overtone * t)
                     audio += overtone_waveform
 
-        # Normalize to prevent clipping
-        audio /= len(frequencies)
+        # Apply ADSR envelope
+        if self.args.envelope is not None:
+            audio = self._apply_envelope(audio, self.args.envelope)
 
         if self.args.use_tremolo:
             # Apply tremolo effect
             audio = self._apply_hammond_tremolo(audio)
+
+        # Normalize to prevent clipping
+        audio /= len(frequencies)
 
         return audio
 
@@ -108,3 +115,26 @@ class Synth:
         audio = self._apply_tremolo(audio, frequency=1.7, dip=0.92)
 
         return audio  # noqa: RET504
+
+    def _apply_envelope(self, audio: Tensor, envelope: Envelope) -> Tensor:
+        duration_s = len(audio) / self.args.sample_rate
+        sustain = envelope.sustain
+        if sustain is None:
+            sustain = duration_s - envelope.attack - envelope.decay - envelope.release
+
+        n_a = int(envelope.attack * self.args.sample_rate)
+        n_d = int(envelope.decay * self.args.sample_rate)
+        n_s = int(sustain * self.args.sample_rate)
+        n_r = int(envelope.release * self.args.sample_rate)
+
+        n_ad = n_a + n_d
+        n_ads = n_ad + n_s
+        n_adsr = n_ads + n_r
+
+        envelope_mask = torch.zeros_like(audio)
+        envelope_mask[:n_a] = torch.linspace(0, 1, n_a)
+        envelope_mask[n_a:n_ad] = torch.linspace(1, envelope.sustain_level, n_d)
+        envelope_mask[n_ad:n_ads] = envelope.sustain_level
+        envelope_mask[n_ads:n_adsr] = torch.linspace(envelope.sustain_level, 0, n_r)
+
+        return audio * envelope_mask
