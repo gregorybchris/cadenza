@@ -183,7 +183,7 @@ songs:
       A A7 D C#7
       A/F# B D A
       A/F# B D A
-    tempo: 50
+    tempo: 35
     beat_duration: quarter
     chord_duration: quarter
     key:
