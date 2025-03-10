@@ -56,6 +56,9 @@ cz chord F#dim --overtones
 # Add tremolo
 cz chord E7b9/G# --tremolo
 
+# Apply a lowpass filter
+cz chord Cadd6 --overtones --lowpass 120
+
 # Analyze a chord without playing it
 cz chord Dmaj7 --no-play
 
@@ -109,6 +112,9 @@ cz song homesick --tremolo
 
 # Add reverb
 cz song homesick --reverb
+
+# Apply a highpass filter
+cz song homesick --overtones --highpass 450
 
 # Save song audio to a file
 cz song homesick --filepath audio.wav
