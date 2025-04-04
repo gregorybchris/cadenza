@@ -61,7 +61,7 @@ class Composer:
                 return [Interval.PerfectFourth, Interval.PerfectFifth]
 
     @classmethod
-    def _get_intervals_from_extension(cls, voicing: Voicing) -> list[Interval]:
+    def _get_intervals_from_extension(cls, voicing: Voicing) -> list[Interval]:  # noqa: PLR0911
         if not voicing.chord.extension:
             return []
         match voicing.chord.extension:
@@ -72,6 +72,9 @@ class Composer:
             case Extension.Nine:
                 # NOTE: The 9 chord includes all previous extensions (the 7th).
                 return [Interval.MinorSeventh, Interval.MajorNinth]
+            case Extension.MajorNine:
+                # NOTE: The maj9 chord includes all previous extensions (the 7th).
+                return [Interval.MajorSeventh, Interval.MajorNinth]
             case Extension.Eleven:
                 # NOTE: The 11 chord includes all previous extensions (the 7th and 9th).
                 return [Interval.MinorSeventh, Interval.MajorNinth, Interval.PerfectEleventh]

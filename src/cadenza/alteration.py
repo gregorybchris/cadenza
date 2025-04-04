@@ -24,8 +24,8 @@ class Alteration(StrEnum):
             "4": cls.AddFour,
             "add4": cls.AddFour,
             "6": cls.AddSix,
-            "add9": cls.AddNine,
             "add6": cls.AddSix,
+            "add9": cls.AddNine,
             "b5": cls.FlatFive,
             "b9": cls.FlatNine,
         }

@@ -27,16 +27,27 @@ class FunctionalAnalysis:
 
         function = scale_degree.to_symbol()
 
+        # TODO: use match case to avoid dropping cases
         if chord.quality in [Quality.Minor, Quality.Diminished]:
             function = function.lower()
         if chord.quality == Quality.Diminished:
             function += Quality.Diminished.to_str()
         if chord.quality == Quality.Augmented:
             function += Quality.Augmented.to_str()
+        if chord.quality == Quality.HalfDiminished:
+            function += Quality.HalfDiminished.to_str()
         if chord.extension == Extension.Seven:
             function += Extension.Seven.to_str()
         if chord.extension == Extension.MajorSeven:
             function += Extension.MajorSeven.to_str()
+        if chord.extension == Extension.Nine:
+            function += Extension.Nine.to_str()
+        if chord.extension == Extension.MajorNine:
+            function += Extension.MajorNine.to_str()
+        if chord.extension == Extension.Eleven:
+            function += Extension.Eleven.to_str()
+        if chord.extension == Extension.Thirteen:
+            function += Extension.Thirteen.to_str()
         if chord.quality == Quality.SusTwo:
             function += Quality.SusTwo.to_str()
         if chord.quality == Quality.SusFour:

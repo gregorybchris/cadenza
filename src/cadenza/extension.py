@@ -10,6 +10,7 @@ class Extension(StrEnum):
     Seven = auto()
     MajorSeven = auto()
     Nine = auto()
+    MajorNine = auto()
     Eleven = auto()
     Thirteen = auto()
 
@@ -19,6 +20,7 @@ class Extension(StrEnum):
             "7": cls.Seven,
             "maj7": cls.MajorSeven,
             "9": cls.Nine,
+            "maj9": cls.MajorNine,
             "11": cls.Eleven,
             "13": cls.Thirteen,
         }
@@ -35,6 +37,8 @@ class Extension(StrEnum):
                 return "maj7"
             case Extension.Nine:
                 return "9"
+            case Extension.MajorNine:
+                return "maj9"
             case Extension.Eleven:
                 return "11"
             case Extension.Thirteen:
