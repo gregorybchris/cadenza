@@ -419,3 +419,13 @@ songs:
     key:
       root: A
       mode: major
+
+  - id: bf6bd49d-81a3-4a94-a501-25a2b738c4d1
+    title: Sober
+    artist: Joy Oladokun
+    chords: |
+      F C Dm F7/C Bb Bb/C F (x2)
+    tempo: 40
+    key:
+      root: F
+      mode: major
