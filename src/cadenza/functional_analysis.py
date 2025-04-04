@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class FunctionalAnalysis:
     @classmethod
-    def get_chord_function_str(cls, chord: Chord, root: Note) -> str:
+    def get_chord_function_str(cls, chord: Chord, root: Note) -> str:  # noqa: PLR0912
         interval_int = (chord.root.to_integer() - root.to_integer()) % N_NOTES
         interval = Interval.from_int(interval_int)
         try:
