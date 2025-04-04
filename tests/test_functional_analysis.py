@@ -12,7 +12,7 @@ class TestFunctionalAnalysis:
             ("B7", Note.new_d(), "VI7"),
             ("Bbmaj7", Note.new_e_flat(), "Vmaj7"),
             ("C#dim", Note.new_g_sharp(), "iv°"),
-            ("Chalfdim", Note.new_a(), "IIIø"),
+            ("Chalfdim", Note.new_a(), "iiiø"),
             ("D", Note.new_e(), "VII"),
             ("D#aug", Note.new_d_flat(), "II+"),
             ("Emaj7b5", Note.new_f(), "VIImaj7"),

@@ -28,7 +28,7 @@ class FunctionalAnalysis:
         function = scale_degree.to_symbol()
 
         # TODO: use match case to avoid dropping cases
-        if chord.quality in [Quality.Minor, Quality.Diminished]:
+        if chord.quality in [Quality.Minor, Quality.Diminished, Quality.HalfDiminished]:
             function = function.lower()
         if chord.quality == Quality.Diminished:
             function += Quality.Diminished.to_str()
