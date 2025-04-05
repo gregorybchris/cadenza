@@ -5,7 +5,7 @@ logger = logging.getLogger(__name__)
 
 
 class OrganPipeFamily(StrEnum):
-    Strings = auto()
-    Principals = auto()
     Flutes = auto()
+    Principals = auto()
     Reeds = auto()
+    Strings = auto()

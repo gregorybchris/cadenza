@@ -6,7 +6,8 @@ import torch.fft
 from torch import Tensor
 
 from cadenza.envelope import Envelope
-from cadenza.organ_pipe_length import OrganPipeLength
+from cadenza.organ_args import OrganArgs
+from cadenza.organ_pipe_family import OrganPipeFamily
 from cadenza.reverb_model import ReverbModel
 from cadenza.tremolo_args import Tremolo, TremoloArgs
 
@@ -15,7 +16,7 @@ from cadenza.tremolo_args import Tremolo, TremoloArgs
 class SynthArgs:
     sample_rate: int
     tremolo_args: Optional[TremoloArgs] = None
-    use_overtones: bool = False
+    organ_args: Optional[OrganArgs] = None
     lowpass_cutoff: Optional[float] = None
     highpass_cutoff: Optional[float] = None
     envelope: Optional[Envelope] = field(default_factory=Envelope)
@@ -30,25 +31,18 @@ class Synth:
 
     def generate(self, frequencies: Tensor, duration_s: float) -> Tensor:
         # Time vector
-        t = torch.linspace(0, duration_s, int(self.args.sample_rate * duration_s), dtype=torch.float32)
+        time_tensor = torch.linspace(0, duration_s, int(self.args.sample_rate * duration_s), dtype=torch.float32)
 
         # Generate sine waves
         amplitude = 0.5
-        tones = torch.stack([amplitude * torch.sin(2 * torch.pi * freq * t) for freq in frequencies])
+        tones = torch.stack([amplitude * torch.sin(2 * torch.pi * freq * time_tensor) for freq in frequencies])
 
         # Merge tones by summing them
         audio = tones.sum(dim=0)
 
-        if self.args.use_overtones:
+        if self.args.organ_args:
             # Add overtones using organ stops
-            for freq in frequencies:
-                for pipe_length in OrganPipeLength:
-                    multiplier = pipe_length.get_multiplier()
-                    overtone_decay = self._get_overtone_decay(pipe_length)
-                    overtone = freq * multiplier
-                    overtone_amplitude = overtone_decay * amplitude
-                    overtone_waveform = overtone_amplitude * torch.sin(2 * torch.pi * overtone * t)
-                    audio += overtone_waveform
+            audio = self._apply_overtones(audio, self.args.organ_args, frequencies, amplitude, time_tensor)
 
         if self.args.tremolo_args:
             # Apply tremolo effect
@@ -65,21 +59,6 @@ class Synth:
         audio /= len(frequencies)
 
         return audio
-
-    def _get_overtone_decay(self, pipe_length: OrganPipeLength) -> float:
-        match pipe_length:
-            case OrganPipeLength.TwoFoot:
-                return 1 / 9
-            case OrganPipeLength.FourFoot:
-                return 1 / 4
-            case OrganPipeLength.EightFoot:
-                return 1
-            case OrganPipeLength.SixteenFoot:
-                return 1 / 4
-            case OrganPipeLength.ThirtyTwoFoot:
-                return 1 / 9
-            case OrganPipeLength.SixtyFourFoot:
-                return 1 / 16
 
     def concat(self, segments: list[Tensor]) -> Tensor:
         fade_duration_s = 0.05
@@ -106,6 +85,41 @@ class Synth:
 
         return torch.cat(new_segments)
 
+    def _apply_overtones(
+        self,
+        audio: Tensor,
+        organ_args: OrganArgs,
+        played_frequencies: Tensor,
+        amplitude: float,
+        time_tensor: Tensor,
+    ) -> Tensor:
+        for played_frequency in played_frequencies:
+            for stop in organ_args.stops:
+                pipe_length_multiplier = stop.pipe_length.get_pitch_multiplier()
+                fundamental = played_frequency * pipe_length_multiplier
+                overtone_amplitudes = self._get_overtone_amplitudes(stop.pipe_family)
+                for overtone_number, overtone_amplitude in enumerate(overtone_amplitudes):
+                    overtone_multiplier = overtone_number + 1
+                    overtone_frequency = fundamental * overtone_multiplier
+                    audio += amplitude * overtone_amplitude * torch.sin(2 * torch.pi * overtone_frequency * time_tensor)
+        return audio
+
+    def _get_overtone_amplitudes(self, pipe_family: OrganPipeFamily) -> list[float]:
+        match pipe_family:
+            case OrganPipeFamily.Strings:
+                return [0.70, 0.20, 0.20, 0.1, 0.06, 0.04, 0.03, 0.02, 0.01]
+            case OrganPipeFamily.Flutes:
+                return [0.70, 0.02, 0.01]
+            case OrganPipeFamily.Principals:
+                return [0.90, 0.50, 0.20, 0.10, 0.05]
+            case OrganPipeFamily.Reeds:
+                return [0.50, 0.2, 0.1, 0.08, 0.03]
+
+    def _apply_tremolos(self, audio: Tensor, tremolo_args: TremoloArgs) -> Tensor:
+        for tremolo in tremolo_args.tremolos:
+            audio = self._apply_tremolo(audio, tremolo)
+        return audio
+
     def _apply_tremolo(self, audio: Tensor, tremolo: Tremolo) -> Tensor:
         sample_rate = self.args.sample_rate
         audio_duration = len(audio) / sample_rate
@@ -114,11 +128,6 @@ class Synth:
         height = 1.0 - tremolo.dip
         amplitude = tremolo.dip + height * torch.sin(2 * torch.pi * tremolo.frequency * t)
         return audio * amplitude
-
-    def _apply_tremolos(self, audio: Tensor, tremolo_args: TremoloArgs) -> Tensor:
-        for tremolo in tremolo_args.tremolos:
-            audio = self._apply_tremolo(audio, tremolo)
-        return audio
 
     def _apply_envelope(self, audio: Tensor, envelope: Envelope) -> Tensor:
         duration_s = len(audio) / self.args.sample_rate

@@ -12,20 +12,12 @@ class OrganPipeLength(StrEnum):
     ThirtyTwoFoot = auto()
     SixtyFourFoot = auto()
 
-    def get_multiplier(self) -> float:
-        match self:
-            case OrganPipeLength.TwoFoot:
-                return 1 / 4
-            case OrganPipeLength.FourFoot:
-                return 1 / 2
-            case OrganPipeLength.EightFoot:
-                return 1
-            case OrganPipeLength.SixteenFoot:
-                return 2
-            case OrganPipeLength.ThirtyTwoFoot:
-                return 4
-            case OrganPipeLength.SixtyFourFoot:
-                return 8
+    @classmethod
+    def base(cls) -> "OrganPipeLength":
+        return OrganPipeLength.EightFoot
+
+    def get_pitch_multiplier(self) -> float:
+        return self.get_number() / self.base().get_number()
 
     def get_number(self) -> int:
         match self:

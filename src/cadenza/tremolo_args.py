@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 from typing import Self
 
+from pydantic import BaseModel
 
-@dataclass(kw_only=True)
-class Tremolo:
+
+class Tremolo(BaseModel):
     frequency: float
     dip: float
 
