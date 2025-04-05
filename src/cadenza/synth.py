@@ -8,12 +8,13 @@ from torch import Tensor
 from cadenza.envelope import Envelope
 from cadenza.organ_pipe_length import OrganPipeLength
 from cadenza.reverb_model import ReverbModel
+from cadenza.tremolo import Tremolo, TremoloArgs
 
 
 @dataclass(kw_only=True)
 class SynthArgs:
     sample_rate: int
-    use_tremolo: bool = False
+    tremolo_args: Optional[TremoloArgs] = None
     use_overtones: bool = False
     lowpass_cutoff: Optional[float] = None
     highpass_cutoff: Optional[float] = None
@@ -49,9 +50,9 @@ class Synth:
                     overtone_waveform = overtone_amplitude * torch.sin(2 * torch.pi * overtone * t)
                     audio += overtone_waveform
 
-        if self.args.use_tremolo:
+        if self.args.tremolo_args:
             # Apply tremolo effect
-            audio = self._apply_hammond_tremolo(audio)
+            audio = self._apply_tremolos(audio, self.args.tremolo_args)
 
         # Apply ADSR envelope
         if self.args.envelope is not None:
@@ -105,23 +106,19 @@ class Synth:
 
         return torch.cat(new_segments)
 
-    def _apply_tremolo(self, audio: Tensor, *, frequency: float, dip: float) -> Tensor:
+    def _apply_tremolo(self, audio: Tensor, tremolo: Tremolo) -> Tensor:
         sample_rate = self.args.sample_rate
         audio_duration = len(audio) / sample_rate
 
         t = torch.linspace(0, audio_duration, len(audio), dtype=torch.float32)
-        height = 1.0 - dip
-        amplitude = dip + height * torch.sin(2 * torch.pi * frequency * t)
+        height = 1.0 - tremolo.dip
+        amplitude = tremolo.dip + height * torch.sin(2 * torch.pi * tremolo.frequency * t)
         return audio * amplitude
 
-    def _apply_hammond_tremolo(self, audio: Tensor) -> Tensor:
-        # Apply high frequency tremolo
-        audio = self._apply_tremolo(audio, frequency=5.2, dip=0.92)
-
-        # Apply low frequency tremolo, like the Leslie effect on a Hammond organ
-        audio = self._apply_tremolo(audio, frequency=1.7, dip=0.92)
-
-        return audio  # noqa: RET504
+    def _apply_tremolos(self, audio: Tensor, tremolo_args: TremoloArgs) -> Tensor:
+        for tremolo in tremolo_args.tremolos:
+            audio = self._apply_tremolo(audio, tremolo)
+        return audio
 
     def _apply_envelope(self, audio: Tensor, envelope: Envelope) -> Tensor:
         duration_s = len(audio) / self.args.sample_rate

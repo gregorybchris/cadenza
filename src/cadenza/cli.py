@@ -21,6 +21,7 @@ from cadenza.player import Player
 from cadenza.saver import Saver
 from cadenza.synth import Synth, SynthArgs
 from cadenza.transposer import Transposer
+from cadenza.tremolo import TremoloArgs
 from cadenza.visualizer import Visualizer, VisualizerArgs
 from cadenza.voicing import Voicing
 
@@ -70,9 +71,10 @@ def note(  # noqa: PLR0913
     note = Transposer.transpose_note(note, transpose, scale=DiatonicScale.major(note))
     pitch = Pitch(note=note, octave=octave)
 
+    tremolo_args = TremoloArgs.hammond() if use_tremolo else None
     synth_args = SynthArgs(
         sample_rate=sample_rate,
-        use_tremolo=use_tremolo,
+        tremolo_args=tremolo_args,
         use_overtones=use_overtones,
         lowpass_cutoff=lowpass_cutoff,
         highpass_cutoff=highpass_cutoff,
@@ -134,9 +136,10 @@ def chord(  # noqa: PLR0913
     chord = Transposer.transpose_chord_unsafe(chord, transpose)
     console.print(f"[red]{chord.to_str(symbols=show_symbols)}")
 
+    tremolo_args = TremoloArgs.hammond() if use_tremolo else None
     synth_args = SynthArgs(
         sample_rate=sample_rate,
-        use_tremolo=use_tremolo,
+        tremolo_args=tremolo_args,
         use_overtones=use_overtones,
         lowpass_cutoff=lowpass_cutoff,
         highpass_cutoff=highpass_cutoff,
@@ -197,9 +200,10 @@ def chords(  # noqa: PLR0913
 ) -> None:
     set_logger_config(info, debug)
 
+    tremolo_args = TremoloArgs.hammond() if use_tremolo else None
     synth_args = SynthArgs(
         sample_rate=sample_rate,
-        use_tremolo=use_tremolo,
+        tremolo_args=tremolo_args,
         use_overtones=use_overtones,
         lowpass_cutoff=lowpass_cutoff,
         highpass_cutoff=highpass_cutoff,
@@ -273,9 +277,10 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
 ) -> None:
     set_logger_config(info, debug)
 
+    tremolo_args = TremoloArgs.hammond() if use_tremolo else None
     synth_args = SynthArgs(
         sample_rate=sample_rate,
-        use_tremolo=use_tremolo,
+        tremolo_args=tremolo_args,
         use_overtones=use_overtones,
         lowpass_cutoff=lowpass_cutoff,
         highpass_cutoff=highpass_cutoff,
@@ -429,11 +434,7 @@ def optimize(  # noqa: PLR0913
     optimizer = Optimizer(args=optimizer_args)
     optimized_frequencies = optimizer.optimize(unoptimized_frequencies)
 
-    synth_args = SynthArgs(
-        sample_rate=sample_rate,
-        use_tremolo=False,
-        use_overtones=False,
-    )
+    synth_args = SynthArgs(sample_rate=sample_rate)
     synth = Synth(args=synth_args)
     unoptimized_audio = synth.generate(unoptimized_frequencies, duration_s)
     optimized_audio = synth.generate(optimized_frequencies, duration_s)
