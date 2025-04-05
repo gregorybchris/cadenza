@@ -101,6 +101,7 @@ class Synth:
                 for overtone_number, overtone_amplitude in enumerate(overtone_amplitudes):
                     overtone_multiplier = overtone_number + 1
                     overtone_frequency = fundamental * overtone_multiplier
+                    # TODO: Normalize to avoid more overtones causing clipping
                     audio += amplitude * overtone_amplitude * torch.sin(2 * torch.pi * overtone_frequency * time_tensor)
         return audio
 
