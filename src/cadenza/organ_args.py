@@ -26,14 +26,16 @@ class OrganArgs:
     @classmethod
     def default(cls) -> Self:
         stops = [
-            OrganStop.new(OrganPipeFamily.Principals, OrganPipeLength.TwoFoot),
             OrganStop.new(OrganPipeFamily.Principals, OrganPipeLength.FourFoot),
             OrganStop.new(OrganPipeFamily.Principals, OrganPipeLength.EightFoot),
             OrganStop.new(OrganPipeFamily.Principals, OrganPipeLength.SixteenFoot),
+            OrganStop.new(OrganPipeFamily.Principals, OrganPipeLength.ThirtyTwoFoot),
             OrganStop.new(OrganPipeFamily.Strings, OrganPipeLength.EightFoot),
+            OrganStop.new(OrganPipeFamily.Strings, OrganPipeLength.SixteenFoot),
             OrganStop.new(OrganPipeFamily.Flutes, OrganPipeLength.FourFoot),
             OrganStop.new(OrganPipeFamily.Flutes, OrganPipeLength.EightFoot),
             OrganStop.new(OrganPipeFamily.Flutes, OrganPipeLength.SixteenFoot),
+            OrganStop.new(OrganPipeFamily.Flutes, OrganPipeLength.ThirtyTwoFoot),
             OrganStop.new(OrganPipeFamily.Reeds, OrganPipeLength.EightFoot),
         ]
         return cls(stops=stops)
