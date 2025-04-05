@@ -15,7 +15,7 @@ class OrganPipeLength(StrEnum):
     def get_multiplier(self) -> float:
         match self:
             case OrganPipeLength.TwoFoot:
-                return 1 / 3
+                return 1 / 4
             case OrganPipeLength.FourFoot:
                 return 1 / 2
             case OrganPipeLength.EightFoot:
@@ -23,9 +23,9 @@ class OrganPipeLength(StrEnum):
             case OrganPipeLength.SixteenFoot:
                 return 2
             case OrganPipeLength.ThirtyTwoFoot:
-                return 3
-            case OrganPipeLength.SixtyFourFoot:
                 return 4
+            case OrganPipeLength.SixtyFourFoot:
+                return 8
 
     def get_number(self) -> int:
         match self:

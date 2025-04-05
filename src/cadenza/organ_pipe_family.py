@@ -4,7 +4,7 @@ from enum import StrEnum, auto
 logger = logging.getLogger(__name__)
 
 
-class OrganPipeType(StrEnum):
+class OrganPipeFamily(StrEnum):
     Strings = auto()
     Principals = auto()
     Flutes = auto()
