@@ -8,7 +8,7 @@ from torch import Tensor
 from cadenza.envelope import Envelope
 from cadenza.organ_pipe_length import OrganPipeLength
 from cadenza.reverb_model import ReverbModel
-from cadenza.tremolo import Tremolo, TremoloArgs
+from cadenza.tremolo_args import Tremolo, TremoloArgs
 
 
 @dataclass(kw_only=True)

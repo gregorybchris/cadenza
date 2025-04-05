@@ -21,7 +21,7 @@ from cadenza.player import Player
 from cadenza.saver import Saver
 from cadenza.synth import Synth, SynthArgs
 from cadenza.transposer import Transposer
-from cadenza.tremolo import TremoloArgs
+from cadenza.tremolo_args import TremoloArgs
 from cadenza.visualizer import Visualizer, VisualizerArgs
 from cadenza.voicing import Voicing
 
