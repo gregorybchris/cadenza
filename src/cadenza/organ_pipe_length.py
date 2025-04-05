@@ -17,7 +17,7 @@ class OrganPipeLength(StrEnum):
         return OrganPipeLength.EightFoot
 
     def get_pitch_multiplier(self) -> float:
-        return self.get_number() / self.base().get_number()
+        return self.base().get_number() / self.get_number()
 
     def get_number(self) -> int:
         match self:
