@@ -93,16 +93,21 @@ class Synth:
         amplitude: float,
         time_tensor: Tensor,
     ) -> Tensor:
+        n_overtones = 0
         for played_frequency in played_frequencies:
             for stop in organ_args.stops:
                 pipe_length_multiplier = stop.pipe_length.get_pitch_multiplier()
                 fundamental = played_frequency * pipe_length_multiplier
                 overtone_amplitudes = self._get_overtone_amplitudes(stop.pipe_family)
                 for overtone_number, overtone_amplitude in enumerate(overtone_amplitudes):
+                    n_overtones += 1
                     overtone_multiplier = overtone_number + 1
                     overtone_frequency = fundamental * overtone_multiplier
-                    # TODO: Normalize to avoid more overtones causing clipping
                     audio += amplitude * overtone_amplitude * torch.sin(2 * torch.pi * overtone_frequency * time_tensor)
+
+        # Normalize by the number of overtones added
+        if n_overtones > 0:
+            audio /= n_overtones
         return audio
 
     def _get_overtone_amplitudes(self, pipe_family: OrganPipeFamily) -> list[float]:
@@ -172,7 +177,7 @@ class Synth:
         return torch.fft.ifft(fft_filtered).real
 
     def apply_cathedral_reverb(self, audio: Tensor) -> Tensor:
-        return self.apply_reverb(audio, delay_s=0.3, feedback=0.5)
+        return self.apply_reverb(audio, delay_s=0.1, feedback=0.5)
 
     def apply_reverb(self, audio: Tensor, delay_s: float, feedback: float) -> Tensor:
         delay_samples = int(self.args.sample_rate * delay_s)
