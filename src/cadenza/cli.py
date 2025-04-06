@@ -62,7 +62,7 @@ def note(  # noqa: PLR0913
     play: Annotated[bool, Option("--play/--no-play")] = True,
     show_pitch: Annotated[bool, Option("--pitch/--no-pitch")] = True,
     visualize: Annotated[bool, Option("--visualize/--no-visualize")] = False,
-    filepath: Optional[Path] = None,
+    filepath: Annotated[Optional[Path], Option("--filepath")] = None,
     info: bool = False,
     debug: bool = False,
 ) -> None:
@@ -127,7 +127,7 @@ def chord(  # noqa: PLR0913
     play: Annotated[bool, Option("--play/--no-play")] = True,
     show_pitches: Annotated[bool, Option("--pitches/--no-pitches")] = True,
     visualize: Annotated[bool, Option("--visualize/--no-visualize")] = False,
-    filepath: Optional[Path] = None,
+    filepath: Annotated[Optional[Path], Option("--filepath")] = None,
     info: bool = False,
     debug: bool = False,
 ) -> None:
@@ -197,7 +197,7 @@ def chords(  # noqa: PLR0913
     include_left_hand: Annotated[bool, Option("--include-left-hand/--no-left-hand")] = False,
     play: Annotated[bool, Option("--play/--no-play")] = True,
     visualize: Annotated[bool, Option("--visualize/--no-visualize")] = False,
-    filepath: Optional[Path] = None,
+    filepath: Annotated[Optional[Path], Option("--filepath")] = None,
     info: bool = False,
     debug: bool = False,
 ) -> None:
@@ -275,7 +275,7 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     start_line: Annotated[int, Option("--line")] = 1,
     spacious: Annotated[bool, Option("--spacious/--no-spacious")] = False,
     visualize: Annotated[bool, Option("--visualize/--no-visualize")] = False,
-    filepath: Optional[Path] = None,
+    filepath: Annotated[Optional[Path], Option("--filepath")] = None,
     info: bool = False,
     debug: bool = False,
 ) -> None:
@@ -407,8 +407,9 @@ def optimize(  # noqa: PLR0913
     include_left_hand: Annotated[bool, Option("--include-left-hand/--no-left-hand")] = False,
     play: Annotated[bool, Option("--play/--no-play")] = True,
     show_pitches: Annotated[bool, Option("--pitches/--no-pitches")] = True,
-    unoptimized_filepath: Optional[Path] = None,
-    optimized_filepath: Optional[Path] = None,
+    unoptimized_filepath: Annotated[Optional[Path], Option("--unoptimized-filepath")] = None,
+    optimized_filepath: Annotated[Optional[Path], Option("--optimized-filepath")] = None,
+    use_overtones: Annotated[bool, Option("--overtones/--no-overtones")] = False,
     n_epochs: Annotated[int, Option("--n-epochs")] = 1000,
     learning_rate: Annotated[float, Option("--learning-rate", "-lr")] = 0.01,
     max_denominator: Annotated[int, Option("--max-denominator")] = 6,
@@ -439,7 +440,14 @@ def optimize(  # noqa: PLR0913
     optimizer = Optimizer(args=optimizer_args)
     optimized_frequencies = optimizer.optimize(unoptimized_frequencies)
 
-    synth_args = SynthArgs(sample_rate=sample_rate)
+    organ_args = OrganArgs.default() if use_overtones else None
+    synth_args = SynthArgs(
+        sample_rate=sample_rate,
+        tremolo_args=None,
+        organ_args=organ_args,
+        lowpass_cutoff=None,
+        highpass_cutoff=None,
+    )
     synth = Synth(args=synth_args)
     unoptimized_audio = synth.generate(unoptimized_frequencies, duration_s)
     optimized_audio = synth.generate(optimized_frequencies, duration_s)
