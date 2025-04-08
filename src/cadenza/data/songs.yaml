@@ -429,3 +429,93 @@ songs:
     key:
       root: F
       mode: major
+
+  - id: 7be88564-bab3-4980-a420-6e1f7221bb9a
+    title: Lean On Me
+    artist: Bill Withers
+    chords: |
+      Ab (x4)
+      Ab Db/Bb Ab/C Db
+      Db (x4)
+      Db Ab/C Db/Bb Ab
+      Ab (x4)
+      Ab Db/Bb Ab/C Eb
+      Eb Eb Eb Ab/C
+      Ab/C (x4)
+      Ab (x4)
+      Ab Db/Bb Ab/C Db
+      Db (x4)
+      Db Ab/C Db/Bb Ab
+      Ab (x4)
+      Ab Db/Bb Ab/C Eb7
+      Eb7 Eb7 Eb7 Ab
+      Ab (x4)
+    voicings:
+      - { chord: Ab, inversion: second, octave: 3 }
+      - { chord: Bb/Bb, inversion: first, octave: 3 }
+      - { chord: Ab/C, inversion: second, octave: 3 }
+      - { chord: Db, inversion: first, octave: 3 }
+      - { chord: Eb, inversion: first, octave: 3 }
+      - { chord: Eb7, inversion: first, octave: 3 }
+    tempo: 120
+    key:
+      root: Ab
+      mode: major
+
+  - id: 2ab9ca41-4d76-4805-98a9-8082b21f3630
+    title: War In Your Arms
+    artist: Ben Abraham
+    chords: |
+      Bbm Db/F Gb Gb
+      Bbm Db/F Gb Gb
+      ~ Order of these chords is probably wrong
+      Bbm Ab Db/F Gb
+      Db/F Gb Bbm
+      Ab Gb
+    voicings:
+      - { chord: Db/F, inversion: second, octave: 3 }
+      - { chord: Gb, inversion: second, octave: 3 }
+      - { chord: Ab, inversion: second, octave: 3 }
+      - { chord: Db, inversion: first, octave: 3 }
+    tempo: 40
+    key:
+      root: B
+      mode: minor
+
+  - id: 3ebf7f10-e477-4a84-ad14-3eb92807fae3
+    title: Sink In
+    artist: Amelia Day, Miki Fiki
+    chords: |
+      D D F# F# G G G G Em7 Em7 D/F# D/F# G G G G (x3)
+      Am7 Am7 Am7 Am7 Em Em D/F# D/F#
+      G G D D A A A A#dim Bm7 Bm7 Bm7 A G G G G (x2)
+      Em Em Em D/F# G G G G
+      D D D D D D D D
+      Em Em Em D/F# G G G G
+    tempo: 80
+    key:
+      root: D
+      mode: major
+
+  - id: bf6385c9-4c7d-4678-ba49-f2f20c7f9b85
+    title: Cheap Date
+    artist: Caitlyn Smith
+    chords: |
+      Dsus4 D Dsus4 D
+      Em7 G D
+      D Em7 D/F# G G/A D
+      C D Em G
+      D/A Bm Em7 D/F# G G/A
+      F# Bm E Em G Gsus4 D
+      D Em7 D/F# G G/A D
+      C D Em G
+      D/A Bm Em7 D/F# G G#dim A Gdim
+      F# Bm E Em7 G G/A D
+      A Bm Em7 A A Bm Em7 Em7/A
+      D/A Bm Em7 D/F# G G#dim A Gdim
+      F# Bm E Em G G/A D
+      Em7 D/F# G G/A D
+    tempo: 50
+    key:
+      root: D
+      mode: major
