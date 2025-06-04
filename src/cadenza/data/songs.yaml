@@ -384,7 +384,7 @@ songs:
       A C#m/G# F#m A/E
       D2 D2 F#m A/E
       ~ Riff: E -> F -> F#
-      F# A/E Dmaj7 Dmaj7 (x2)
+      F#m A/E Dmaj7 Dmaj7 (x2)
     voicings:
       - { chord: C#m/G#, inversion: first, octave: 4 }
       - { chord: A/E, inversion: second, octave: 3 }
