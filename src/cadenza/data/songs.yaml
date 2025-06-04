@@ -4,8 +4,8 @@ songs:
     artist: Ben Rector
     chords: |
       D F#m Bm G
-      D F#m Bm D7 G D E7 G
-      D F# Bm D7 G D E7 G/A
+      D F#m Bm D7/A G D/F# E7 G
+      D F# Bm D7/A G D/F# E7 G/A
       D D D
     tempo: 35
     beat_duration: whole
