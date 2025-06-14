@@ -20,6 +20,10 @@ By default the synthesizer uses a reference frequency of 440.0 Hz (for the pitch
 
 [A video of oscilloscope visualizations of just intonation vs equal temperament](https://www.youtube.com/watch?v=6NlI4No3s0M)
 
+## Chord library
+
+You can find a collection of songs with chords transcribed in [songs.yaml](./src/cadenza/data/songs.yaml).
+
 ## Installation
 
 Install using [uv](https://docs.astral.sh/uv)
