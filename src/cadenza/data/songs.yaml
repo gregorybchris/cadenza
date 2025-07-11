@@ -519,3 +519,52 @@ songs:
     key:
       root: D
       mode: major
+
+  - id: 04d8c12f-94dc-4d8b-81c1-377bb0bc9f32
+    title: II MOST WANTED
+    artist: Beyoncé, Miley Cyrus
+    chords: |
+      Db Ab/C Db/Bb Ab/C (x4)
+    voicings:
+      - { chord: Db, inversion: second, octave: 4 }
+      - { chord: Ab/C, inversion: root, octave: 4 }
+      - { chord: Db/Bb, inversion: first, octave: 4 }
+    tempo: 35
+    key:
+      root: Ab
+      mode: major
+
+  - id: 40488bb2-ca49-44aa-8dcf-169cfa538cd7
+    title: Washed by the Water
+    artist: NEEDTOBREATHE
+    chords: |
+      ~ Riff: F# G# B G# B
+      B Eadd2 G#m F#
+      ~ Passing tones: F# G#
+      B B/D# E G#m E B E (x3)
+      B B/D# E E/F# (x4)
+      G#m E B (x3)
+      F# E
+      B B/D# E E/F# (x8)
+      B E G#m F# (x3)
+      B
+    voicings:
+      - { chord: Eadd2, inversion: first, octave: 4 }
+    tempo: 90
+    key:
+      root: B
+      mode: major
+
+  - id: b6fdf6de-ddcc-4a50-bedc-8f3012a27669
+    title: If I'm Honest
+    artist: Trousdale
+    chords: |
+      Fm7 Fm7 Fm7 Fm7 Cm7 Cm7 Cm7 Cm7 Eb Eb Eb Eb Bb Bb Bb Bb (x2)
+      Fm7 Fm7 Fm7 Fm7 Cm7 Cm7 Cm7 Cm7 Eb Eb Eb Eb Cm Bb/D Eb Eb
+      Fm7 Fm7 Fm7 Fm7 Ab Ab Ab Ab Cm7 Cm7 Cm7 Cm7 Cm Bb/D Eb Eb
+      Fm7 Fm7 Fm7 Fm7 Ab Ab Bb Bb Gm7 Gm7 Cm7 Cm7 Bb Bb Bb Bb
+      Fm7 Fm7 Fm7 Fm7 Cm7 Cm7 Cm7 Cm7 Eb Eb Eb Eb Bb Bb Bb Bb
+    tempo: 90
+    key:
+      root: Eb
+      mode: major
