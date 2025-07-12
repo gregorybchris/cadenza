@@ -11,11 +11,12 @@ dependencies = [
     "soundfile>=0.13.1",
     "torch>=2.6.0",
     "torchaudio>=2.6.0",
-    "typer>=0.15.2",
+    "typer>=0.16.0",
     "types-pyyaml>=6.0.12.20241230",
 ]
 description = "Exploration of music theory."
 keywords = ["chord", "progression", "modulator", "music", "theory", "song"]
+license = { text = "MIT" }
 name = "cadenza"
 readme = "README.md"
 requires-python = ">=3.12"
