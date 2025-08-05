@@ -568,3 +568,27 @@ songs:
     key:
       root: Eb
       mode: major
+
+  - id: 5cca9740-e2c3-47ea-8b4e-8f9b8a185a52
+    title: I'm Breaking My Father's Heart
+    artist: Kenton
+    chords: |
+      B F# C#
+      D#m7 B F# C# B F# (x2)
+      B F# C# D#m C#
+      B F# C# (x2)
+      B F# C# D#m C#
+      B F# C# Ddim D#m7
+      Badd2 F# C#sus4
+      D#m7 B F# C# B F# (x2)
+      B F# C# D#m C#
+      B F# C# (x2)
+      B F# C# D#m C#
+      B F# C# Ddim D#m7
+      Badd2 F# C#sus4
+      B F# C# D#m
+      B F# C#
+    tempo: 30
+    key:
+      root: F#
+      mode: major
