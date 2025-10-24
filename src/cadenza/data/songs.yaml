@@ -612,3 +612,18 @@ songs:
     key:
       root: D
       mode: major
+
+  - id: 7d3b5610-cc99-48b0-94c0-83b944b5f0a9
+    title: Love Song
+    artist: Sara Bareilles
+    chords: |
+      Gb Gm Gm Gm F/A Bbsus2 Bbsus2 Bbsus2 C Dm Dm Dm C/E F F F (x2)
+    voicings:
+      - { chord: C, inversion: second, octave: 4 }
+      - { chord: Dm, inversion: root, octave: 5 }
+      - { chord: C/E, inversion: root, octave: 5 }
+      - { chord: F, inversion: second, octave: 4 }
+    tempo: 100
+    key:
+      root: G
+      mode: minor
