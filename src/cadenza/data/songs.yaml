@@ -627,3 +627,38 @@ songs:
     key:
       root: G
       mode: minor
+
+  - id: 1b7c8f3b-93dd-4140-a5ab-d3383f07f6ab
+    title: Love Came For Me
+    artist: Shannon J. Wexelberg
+    chords: |
+      Bm A/C# D Gsus2 (x2)
+
+      Bm A/C# D Gsus2
+      Em G/D Asus4 A/G
+      D/F# G F#7/A# Bm
+      E/G# A D/F# G A7sus4
+      Bm A/C# D Gsus2
+
+      Bm A/C# D Gsus2
+      Em G/D Asus4 A/G
+      D/F# G F#7/A# Bm
+      E/G# A D/F# G2/E
+      A7sus4 D Bm7 Em7 A7sus4
+      Bm E7/G# Em7 A7sus4
+
+      Bm A/C# D Gsus2
+      Bm A/C# D Gsus2
+      Em G/D Asus4 A/G
+      D/F# G F#7/A# Bm
+      E/G# A D/F# G2
+      D/F# E/G# A7sus4 A D/F# G2/E A7sus4
+
+      D D/C# Bm7 Em7 A7sus4 A
+      Bm E7/G# Em7 G/D A7sus4
+      Bm7 E/G# Em7 G/D A7sus4 A6
+      Bm A/C# D G2 G Gmaj7 G6 D
+    tempo: 40
+    key:
+      root: D
+      mode: major
