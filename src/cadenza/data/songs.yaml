@@ -662,3 +662,36 @@ songs:
     key:
       root: D
       mode: major
+
+  - id: a6422f2b-bec9-4f65-85de-7c09f658e7c5
+    title: Goodness of God
+    artist: Cece Winans
+    chords: |
+      ~ Verse
+      G C G D/F# Em C D
+      Em C G D/F# Em
+      C D G
+      ~ Chorus
+      C G
+      C G D
+      C G D/F# Em
+      C D G
+      ~ Back to verse
+      ~ Back to chorus
+      ~ Bridge
+      G/B Cadd2 Dsus4 G
+      G/B Cadd2 Dsus4 G
+      G/B C D D#dim Em
+      G/B Cadd2 Dsus4 G
+    voicings:
+      - { chord: G, inversion: first, octave: 4 }
+      - { chord: C, inversion: root, octave: 4 }
+      - { chord: D/F#, inversion: first, octave: 3 }
+      - { chord: Em, inversion: root, octave: 3 }
+      - { chord: G/B, inversion: first, octave: 4 }
+      - { chord: Cadd2, inversion: root, octave: 4 }
+      - { chord: Dsus4, inversion: second, octave: 3 }
+    tempo: 30
+    key:
+      root: G
+      mode: major
