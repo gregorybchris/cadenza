@@ -1,8 +1,14 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-import torchaudio
-from torch import Tensor
+from cadenza.audio.errors import require_audio
+
+try:
+    import torchaudio
+    from torch import Tensor
+except ImportError:
+    require_audio("Saving audio to a file")
+    raise
 
 
 @dataclass(kw_only=True)

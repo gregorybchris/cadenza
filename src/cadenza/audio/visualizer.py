@@ -1,8 +1,14 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from torch import Tensor
-from torchaudio.transforms import AmplitudeToDB, MelSpectrogram
+from cadenza.audio.errors import require_audio
+
+try:
+    from torch import Tensor
+    from torchaudio.transforms import AmplitudeToDB, MelSpectrogram
+except ImportError:
+    require_audio("Audio visualization")
+    raise
 
 try:
     import matplotlib.pyplot as plt

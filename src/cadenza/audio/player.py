@@ -1,7 +1,13 @@
 from dataclasses import dataclass
 
-import sounddevice
-from torch import Tensor
+from cadenza.audio.errors import require_audio
+
+try:
+    import sounddevice
+    from torch import Tensor
+except ImportError:
+    require_audio("Audio playback")
+    raise
 
 
 @dataclass(kw_only=True)

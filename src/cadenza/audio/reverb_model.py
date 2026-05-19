@@ -1,5 +1,11 @@
-import torch
-from torch import Tensor
+from cadenza.audio.errors import require_audio
+
+try:
+    import torch
+    from torch import Tensor
+except ImportError:
+    require_audio("Reverb modeling")
+    raise
 
 
 class ReverbModel(torch.nn.Module):

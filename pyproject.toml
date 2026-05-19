@@ -3,14 +3,9 @@ authors = [
     { name = "Chris Gregory", email = "christopher.b.gregory@gmail.com" },
 ]
 dependencies = [
-    "numpy>=2.4.6",
     "pydantic>=2.13.4",
     "pyyaml>=6.0.3",
     "rich>=15.0.0",
-    "sounddevice>=0.5.5",
-    "soundfile>=0.13.1",
-    "torch>=2.12.0",
-    "torchaudio>=2.11.0",
     "typer>=0.25.1",
     "types-pyyaml>=6.0.12.20241230",
 ]
@@ -23,6 +18,13 @@ requires-python = ">=3.12"
 version = "0.1.0"
 
 [project.optional-dependencies]
+audio = [
+    "numpy>=2.4.6",
+    "sounddevice>=0.5.5",
+    "soundfile>=0.13.1",
+    "torch>=2.12.0",
+    "torchaudio>=2.11.0",
+]
 plot = ["matplotlib>=3.10.1"]
 
 [dependency-groups]
@@ -35,9 +37,16 @@ dev = [
     "semver>=3.0.4",
 ]
 plot = ["matplotlib>=3.10.1"]
+audio = [
+    "numpy>=2.4.6",
+    "sounddevice>=0.5.5",
+    "soundfile>=0.13.1",
+    "torch>=2.12.0",
+    "torchaudio>=2.11.0",
+]
 
 [tool.uv]
-default-groups = ["dev", "plot"]
+default-groups = ["dev", "plot", "audio"]
 
 [build-system]
 build-backend = "hatchling.build"

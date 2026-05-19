@@ -2,16 +2,11 @@ import logging
 from pathlib import Path
 from typing import TYPE_CHECKING, Annotated, Optional
 
-import torch
 from rich.console import Console
 from rich.logging import RichHandler
 from typer import Argument, Option, Typer
 
-from cadenza.audio.optimizer import Optimizer, OptimizerArgs
-from cadenza.audio.player import Player
-from cadenza.audio.saver import Saver
-from cadenza.audio.synth import Synth, SynthArgs
-from cadenza.audio.visualizer import Visualizer, VisualizerArgs
+from cadenza.audio.errors import require_audio
 from cadenza.core.chord import Chord
 from cadenza.core.composer import Composer
 from cadenza.core.diatonic_scale import DiatonicScale
@@ -25,6 +20,18 @@ from cadenza.core.pitch import Pitch
 from cadenza.core.transposer import Transposer
 from cadenza.core.tremolo_args import TremoloArgs
 from cadenza.core.voicing import Voicing
+
+try:
+    import torch
+
+    from cadenza.audio.optimizer import Optimizer, OptimizerArgs
+    from cadenza.audio.player import Player
+    from cadenza.audio.saver import Saver
+    from cadenza.audio.synth import Synth, SynthArgs
+    from cadenza.audio.visualizer import Visualizer, VisualizerArgs
+except ImportError:
+    require_audio("The cadenza command-line interface")
+    raise
 
 if TYPE_CHECKING:
     from torch import Tensor

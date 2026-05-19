@@ -1,15 +1,21 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-import torch
-import torch.fft
-from torch import Tensor
+from cadenza.audio.errors import require_audio
+from cadenza.core.envelope import Envelope
+from cadenza.core.organ_args import OrganArgs
+from cadenza.core.organ_pipe_family import OrganPipeFamily
+from cadenza.core.tremolo_args import Tremolo, TremoloArgs
 
-from cadenza.envelope import Envelope
-from cadenza.organ_args import OrganArgs
-from cadenza.organ_pipe_family import OrganPipeFamily
-from cadenza.reverb_model import ReverbModel
-from cadenza.tremolo_args import Tremolo, TremoloArgs
+try:
+    import torch
+    import torch.fft
+    from torch import Tensor
+
+    from cadenza.audio.reverb_model import ReverbModel
+except ImportError:
+    require_audio("Audio synthesis")
+    raise
 
 
 @dataclass(kw_only=True)

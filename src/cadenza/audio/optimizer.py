@@ -3,9 +3,16 @@ from dataclasses import dataclass
 from fractions import Fraction
 from typing import Iterator
 
-import torch
 from rich.console import Console
-from torch import Tensor
+
+from cadenza.audio.errors import require_audio
+
+try:
+    import torch
+    from torch import Tensor
+except ImportError:
+    require_audio("Chord frequency optimization")
+    raise
 
 logger = logging.getLogger(__name__)
 
