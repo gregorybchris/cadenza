@@ -1,0 +1,36 @@
+songs:
+  - id: 40488bb2-ca49-44aa-8dcf-169cfa538cd7
+    title: Washed by the Water
+    artist: NEEDTOBREATHE
+    chords: |
+      ~ Riff: F# G# B G# B
+      B Eadd2 G#m F#
+      ~ Passing tones: F# G#
+      B B/D# E G#m E B E (x3)
+      B B/D# E E/F# (x4)
+      G#m E B (x3)
+      F# E
+      B B/D# E E/F# (x8)
+      B E G#m F# (x3)
+      B
+    voicings:
+      - { chord: Eadd2, inversion: first, octave: 4 }
+    tempo: 90
+    key:
+      root: B
+      mode: major
+
+  - id: 7d3b5610-cc99-48b0-94c0-83b944b5f0a9
+    title: Love Song
+    artist: Sara Bareilles
+    chords: |
+      Gb Gm Gm Gm F/A Bbsus2 Bbsus2 Bbsus2 C Dm Dm Dm C/E F F F (x2)
+    voicings:
+      - { chord: C, inversion: second, octave: 4 }
+      - { chord: Dm, inversion: root, octave: 5 }
+      - { chord: C/E, inversion: root, octave: 5 }
+      - { chord: F, inversion: second, octave: 4 }
+    tempo: 100
+    key:
+      root: G
+      mode: minor

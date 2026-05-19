@@ -52,6 +52,9 @@ default-groups = ["dev", "plot", "audio"]
 build-backend = "hatchling.build"
 requires = ["hatchling"]
 
+[tool.hatch.build.targets.sdist]
+exclude = ["planning", "songs.yaml", "dictionaries", ".cspell.json"]
+
 [project.urls]
 repository = "https://github.com/gregorybchris/cadenza"
 

@@ -5,7 +5,7 @@ from cadenza import DiatonicScale, Library, Note, Transposer
 
 class TestE2EModulate:
     def test_modulate_washed_by_the_water_up_three_semitones(self) -> None:
-        library_filepath = Path(__file__).parent.parent / "src" / "cadenza" / "data" / "songs.yaml"
+        library_filepath = Path(__file__).parent / "data" / "library.yaml"
         library = Library.from_file(library_filepath)
 
         song = next(library.search("Washed by the Water"))

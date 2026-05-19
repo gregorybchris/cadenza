@@ -22,7 +22,7 @@ By default the synthesizer uses a reference frequency of 440.0 Hz (for the pitch
 
 ## Chord library
 
-You can find a collection of songs with chords transcribed in [songs.yaml](./src/cadenza/data/songs.yaml).
+You can find a collection of songs with chords transcribed in [songs.yaml](./songs.yaml).
 
 ## Installation
 
@@ -87,50 +87,50 @@ cz chords --tempo 60 --repeat 3 "E C#madd9 Amaj7"
 
 ### Song command
 
-Play a full song
+Play a full song. The song command takes a query followed by a path to a library YAML file (see [songs.yaml](./songs.yaml)).
 
 ```bash
 # Play a song by title
-cz song homesick
+cz song homesick songs.yaml
 
 # Change the octave (default is 4)
-cz song homesick --octave 5
+cz song homesick songs.yaml --octave 5
 
 # Transpose a song into a different key by a number of semitones
-cz song homesick --transpose -2
+cz song homesick songs.yaml --transpose -2
 
 # Change the tempo (in beats per minute)
-cz song homesick --tempo 120
+cz song homesick songs.yaml --tempo 120
 
 # Change the duration of each chord
-cz song homesick --chord-duration eighth
+cz song homesick songs.yaml --chord-duration eighth
 
 # Change the note associated with one beat
-cz song homesick --beat-duration half
+cz song homesick songs.yaml --beat-duration half
 
 # Add pipe organ overtones
-cz song homesick --overtones
+cz song homesick songs.yaml --overtones
 
 # Add tremolo
-cz song homesick --tremolo
+cz song homesick songs.yaml --tremolo
 
 # Add reverb
-cz song homesick --reverb
+cz song homesick songs.yaml --reverb
 
 # Apply a highpass filter
-cz song homesick --overtones --highpass 450
+cz song homesick songs.yaml --overtones --highpass 450
 
 # Save song audio to a file
-cz song homesick --filepath audio.wav
+cz song homesick songs.yaml --filepath audio.wav
 
 # Save a song to a file without playing it
-cz song homesick --filepath audio.wav --no-play
+cz song homesick songs.yaml --filepath audio.wav --no-play
 
 # Save song audio to a file with a different sample rate
-cz song homesick --filepath audio.wav --sample-rate 48000
+cz song homesick songs.yaml --filepath audio.wav --sample-rate 48000
 
 # Visualize the mel spectrogram
-cz song homesick --visualize
+cz song homesick songs.yaml --visualize
 ```
 
 ### Optimize command

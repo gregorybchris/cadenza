@@ -264,6 +264,7 @@ def chords(  # noqa: PLR0913
 @app.command()
 def song(  # noqa: PLR0912, PLR0913, PLR0915
     query: str,
+    library_filepath: Annotated[Path, Argument(help="Path to the library YAML file")],
     octave: Annotated[int, Option("--octave")] = 4,
     transpose: Annotated[int, Option("--transpose")] = 0,
     tempo: Annotated[Optional[float], Option("--tempo")] = None,
@@ -299,7 +300,6 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     )
     synth = Synth(args=synth_args)
 
-    library_filepath = Path(__file__).parent / "data" / "songs.yaml"
     library = Library.from_file(library_filepath)
     results_iter = library.search(query)
 
