@@ -126,7 +126,7 @@ class Composer:
 
         for _ in range(inversion_number):
             pitches[0].octave += 1
-            pitches = pitches[1:] + [pitches[0]]
+            pitches = [*pitches[1:], pitches[0]]
         return pitches
 
     @classmethod
