@@ -1,14 +1,14 @@
 import logging
 
-from cadenza.chord import Chord
-from cadenza.constants import N_NOTES
-from cadenza.diatonic_scale import DiatonicScale
-from cadenza.extension import Extension
-from cadenza.interval import Interval
-from cadenza.note import Note
-from cadenza.quality import Quality
-from cadenza.scale_degree import ScaleDegree
-from cadenza.transposer import Transposer
+from cadenza.core.chord import Chord
+from cadenza.core.constants import N_NOTES
+from cadenza.core.diatonic_scale import DiatonicScale
+from cadenza.core.extension import Extension
+from cadenza.core.interval import Interval
+from cadenza.core.note import Note
+from cadenza.core.quality import Quality
+from cadenza.core.scale_degree import ScaleDegree
+from cadenza.core.transposer import Transposer
 
 logger = logging.getLogger(__name__)
 

@@ -7,24 +7,24 @@ from rich.console import Console
 from rich.logging import RichHandler
 from typer import Argument, Option, Typer
 
-from cadenza.chord import Chord
-from cadenza.composer import Composer
-from cadenza.diatonic_scale import DiatonicScale
-from cadenza.duration import Duration
-from cadenza.functional_analysis import FunctionalAnalysis
-from cadenza.inversion import Inversion
-from cadenza.library import Library
-from cadenza.note import Note
-from cadenza.optimizer import Optimizer, OptimizerArgs
-from cadenza.organ_args import OrganArgs
-from cadenza.pitch import Pitch
-from cadenza.player import Player
-from cadenza.saver import Saver
-from cadenza.synth import Synth, SynthArgs
-from cadenza.transposer import Transposer
-from cadenza.tremolo_args import TremoloArgs
-from cadenza.visualizer import Visualizer, VisualizerArgs
-from cadenza.voicing import Voicing
+from cadenza.audio.optimizer import Optimizer, OptimizerArgs
+from cadenza.audio.player import Player
+from cadenza.audio.saver import Saver
+from cadenza.audio.synth import Synth, SynthArgs
+from cadenza.audio.visualizer import Visualizer, VisualizerArgs
+from cadenza.core.chord import Chord
+from cadenza.core.composer import Composer
+from cadenza.core.diatonic_scale import DiatonicScale
+from cadenza.core.duration import Duration
+from cadenza.core.functional_analysis import FunctionalAnalysis
+from cadenza.core.inversion import Inversion
+from cadenza.core.library import Library
+from cadenza.core.note import Note
+from cadenza.core.organ_args import OrganArgs
+from cadenza.core.pitch import Pitch
+from cadenza.core.transposer import Transposer
+from cadenza.core.tremolo_args import TremoloArgs
+from cadenza.core.voicing import Voicing
 
 if TYPE_CHECKING:
     from torch import Tensor

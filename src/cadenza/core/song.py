@@ -3,12 +3,12 @@ from typing import Any, ClassVar, Iterator, Optional
 
 from pydantic import BaseModel, model_validator
 
-from cadenza.chord import Chord
-from cadenza.diatonic_key import DiatonicKey
-from cadenza.diatonic_mode import DiatonicMode
-from cadenza.duration import Duration
-from cadenza.note import Note
-from cadenza.voicing import Voicing
+from cadenza.core.chord import Chord
+from cadenza.core.diatonic_key import DiatonicKey
+from cadenza.core.diatonic_mode import DiatonicMode
+from cadenza.core.duration import Duration
+from cadenza.core.note import Note
+from cadenza.core.voicing import Voicing
 
 JsonDict = dict[str, Any]
 

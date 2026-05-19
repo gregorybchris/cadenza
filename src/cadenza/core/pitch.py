@@ -3,7 +3,7 @@ from typing import ClassVar
 
 from pydantic import BaseModel
 
-from cadenza.note import Note
+from cadenza.core.note import Note
 
 logger = logging.getLogger(__name__)
 

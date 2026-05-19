@@ -3,8 +3,8 @@ from typing import Self
 
 from pydantic import BaseModel
 
-from cadenza.constants import FLAT_CHAR, N_NOTES, SHARP_CHAR
-from cadenza.note_letter import NoteLetter
+from cadenza.core.constants import FLAT_CHAR, N_NOTES, SHARP_CHAR
+from cadenza.core.note_letter import NoteLetter
 from cadenza.utils.symbol_utils import add_symbols, remove_symbols
 
 logger = logging.getLogger(__name__)

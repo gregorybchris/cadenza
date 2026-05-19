@@ -3,10 +3,10 @@ from typing import Iterator, Self
 
 from pydantic import BaseModel
 
-from cadenza.constants import N_DIATONIC_SCALE_NOTES, N_NOTES
-from cadenza.diatonic_mode import DiatonicMode
-from cadenza.note import Note
-from cadenza.note_letter import NoteLetter
+from cadenza.core.constants import N_DIATONIC_SCALE_NOTES, N_NOTES
+from cadenza.core.diatonic_mode import DiatonicMode
+from cadenza.core.note import Note
+from cadenza.core.note_letter import NoteLetter
 
 logger = logging.getLogger(__name__)
 

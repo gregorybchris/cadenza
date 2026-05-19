@@ -4,7 +4,7 @@ import math
 import pytest
 
 from cadenza import Alteration, Chord, Composer, Extension, Inversion, Note, Pitch, Quality, Voicing
-from cadenza.note_letter import NoteLetter
+from cadenza.core.note_letter import NoteLetter
 
 logger = logging.getLogger(__name__)
 

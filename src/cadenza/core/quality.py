@@ -1,7 +1,7 @@
 import logging
 from enum import StrEnum, auto
 
-from cadenza.constants import (
+from cadenza.core.constants import (
     AUG_CHARS,
     AUG_SYMBOL,
     DIM_CHARS,
@@ -13,7 +13,7 @@ from cadenza.constants import (
     MIN_CHARS,
     MIN_SYMBOL,
 )
-from cadenza.errors import ParseError
+from cadenza.core.errors import ParseError
 from cadenza.utils.symbol_utils import remove_symbols
 
 logger = logging.getLogger(__name__)

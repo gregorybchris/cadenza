@@ -2,7 +2,7 @@ import logging
 from enum import StrEnum
 from typing import Self
 
-from cadenza.constants import N_DIATONIC_SCALE_NOTES
+from cadenza.core.constants import N_DIATONIC_SCALE_NOTES
 
 logger = logging.getLogger(__name__)
 

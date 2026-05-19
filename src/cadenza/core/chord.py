@@ -4,11 +4,11 @@ from typing import Optional, Self
 
 from pydantic import BaseModel
 
-from cadenza.alteration import Alteration
-from cadenza.errors import ParseError
-from cadenza.extension import Extension
-from cadenza.note import Note
-from cadenza.quality import Quality
+from cadenza.core.alteration import Alteration
+from cadenza.core.errors import ParseError
+from cadenza.core.extension import Extension
+from cadenza.core.note import Note
+from cadenza.core.quality import Quality
 
 logger = logging.getLogger(__name__)
 

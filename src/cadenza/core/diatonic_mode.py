@@ -2,9 +2,9 @@ import logging
 from enum import StrEnum, auto
 from typing import Iterator, Self
 
-from cadenza.errors import ParseError
-from cadenza.interval import Interval
-from cadenza.scale_type import ScaleType
+from cadenza.core.errors import ParseError
+from cadenza.core.interval import Interval
+from cadenza.core.scale_type import ScaleType
 
 logger = logging.getLogger(__name__)
 

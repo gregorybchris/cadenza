@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from cadenza.library import Library
+from cadenza.core.library import Library
 
 
 class TestLibrary:

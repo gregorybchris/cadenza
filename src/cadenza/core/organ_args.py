@@ -4,8 +4,8 @@ from typing import Self
 
 from pydantic import BaseModel
 
-from cadenza.organ_pipe_family import OrganPipeFamily
-from cadenza.organ_pipe_length import OrganPipeLength
+from cadenza.core.organ_pipe_family import OrganPipeFamily
+from cadenza.core.organ_pipe_length import OrganPipeLength
 
 logger = logging.getLogger(__name__)
 

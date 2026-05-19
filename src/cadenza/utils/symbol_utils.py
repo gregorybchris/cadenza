@@ -1,4 +1,4 @@
-from cadenza.constants import (
+from cadenza.core.constants import (
     AUG_CHARS,
     AUG_SYMBOL,
     DIM_CHARS,

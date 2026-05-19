@@ -3,8 +3,8 @@ from typing import Self
 
 from pydantic import BaseModel
 
-from cadenza.chord import Chord
-from cadenza.inversion import Inversion
+from cadenza.core.chord import Chord
+from cadenza.core.inversion import Inversion
 
 logger = logging.getLogger(__name__)
 

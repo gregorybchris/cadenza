@@ -2,8 +2,8 @@ import logging
 from enum import StrEnum, auto
 from typing import Self
 
-from cadenza.constants import N_DIATONIC_SCALE_NOTES
-from cadenza.interval import Interval
+from cadenza.core.constants import N_DIATONIC_SCALE_NOTES
+from cadenza.core.interval import Interval
 
 logger = logging.getLogger(__name__)
 

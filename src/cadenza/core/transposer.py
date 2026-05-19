@@ -2,13 +2,13 @@ import logging
 from copy import deepcopy
 from dataclasses import dataclass
 
-from cadenza.chord import Chord
-from cadenza.constants import N_NOTES
-from cadenza.diatonic_key import DiatonicKey
-from cadenza.diatonic_scale import DiatonicScale
-from cadenza.note import Note
-from cadenza.pitch import Pitch
-from cadenza.song import Song
+from cadenza.core.chord import Chord
+from cadenza.core.constants import N_NOTES
+from cadenza.core.diatonic_key import DiatonicKey
+from cadenza.core.diatonic_scale import DiatonicScale
+from cadenza.core.note import Note
+from cadenza.core.pitch import Pitch
+from cadenza.core.song import Song
 
 logger = logging.getLogger(__name__)
 

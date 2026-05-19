@@ -5,7 +5,7 @@ from typing import Iterator, Self
 import yaml
 from pydantic import BaseModel
 
-from cadenza.song import Song
+from cadenza.core.song import Song
 
 
 class Library(BaseModel):

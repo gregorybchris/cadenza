@@ -1,7 +1,7 @@
 import logging
 from enum import StrEnum, auto
 
-from cadenza.errors import ParseError
+from cadenza.core.errors import ParseError
 
 logger = logging.getLogger(__name__)
 

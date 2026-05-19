@@ -1,5 +1,5 @@
-from cadenza.diatonic_mode import DiatonicMode
-from cadenza.interval import Interval
+from cadenza.core.diatonic_mode import DiatonicMode
+from cadenza.core.interval import Interval
 
 
 class TestDiatonicMode:
