@@ -10,6 +10,7 @@ from cadenza.core.functional_analysis import FunctionalAnalysis
 from cadenza.core.interval import Interval
 from cadenza.core.inversion import Inversion
 from cadenza.core.note import Note
+from cadenza.core.note_letter import NoteLetter
 from cadenza.core.pitch import Pitch
 from cadenza.core.quality import Quality
 from cadenza.core.transposer import Transposer
@@ -28,6 +29,7 @@ __all__ = [
     "Interval",
     "Inversion",
     "Note",
+    "NoteLetter",
     "Pitch",
     "Quality",
     "Transposer",

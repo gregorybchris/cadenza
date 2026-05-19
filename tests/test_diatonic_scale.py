@@ -1,9 +1,6 @@
 import pytest
 
-from cadenza.core.diatonic_mode import DiatonicMode
-from cadenza.core.diatonic_scale import DiatonicScale
-from cadenza.core.note import Note
-from cadenza.core.note_letter import NoteLetter
+from cadenza import DiatonicMode, DiatonicScale, Note, NoteLetter
 
 
 class TestDiatonicScale:

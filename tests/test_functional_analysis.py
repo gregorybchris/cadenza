@@ -1,7 +1,6 @@
 import pytest
 
-from cadenza import Chord, Note
-from cadenza.core.functional_analysis import FunctionalAnalysis
+from cadenza import Chord, FunctionalAnalysis, Note
 
 
 class TestFunctionalAnalysis:

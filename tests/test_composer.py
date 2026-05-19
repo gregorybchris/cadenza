@@ -1,10 +1,10 @@
 import logging
 import math
+import re
 
 import pytest
 
-from cadenza import Alteration, Chord, Composer, Extension, Inversion, Note, Pitch, Quality, Voicing
-from cadenza.core.note_letter import NoteLetter
+from cadenza import Alteration, Chord, Composer, Extension, Inversion, Note, NoteLetter, Pitch, Quality, Voicing
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +53,7 @@ class TestComposer:
         chord = Chord(root=Note.new_c(), quality=Quality.Major)
         voicing = Voicing(chord=chord, inversion=Inversion.Third, octave=4)
         with pytest.raises(
-            ValueError, match="The third inversion does not exist for a voicing with 3 right hand notes."
+            ValueError, match=re.escape("The third inversion does not exist for a voicing with 3 right hand notes.")
         ):
             Composer.voicing_to_pitches(voicing)
 
