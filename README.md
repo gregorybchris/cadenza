@@ -26,7 +26,26 @@ You can find a collection of songs with chords transcribed in [songs.yaml](./son
 
 ## Installation
 
-Install using [uv](https://docs.astral.sh/uv)
+Install from PyPI:
+
+```bash
+pip install cadenza-music
+```
+
+Most commands (playback, synthesis, filters) need the `audio` extra, and the
+`--visualize` flag needs the `plot` extra:
+
+```bash
+pip install "cadenza-music[audio,plot]"
+```
+
+The import name and `cz` CLI command are unchanged:
+
+```python
+import cadenza
+```
+
+To work on Cadenza itself, clone the repo and use [uv](https://docs.astral.sh/uv):
 
 ```bash
 uv sync

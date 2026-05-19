@@ -29,7 +29,7 @@ from cadenza.core.transposer import Transposer
 from cadenza.core.tremolo_args import TremoloArgs
 from cadenza.core.voicing import Voicing
 
-__version__ = importlib.metadata.version("cadenza")
+__version__ = importlib.metadata.version("cadenza-music")
 
 __all__ = [
     "Accidental",
