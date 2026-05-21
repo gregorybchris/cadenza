@@ -59,6 +59,9 @@ class Composer:
                 return [Interval.MajorSecond, Interval.PerfectFifth]
             case Quality.SusFour:
                 return [Interval.PerfectFourth, Interval.PerfectFifth]
+            case Quality.Power:
+                # NOTE: A power chord is just the root and perfect fifth, with no third.
+                return [Interval.PerfectFifth]
 
     @classmethod
     def _get_intervals_from_extension(cls, voicing: Voicing) -> list[Interval]:  # noqa: PLR0911
@@ -94,7 +97,8 @@ class Composer:
                 intervals.append(Interval.PerfectFourth)
             case Alteration.AddSix:
                 match voicing.chord.quality:
-                    case Quality.Major:
+                    # NOTE: A power chord has no third, so it defaults to the major sixth.
+                    case Quality.Major | Quality.Power:
                         intervals.append(Interval.MajorSixth)
                     case Quality.Minor:
                         intervals.append(Interval.MinorSixth)

@@ -34,6 +34,9 @@ class TestFunctionalAnalysis:
             ("Eadd9", Note.new_e(), "I"),
             ("Gbmaj9", Note.new_g(), "VIImaj9"),
             ("Cm9", Note.new_d(), "vii9"),
+            ("C5", Note.new_c(), "I5"),
+            ("A5", Note.new_d(), "V5"),
+            ("G5/D", Note.new_c(), "V5/II"),
         ],
     )
     def test_get_chord_function_str(self, chord_str: str, root: Note, expected: str) -> None:

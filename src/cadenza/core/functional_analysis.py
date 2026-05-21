@@ -52,6 +52,8 @@ class FunctionalAnalysis:
             function += Quality.SusTwo.to_str()
         if chord.quality == Quality.SusFour:
             function += Quality.SusFour.to_str()
+        if chord.quality == Quality.Power:
+            function += Quality.Power.to_str()
 
         if chord.bass is not None:
             base_interval_int = (chord.bass.to_integer() - root.to_integer()) % N_NOTES

@@ -24,9 +24,9 @@ class Chord(BaseModel):
     def from_str(cls, chord_str: str) -> Self:
         regex = (
             r"^([A-Ga-g](♯|#|♭|b)?)"  # Root
-            r"(m|dim|\°|aug|\+|\ø|halfdim)?"  # Quality pre
+            r"(m|dim|\°|aug|\+|\ø|halfdim|5)?"  # Quality pre
             r"(7|maj7|9|maj9|11|13)?"  # Extension
-            r"((♯|#|♭|b|sharp|flat|add)?\d+)?"  # Alteration
+            r"((♯|#|♭|b|sharp|flat|add)\d+|[246])?"  # Alteration
             r"(sus2|sus4)?"  # Quality post
             r"(/([A-Ga-g](♯|#|♭|b)?))?$"  # Optional bass note
         )

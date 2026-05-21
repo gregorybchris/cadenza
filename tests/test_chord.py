@@ -36,6 +36,13 @@ class TestChord:
             ("A7b5sus2/D#", Note.new_a(), Quality.SusTwo, Extension.Seven, Alteration.FlatFive, Note.new_d_sharp()),
             ("Eadd9", Note.new_e(), Quality.Major, None, Alteration.AddNine, None),
             ("Gbmaj9", Note.new_g_flat(), Quality.Major, Extension.MajorNine, None, None),
+            ("A5", Note.new_a(), Quality.Power, None, None, None),
+            ("C#5", Note.new_c_sharp(), Quality.Power, None, None, None),
+            ("Bb5", Note.new_b_flat(), Quality.Power, None, None, None),
+            ("E5/B", Note.new_e(), Quality.Power, None, None, Note.new_b()),
+            ("C57", Note.new_c(), Quality.Power, Extension.Seven, None, None),
+            ("D5add9", Note.new_d(), Quality.Power, None, Alteration.AddNine, None),
+            ("F57b5/A", Note.new_f(), Quality.Power, Extension.Seven, Alteration.FlatFive, Note.new_a()),
         ],
     )
     def test_from_str(  # noqa: PLR0913
@@ -87,6 +94,22 @@ class TestChord:
                 ),
                 "A7b5sus2/D#",
                 "A7♭5sus2/D♯",
+            ),
+            (Chord(root=Note.new_a(), quality=Quality.Power), "A5", "A5"),
+            (
+                Chord(root=Note.new_g_sharp(), quality=Quality.Power, bass=Note.new_d_sharp()),
+                "G#5/D#",
+                "G♯5/D♯",
+            ),
+            (
+                Chord(
+                    root=Note.new_c(),
+                    quality=Quality.Power,
+                    extension=Extension.Seven,
+                    alteration=Alteration.AddNine,
+                ),
+                "C57add9",
+                "C57add9",
             ),
         ],
     )

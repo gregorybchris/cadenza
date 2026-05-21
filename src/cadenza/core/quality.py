@@ -27,6 +27,7 @@ class Quality(StrEnum):
     HalfDiminished = auto()
     SusTwo = auto()
     SusFour = auto()
+    Power = auto()
 
     def to_written(self) -> str:  # noqa: PLR0911
         match self:
@@ -44,6 +45,8 @@ class Quality(StrEnum):
                 return "suspended second"
             case Quality.SusFour:
                 return "suspended fourth"
+            case Quality.Power:
+                return "power chord"
 
     def is_suffix(self) -> bool:
         return self in [Quality.SusTwo, Quality.SusFour]
@@ -62,6 +65,7 @@ class Quality(StrEnum):
             HALFDIM_CHARS: cls.HalfDiminished,
             "sus2": cls.SusTwo,
             "sus4": cls.SusFour,
+            "5": cls.Power,
         }
         if quality_str not in mapping:
             msg = f"Invalid quality: {quality_str}"
@@ -84,6 +88,8 @@ class Quality(StrEnum):
                 return "sus2"
             case Quality.SusFour:
                 return "sus4"
+            case Quality.Power:
+                return "5"
 
     def __str__(self) -> str:
         return self.to_str()

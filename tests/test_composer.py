@@ -91,6 +91,76 @@ class TestComposer:
             Pitch(note=Note(letter=NoteLetter.D, n_sharps=1), octave=5),
         ]
 
+    def test_voicing_to_pitches_power_chord(self) -> None:
+        chord = Chord(root=Note.new_c(), quality=Quality.Power)
+        voicing = Voicing(chord=chord, inversion=Inversion.Root, octave=4)
+        pitches = Composer.voicing_to_pitches(voicing)
+        assert pitches == [
+            Pitch(note=Note.new_c(), octave=2),
+            Pitch(note=Note.new_c(), octave=4),
+            Pitch(note=Note.new_g(), octave=4),
+        ]
+
+    def test_voicing_to_pitches_power_chord_first_inversion(self) -> None:
+        chord = Chord(root=Note.new_c(), quality=Quality.Power)
+        voicing = Voicing(chord=chord, inversion=Inversion.First, octave=4)
+        pitches = Composer.voicing_to_pitches(voicing)
+        assert pitches == [
+            Pitch(note=Note.new_c(), octave=2),
+            Pitch(note=Note.new_g(), octave=4),
+            Pitch(note=Note.new_c(), octave=5),
+        ]
+
+    def test_voicing_to_pitches_power_chord_second_inversion_raises_value_error(self) -> None:
+        chord = Chord(root=Note.new_c(), quality=Quality.Power)
+        voicing = Voicing(chord=chord, inversion=Inversion.Second, octave=4)
+        with pytest.raises(
+            ValueError, match=re.escape("The second inversion does not exist for a voicing with 2 right hand notes.")
+        ):
+            Composer.voicing_to_pitches(voicing)
+
+    def test_voicing_to_pitches_power_chord_with_bass(self) -> None:
+        chord = Chord(root=Note.new_c(), quality=Quality.Power, bass=Note.new_g())
+        voicing = Voicing(chord=chord, inversion=Inversion.Root, octave=4)
+        pitches = Composer.voicing_to_pitches(voicing)
+        assert pitches == [
+            Pitch(note=Note.new_g(), octave=2),
+            Pitch(note=Note.new_c(), octave=4),
+            Pitch(note=Note.new_g(), octave=4),
+        ]
+
+    def test_voicing_to_pitches_power_chord_with_extension(self) -> None:
+        chord = Chord(root=Note.new_c(), quality=Quality.Power, extension=Extension.Seven)
+        voicing = Voicing(chord=chord, inversion=Inversion.Root, octave=4)
+        pitches = Composer.voicing_to_pitches(voicing)
+        assert pitches == [
+            Pitch(note=Note.new_c(), octave=2),
+            Pitch(note=Note.new_c(), octave=4),
+            Pitch(note=Note.new_g(), octave=4),
+            Pitch(note=Note.new_b_flat(), octave=4),
+        ]
+
+    def test_voicing_to_pitches_power_chord_with_add6(self) -> None:
+        chord = Chord(root=Note.new_c(), quality=Quality.Power, alteration=Alteration.AddSix)
+        voicing = Voicing(chord=chord, inversion=Inversion.Root, octave=4)
+        pitches = Composer.voicing_to_pitches(voicing)
+        assert pitches == [
+            Pitch(note=Note.new_c(), octave=2),
+            Pitch(note=Note.new_c(), octave=4),
+            Pitch(note=Note.new_g(), octave=4),
+            Pitch(note=Note.new_a(), octave=4),
+        ]
+
+    def test_voicing_to_pitches_power_chord_with_flat_five(self) -> None:
+        chord = Chord(root=Note.new_c(), quality=Quality.Power, alteration=Alteration.FlatFive)
+        voicing = Voicing(chord=chord, inversion=Inversion.Root, octave=4)
+        pitches = Composer.voicing_to_pitches(voicing)
+        assert pitches == [
+            Pitch(note=Note.new_c(), octave=2),
+            Pitch(note=Note.new_c(), octave=4),
+            Pitch(note=Note.new_g_flat(), octave=4),
+        ]
+
     def test_voicing_to_pitches_flat_five(self) -> None:
         chord = Chord(root=Note.new_c(), quality=Quality.Major, alteration=Alteration.FlatFive)
         voicing = Voicing(chord=chord, inversion=Inversion.Root, octave=4)
