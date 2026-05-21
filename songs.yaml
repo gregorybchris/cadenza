@@ -695,3 +695,34 @@ songs:
     key:
       root: G
       mode: major
+
+  - id: 0a3db985-eea4-4bdd-a2e8-2d04f776577d
+    title: November Trees And Rain
+    artist: Marie Dresselhuis
+    chords: |
+      ~ Intro
+      A5 A/G# Dadd2/F#
+      Dm/F A/E
+      D A/C# Cdim7 Bm
+      E/G# A Aadd2/C# D
+
+      ~ Verse
+      A E/G# F#m
+      A/E Aadd2/C# Dadd2
+      Bm7 Aadd2/C# Dadd2 E/G#
+      A Aadd2/C# Dadd2
+
+      ~ Chorus
+      A A5/G# Dadd2/F#
+      Dm/F A/E
+      D A/C# Cdim7
+      Bm F#/A# E/G#
+
+      ~ Outro
+      A E/G# F#m
+      A/E Aadd2/C# Dadd2
+      Bm7 Aadd2/C# Dadd2 E/G#
+      A D/A Dm/A A
+    key:
+      root: A
+      mode: major
