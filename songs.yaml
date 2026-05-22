@@ -3,7 +3,7 @@ songs:
     title: Range Rover
     artist: Ben Rector
     chords: |
-      D F#m Bm G
+      D F#m Bm G 
       D F#m Bm D7/A G D/F# E7 G
       D F# Bm D7/A G D/F# E7 G/A
       D D D
@@ -725,4 +725,31 @@ songs:
       A D/A Dm/A A
     key:
       root: A
+      mode: major
+
+  - id: 08ed8e9b-c31f-47c6-95e9-19c1db598918
+    title: Older
+    artist: Lizzy McAlpine
+    chords: |
+      Eb Ab/Eb Eb Ab/Eb Eb Ab/Eb G5 G Ab (x4)
+      Eb/Bb Abm6/Cb Cm7 Dbadd2
+      Ab Eb Gm G Ab (x2)
+    voicings:
+      - { chord: Eb, inversion: second, octave: 3 }
+      - { chord: Ab, inversion: root, octave: 3 }
+    key:
+      root: Eb
+      mode: major
+
+  - id: f33bcbf2-9dd4-45dd-b179-d367aacc38e6
+    title: Ceilings
+    artist: Lizzy McAlpine
+    chords: |
+      Dadd2 F#m/C# Dadd2 A/C# E/B
+      Dadd2 F#m/C# Esus4
+    voicings:
+      - { chord: Eb, inversion: second, octave: 3 }
+      - { chord: Ab, inversion: root, octave: 3 }
+    key:
+      root: Eb
       mode: major
