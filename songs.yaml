@@ -753,3 +753,29 @@ songs:
     key:
       root: Eb
       mode: major
+
+  - id: abab0d61-74c8-4e34-97b1-24765e05ba04
+    title: All My Love
+    artist: Coldplay
+    chords: |
+      ~ Intro
+      Bm7 Em7 Am7 D7
+      G G7
+
+      ~ Verse
+      Am D7 G Em
+      Am D7 Em G
+      ~ Walk up quickly in right hand: G G# A Bb
+
+      Am D7 G Em
+      F C/E D/F#
+
+      ~ Chorus
+      G Am G C G C
+      C G Em D
+      G Am G C G C
+      G Em D
+      Bm Em Am D7 G G7
+    key:
+      root: G
+      mode: major
