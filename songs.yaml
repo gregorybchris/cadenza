@@ -780,3 +780,17 @@ songs:
     key:
       root: G
       mode: major
+
+  - id: 459ba91f-ec21-4af1-8205-ebbcc9388c28
+    title: Border Song
+    artist: Elton John
+    chords: |
+      C F/C C (x3)
+      G/B Am E7/G# Am E7/G# Am
+      ~ Run: A G A B
+      C G/B C Esus4 E
+      C G/B F Dm
+      C/E F F#dim C/G F/G C
+    key:
+      root: C
+      mode: major
