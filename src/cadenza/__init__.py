@@ -25,6 +25,7 @@ from cadenza.core.quality import Quality
 from cadenza.core.scale_degree import ScaleDegree
 from cadenza.core.scale_type import ScaleType
 from cadenza.core.song import Song
+from cadenza.core.speller import Speller
 from cadenza.core.transposer import Transposer
 from cadenza.core.tremolo_args import TremoloArgs
 from cadenza.core.voicing import Voicing
@@ -57,6 +58,7 @@ __all__ = [
     "ScaleDegree",
     "ScaleType",
     "Song",
+    "Speller",
     "Transposer",
     "TremoloArgs",
     "Voicing",

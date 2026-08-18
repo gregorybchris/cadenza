@@ -9,7 +9,6 @@ from typer import Argument, Option, Typer
 from cadenza.audio.errors import require_audio
 from cadenza.core.chord import Chord
 from cadenza.core.composer import Composer
-from cadenza.core.diatonic_scale import DiatonicScale
 from cadenza.core.duration import Duration
 from cadenza.core.functional_analysis import FunctionalAnalysis
 from cadenza.core.inversion import Inversion
@@ -76,7 +75,7 @@ def note(  # noqa: PLR0913
     set_logger_config(info, debug)
 
     note = Note.from_str(note_str)
-    note = Transposer.transpose_note(note, transpose, scale=DiatonicScale.major(note))
+    note = Transposer.transpose_note_unsafe(note, transpose)
     pitch = Pitch(note=note, octave=octave)
 
     tremolo_args = TremoloArgs.hammond() if use_tremolo else None
@@ -313,8 +312,7 @@ def song(  # noqa: PLR0912, PLR0913, PLR0915
     if song.key is None:
         song = Transposer.transpose_song_unsafe(song, transpose)
     else:
-        scale = DiatonicScale.major(song.key.root)
-        song = Transposer.transpose_song(song, transpose, scale=scale)
+        song = Transposer.transpose_song(song, transpose)
 
     # Apply overrides
     tempo = tempo or song.tempo

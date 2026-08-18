@@ -2,7 +2,6 @@ import logging
 
 from cadenza.core.chord import Chord
 from cadenza.core.constants import N_NOTES
-from cadenza.core.diatonic_scale import DiatonicScale
 from cadenza.core.extension import Extension
 from cadenza.core.interval import Interval
 from cadenza.core.note import Note
@@ -75,26 +74,24 @@ class FunctionalAnalysis:
         root = tonic.root
         match tonic.quality:
             case Quality.Major:
-                scale = DiatonicScale.major(root)
                 return {
-                    ScaleDegree.Tonic: Chord(root=transpose(root, 0, scale=scale), quality=Quality.Major),
-                    ScaleDegree.Supertonic: Chord(root=transpose(root, 2, scale=scale), quality=Quality.Minor),
-                    ScaleDegree.Mediant: Chord(root=transpose(root, 4, scale=scale), quality=Quality.Minor),
-                    ScaleDegree.Subdominant: Chord(root=transpose(root, 5, scale=scale), quality=Quality.Major),
-                    ScaleDegree.Dominant: Chord(root=transpose(root, 7, scale=scale), quality=Quality.Major),
-                    ScaleDegree.Submediant: Chord(root=transpose(root, 9, scale=scale), quality=Quality.Minor),
-                    ScaleDegree.LeadingTone: Chord(root=transpose(root, 11, scale=scale), quality=Quality.Diminished),
+                    ScaleDegree.Tonic: Chord(root=transpose(root, 0, tonic=root), quality=Quality.Major),
+                    ScaleDegree.Supertonic: Chord(root=transpose(root, 2, tonic=root), quality=Quality.Minor),
+                    ScaleDegree.Mediant: Chord(root=transpose(root, 4, tonic=root), quality=Quality.Minor),
+                    ScaleDegree.Subdominant: Chord(root=transpose(root, 5, tonic=root), quality=Quality.Major),
+                    ScaleDegree.Dominant: Chord(root=transpose(root, 7, tonic=root), quality=Quality.Major),
+                    ScaleDegree.Submediant: Chord(root=transpose(root, 9, tonic=root), quality=Quality.Minor),
+                    ScaleDegree.LeadingTone: Chord(root=transpose(root, 11, tonic=root), quality=Quality.Diminished),
                 }[scale_degree]
             case Quality.Minor:
-                scale = DiatonicScale.minor(root)
                 return {
-                    ScaleDegree.Tonic: Chord(root=transpose(root, 0, scale=scale), quality=Quality.Minor),
-                    ScaleDegree.Supertonic: Chord(root=transpose(root, 2, scale=scale), quality=Quality.Diminished),
-                    ScaleDegree.Mediant: Chord(root=transpose(root, 3, scale=scale), quality=Quality.Major),
-                    ScaleDegree.Subdominant: Chord(root=transpose(root, 5, scale=scale), quality=Quality.Minor),
-                    ScaleDegree.Dominant: Chord(root=transpose(root, 7, scale=scale), quality=Quality.Minor),
-                    ScaleDegree.Submediant: Chord(root=transpose(root, 8, scale=scale), quality=Quality.Major),
-                    ScaleDegree.LeadingTone: Chord(root=transpose(root, 10, scale=scale), quality=Quality.Minor),
+                    ScaleDegree.Tonic: Chord(root=transpose(root, 0, tonic=root), quality=Quality.Minor),
+                    ScaleDegree.Supertonic: Chord(root=transpose(root, 2, tonic=root), quality=Quality.Diminished),
+                    ScaleDegree.Mediant: Chord(root=transpose(root, 3, tonic=root), quality=Quality.Major),
+                    ScaleDegree.Subdominant: Chord(root=transpose(root, 5, tonic=root), quality=Quality.Minor),
+                    ScaleDegree.Dominant: Chord(root=transpose(root, 7, tonic=root), quality=Quality.Minor),
+                    ScaleDegree.Submediant: Chord(root=transpose(root, 8, tonic=root), quality=Quality.Major),
+                    ScaleDegree.LeadingTone: Chord(root=transpose(root, 10, tonic=root), quality=Quality.Minor),
                 }[scale_degree]
             case _:
                 msg = f"Getting chords by degree for quality {tonic.quality.to_written()} is not supported"

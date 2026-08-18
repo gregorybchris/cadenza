@@ -479,7 +479,7 @@ songs:
       - { chord: Db, inversion: first, octave: 3 }
     tempo: 40
     key:
-      root: B
+      root: Bb
       mode: minor
 
   - id: 3ebf7f10-e477-4a84-ad14-3eb92807fae3

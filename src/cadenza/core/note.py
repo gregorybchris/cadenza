@@ -1,5 +1,5 @@
 import logging
-from typing import Self
+from typing import ClassVar, Optional, Self
 
 from pydantic import BaseModel
 
@@ -127,26 +127,39 @@ class Note(BaseModel):
         }
         return (letter_mapping[self.letter] + self.n_sharps - self.n_flats) % N_NOTES
 
+    _NATURAL_LETTERS: ClassVar[dict[int, NoteLetter]] = {
+        0: NoteLetter.C,
+        2: NoteLetter.D,
+        4: NoteLetter.E,
+        5: NoteLetter.F,
+        7: NoteLetter.G,
+        9: NoteLetter.A,
+        11: NoteLetter.B,
+    }
+
+    @classmethod
+    def natural_from_integer(cls, index: int) -> Optional["Note"]:
+        """The natural note with the given pitch class, or None where every spelling takes an accidental."""
+        letter = cls._NATURAL_LETTERS.get(index % N_NOTES)
+        return Note(letter=letter) if letter else None
+
     @classmethod
     def from_integer_unsafe(cls, index: int) -> "Note":
         # NOTE: This function is unsafe because it does not account for the key signature.
-        # It will always return a note with a single flat or no accidentals.
-        index %= N_NOTES
-        mapping = {
-            0: Note.new_c(),
-            1: Note.new_d_flat(),
-            2: Note.new_d(),
-            3: Note.new_e_flat(),
-            4: Note.new_e(),
-            5: Note.new_f(),
-            6: Note.new_g_flat(),
-            7: Note.new_g(),
-            8: Note.new_a_flat(),
-            9: Note.new_a(),
-            10: Note.new_b_flat(),
-            11: Note.new_b(),
-        }
-        return mapping[index]
+        # It will always return a note with a single flat or no accidentals. Prefer Speller
+        # when the note has a tonic or a chord root to take its spelling from.
+        natural = cls.natural_from_integer(index)
+        if natural is not None:
+            return natural
+        return Note(letter=cls._NATURAL_LETTERS[(index + 1) % N_NOTES], n_flats=1)
+
+    @classmethod
+    def from_letter_and_pitch_class(cls, letter: NoteLetter, pitch_class: int) -> "Note":
+        """The note with the given letter that sounds the given pitch class, with fewest accidentals."""
+        difference = (pitch_class - Note(letter=letter).to_integer()) % N_NOTES
+        if difference > N_NOTES / 2:
+            difference -= N_NOTES
+        return Note(letter=letter, n_sharps=max(0, difference), n_flats=abs(min(0, difference)))
 
     def is_enharmonic(self, other: "Note") -> bool:
         return self.to_integer() == other.to_integer()

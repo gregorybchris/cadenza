@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from cadenza import DiatonicScale, Library, Note, Transposer
+from cadenza import Library, Note, Transposer
 
 
 class TestE2EModulate:
@@ -14,8 +14,7 @@ class TestE2EModulate:
         assert song.key.root == Note.new_b()
 
         # Modulate up a minor third (3 semitones), from B major to D major
-        scale = DiatonicScale.major(Note.new_d())
-        modulated_song = Transposer.transpose_song(song, 3, scale=scale)
+        modulated_song = Transposer.transpose_song(song, 3)
         assert modulated_song.key is not None
         assert modulated_song.key.root == Note.new_d()
 
