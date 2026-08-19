@@ -54,6 +54,9 @@ songs:
     tempo: 80
     beat_duration: eighth
     chord_duration: quarter
+    key:
+      root: C
+      mode: major
 
   - id: 48315e4c-0a1b-478a-95fe-f233e842fd47
     title: Homesick
@@ -358,6 +361,9 @@ songs:
       F#m F#m A A A A A A
       E E D D F#m
     tempo: 110
+    key:
+      root: A
+      mode: major
 
   - id: 10840d26-124e-4f51-9db0-55878db92db1
     title: AUATC
@@ -389,6 +395,9 @@ songs:
       - { chord: C#m/G#, inversion: first, octave: 4 }
       - { chord: A/E, inversion: second, octave: 3 }
     tempo: 30
+    key:
+      root: A
+      mode: major
 
   - id: 0ed5648c-d0e6-4d73-92bc-8c808c040531
     title: I Wanted Summer With You
