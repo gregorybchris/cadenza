@@ -123,3 +123,35 @@ class TestTransposer:
         assert transposed.key is not None
         assert transposed.key.root == Note.new_a()
         assert [chord.to_str() for chord in transposed.chords[0]] == ["A", "D", "E"]
+
+    @pytest.mark.parametrize(
+        ("semitones", "tonic_str", "expected"),
+        [
+            (11, "B", "D♯7/F𝄪"),  # The third of D#7 is F double sharp, however it reads
+            (6, "F#", "A♯7/C𝄪"),
+        ],
+    )
+    def test_transpose_chord_into_a_double_accidental(self, semitones: int, tonic_str: str, expected: str) -> None:
+        chord = Chord.from_str("E7/G#")
+        transposed = Transposer.transpose_chord(chord, semitones, tonic=Note.from_str(tonic_str))
+        assert transposed.to_str() == expected
+
+        # Whatever we print has to parse back to the same chord
+        assert Chord.from_str(transposed.to_str()) == transposed
+        assert Chord.from_str(transposed.to_str(symbols=False)) == transposed
+
+    def test_transpose_song_into_a_double_accidental_round_trips(self) -> None:
+        song = Song.model_validate(
+            {
+                "id": "test",
+                "title": "Test",
+                "artist": "Test",
+                "chords": "C E7/G# F#dim",
+                "key": {"root": "C", "mode": "major"},
+            }
+        )
+
+        transposed = Transposer.transpose_song(song, 11)
+        printed = " ".join(chord.to_str() for chord in transposed.chords[0])
+        assert printed == "B D♯7/F𝄪 E♯°"
+        assert [Chord.from_str(token) for token in printed.split()] == transposed.chords[0]

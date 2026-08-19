@@ -24,13 +24,18 @@ class Chord(BaseModel):
 
     @classmethod
     def from_str(cls, chord_str: str) -> Self:
+        # NOTE: A doubled flat written out in full collides with the flattened alterations, so Ebb9
+        # is read as an E♭ with a flattened ninth rather than an E𝄫 ninth. Only ♭5 and ♭9 can follow,
+        # so Bbb6 is still a B𝄫 with an added sixth. Nothing may follow a sharp, and the
+        # single-glyph forms are unambiguous, so neither needs the guard.
+        accidental = r"(𝄪|𝄫|##|♯♯|bb(?![59])|♭♭(?![59])|♯|#|♭|b)?"
         regex = (
-            r"^([A-Ga-g](♯|#|♭|b)?)"  # Root
+            rf"^([A-Ga-g]{accidental})"  # Root
             r"(m|dim|\°|aug|\+|\ø|halfdim|5)?"  # Quality pre
             r"(7|maj7|9|maj9|11|13)?"  # Extension
             r"((♯|#|♭|b|sharp|flat|add)\d+|[246])?"  # Alteration
             r"(sus2|sus4)?"  # Quality post
-            r"(/([A-Ga-g](♯|#|♭|b)?))?$"  # Optional bass note
+            rf"(/([A-Ga-g]{accidental}))?$"  # Optional bass note
         )
 
         match = re.match(regex, chord_str)
