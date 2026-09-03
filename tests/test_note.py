@@ -99,7 +99,8 @@ class TestNote:
     @pytest.mark.parametrize("n_flats", [0, 1, 2])
     def test_double_accidental_round_trip(self, n_sharps: int, n_flats: int) -> None:
         if n_sharps and n_flats:
-            pytest.skip("A note is spelled with sharps or with flats, never both")
+            # A note is spelled with sharps or with flats, never both
+            return
         note = Note(letter=NoteLetter.G, n_sharps=n_sharps, n_flats=n_flats)
         assert Note.from_str(note.to_str()) == note
         assert Note.from_str(note.to_str(symbols=False)) == note

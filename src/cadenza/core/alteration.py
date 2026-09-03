@@ -37,9 +37,9 @@ class Alteration(StrEnum):
     def to_str(self, symbols: bool = True) -> str:
         match self:
             case Alteration.AddTwo:
-                return "2"
+                return "add2"
             case Alteration.AddFour:
-                return "4"
+                return "add4"
             case Alteration.AddSix:
                 return "6"
             case Alteration.AddNine:

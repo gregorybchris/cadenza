@@ -28,25 +28,29 @@ class Chord(BaseModel):
         # is read as an E♭ with a flattened ninth rather than an E𝄫 ninth. Only ♭5 and ♭9 can follow,
         # so Bbb6 is still a B𝄫 with an added sixth. Nothing may follow a sharp, and the
         # single-glyph forms are unambiguous, so neither needs the guard.
-        accidental = r"(𝄪|𝄫|##|♯♯|bb(?![59])|♭♭(?![59])|♯|#|♭|b)?"
+        accidental = r"(?:𝄪|𝄫|##|♯♯|bb(?![59])|♭♭(?![59])|♯|#|♭|b)?"
+        # NOTE: The alteration follows the suspension, since a suspension belongs to the base chord
+        # that the alteration then alters: A7sus2♭5, not A7♭5sus2.
         regex = (
-            rf"^([A-Ga-g]{accidental})"  # Root
-            r"(m|dim|\°|aug|\+|\ø|halfdim|5)?"  # Quality pre
-            r"(7|maj7|9|maj9|11|13)?"  # Extension
-            r"((♯|#|♭|b|sharp|flat|add)\d+|[246])?"  # Alteration
-            r"(sus2|sus4)?"  # Quality post
-            rf"(/([A-Ga-g]{accidental}))?$"  # Optional bass note
+            rf"^(?P<root>[A-Ga-g]{accidental})"
+            r"(?P<quality_pre>m|dim|\°|aug|\+|\ø|halfdim|5)?"
+            r"(?P<extension>7|maj7|9|maj9|11|13)?"
+            r"(?P<quality_post>sus2|sus4)?"
+            r"(?P<alteration>(?:♯|#|♭|b|sharp|flat|add)\d+|[246])?"
+            rf"(?:/(?P<bass>[A-Ga-g]{accidental}))?$"
         )
 
         match = re.match(regex, chord_str)
         if not match:
             msg = f"Failed to parse chord string: {chord_str}"
             raise ParseError(msg)
-        root_str, _, quality_pre_str, extension_str, alteration_str, _, quality_post_str, _, bass_str, _ = (
-            match.groups()
-        )
+        quality_pre_str = match["quality_pre"]
+        quality_post_str = match["quality_post"]
+        extension_str = match["extension"]
+        alteration_str = match["alteration"]
+        bass_str = match["bass"]
 
-        root = Note.from_str(root_str)
+        root = Note.from_str(match["root"])
         if quality_pre_str:
             quality = Quality.from_str(quality_pre_str)
         elif quality_post_str:
@@ -144,9 +148,9 @@ class Chord(BaseModel):
         if self.quality.is_prefix():
             ret += self.quality.to_str(symbols=symbols)
         ret += extension_str
-        ret += alterations_str
         if self.quality.is_suffix():
             ret += self.quality.to_str(symbols=symbols)
+        ret += alterations_str
         ret += bass_str
         return ret
 

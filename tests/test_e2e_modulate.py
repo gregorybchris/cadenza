@@ -20,7 +20,7 @@ class TestE2EModulate:
 
         chords_str = "\n".join(" ".join(str(chord) for chord in line) for line in modulated_song.chords)
         assert chords_str == (
-            "D G2 Bm A\n"
+            "D Gadd2 Bm A\n"
             "D D/F♯ G Bm G D G\n"
             "D D/F♯ G Bm G D G\n"
             "D D/F♯ G Bm G D G\n"

@@ -92,7 +92,7 @@ cz chord F/G --filepath audio.wav
 cz chord Cmaj7/A --filepath audio.wav --sample-rate 48000
 
 # Visualize the mel spectrogram
-cz chord A7b5sus2 --visualize
+cz chord A7sus2b5 --visualize
 ```
 
 ### Chords command
